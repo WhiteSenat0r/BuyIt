@@ -20,17 +20,17 @@ public class StoreContext : DbContext
     {
         modelBuilder.Entity<Product>()
             .HasOne(p => p.ProductType)
-            .WithOne(pt => (Product)pt.Product)
+            .WithOne(pt => pt.Product)
             .HasForeignKey<Product>(p => p.ProductTypeId);
         
         modelBuilder.Entity<Product>()
             .HasOne(p => p.Rating)
-            .WithOne(pt => (Product)pt.Product)
+            .WithOne(pt => pt.Product)
             .HasForeignKey<Product>(p => p.RatingId);
         
         modelBuilder.Entity<Product>()
             .HasOne(p => p.Manufacturer)
-            .WithOne(pt => (Product)pt.Product)
+            .WithOne(pt => pt.Product)
             .HasForeignKey<Product>(p => p.ManufacturerId);
         
         modelBuilder.Entity<Product>(entity =>
