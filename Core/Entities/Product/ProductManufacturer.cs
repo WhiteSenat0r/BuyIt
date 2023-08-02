@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Core.Common.Interfaces;
+using Core.Entities.Product.Common.Interfaces;
 
 namespace Core.Entities.Product;
 
-public class ProductManufacturer : IEntity<Guid>
+public class ProductManufacturer : IProductManufacturer
 {
     private string _name = null!;
     private string _registrationCountry = null!;
@@ -19,7 +19,7 @@ public class ProductManufacturer : IEntity<Guid>
     }
     
     public Guid Id { get; set; } = Guid.NewGuid();
-
+    
     [MaxLength(32)]
     public string Name
     {
@@ -27,7 +27,7 @@ public class ProductManufacturer : IEntity<Guid>
         set => AssignStringValue
             (value, ref _name);
     }
-
+    
     [MaxLength(32)]
     public string RegistrationCountry
     {

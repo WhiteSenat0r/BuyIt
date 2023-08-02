@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Core.Common.Interfaces;
+using Core.Entities.Product.Common.Interfaces;
 
 namespace Core.Entities.Product;
 
-public class ProductRating : IEntity<Guid>
+public class ProductRating : IProductRating
 {
     private double? _score;
 
@@ -17,7 +17,7 @@ public class ProductRating : IEntity<Guid>
     }
     
     public Guid Id { get; set; } = Guid.NewGuid();
-
+    
     [Column(TypeName = "decimal(2, 1)")]
     public double? Score // Product's score: calculates with update of the value
     {

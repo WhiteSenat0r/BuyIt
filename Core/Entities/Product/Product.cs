@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
-using Core.Common.Interfaces;
+using Core.Entities.Product.Common.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Core.Entities.Product;
 
-public class Product : IEntity<Guid> // Product entity
+public class Product : IProduct
 {
     private string _name = null!;
     private string _description = null!;

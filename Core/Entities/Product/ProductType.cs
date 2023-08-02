@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Core.Common.Interfaces;
+using Core.Entities.Product.Common.Interfaces;
 
 namespace Core.Entities.Product;
 
-public class ProductType : IEntity<Guid>
+public class ProductType : IProductType
 {
     private string _name = null!;
 
@@ -16,7 +16,7 @@ public class ProductType : IEntity<Guid>
     }
     
     public Guid Id { get; set; } = Guid.NewGuid();
-
+    
     [MaxLength(32)]
     public string Name
     {
