@@ -13,10 +13,11 @@ public class Product : IProduct
     private decimal _price;
     private IDictionary<string, IEnumerable<string>> _mainImagesUrls = null!;
     private IEnumerable<string>? _descriptionImagesUrls;
+    private IDictionary<string, IDictionary<string, string>> _specifications;
 
-    public Product() { }
+    public Product() { } // Required by EF Core for object's initialization from database
 
-    public Product
+    public Product // Typically used in non-database initialization
     (
         string name,
         string description,
@@ -39,6 +40,9 @@ public class Product : IProduct
         MainImagesUrls = mainImagesUrls;
         DescriptionImagesUrls = descriptionImagesUrls;
         Specifications = specifications;
+        ManufacturerId = Manufacturer.Id;
+        ProductTypeId = ProductType.Id;
+        RatingId = Rating.Id;
     }
     
     public Guid Id { get; set; } = Guid.NewGuid(); // Id of the product
@@ -74,7 +78,7 @@ public class Product : IProduct
     public bool InStock { get; set; } // Indicator of the product's availability
 
     public ProductManufacturer Manufacturer { get; set; } = null!; // Manufacturer reference
-    
+
     public Guid ManufacturerId { get; set; }
 
     public ProductRating Rating { get; set; } = null!; // Rating reference
@@ -85,10 +89,7 @@ public class Product : IProduct
     
     public Guid ProductTypeId { get; set; }
 
-    public IDictionary<string, IEnumerable<string>> MainImagesUrls // Dictionary of the product's images:
-                                                                   // key: color, value: urls with images of the product.
-                                                                   // Every pair contains its color variation of the item
-                                                                   // and images related to it.
+    public IDictionary<string, IEnumerable<string>> MainImagesUrls                                        
     {
         get => _mainImagesUrls;
         set
@@ -99,35 +100,92 @@ public class Product : IProduct
         }
     }
     
-    public IEnumerable<string>? DescriptionImagesUrls // Urls that can be used in the product's description
+    public IEnumerable<string>? DescriptionImagesUrls
     {
         get => _descriptionImagesUrls;
         set
         {
             CheckUrlsValidity(value);
+            if (!value!.Any())
+                value = null;
             _descriptionImagesUrls = value;
         }
     }
 
-    public IDictionary<string, IDictionary<string, string>> // Specifications of the product (can easily vary due to the
-                                                            // usage of IDictionary)
-        Specifications { get; set; } = null!;
-    
+    public IDictionary<string, IDictionary<string, string>> Specifications
+    {
+        get => _specifications;
+        set
+        {
+            if (value is null) 
+                ThrowArgumentNullException("Specifications can not be null!");
+            CheckSpecificationsValues(value);
+            _specifications = value;
+        }
+    }
+
+    private static void CheckSpecificationsValues
+        (IDictionary<string, IDictionary<string, string>> value)
+    {
+        foreach (var specificationPair in value!)
+        {
+            if (string.IsNullOrEmpty(specificationPair.Key) ||
+                string.IsNullOrWhiteSpace(specificationPair.Key))
+                ThrowArgumentNullException
+                    ("One of specifications' keys is null, empty or consists only of whitespaces!");
+            if (specificationPair.Value.IsNullOrEmpty())
+                ThrowArgumentNullException("One of specifications' values is null!");
+            foreach (var attributePair in specificationPair.Value!)
+            {
+                if (string.IsNullOrEmpty(attributePair.Key) ||
+                    string.IsNullOrWhiteSpace(attributePair.Key))
+                    ThrowArgumentNullException
+                        ("One of attributes' keys is null, empty or consists only of whitespaces!");
+                if (string.IsNullOrEmpty(attributePair.Value) ||
+                    string.IsNullOrWhiteSpace(attributePair.Value))
+                    ThrowArgumentNullException
+                        ("One of attributes' values is null, empty or consists only of whitespaces!");
+            }
+        }
+    }
+
     private static void AssignStringValue
         (string text, ref string assignedVariable)
     {
-        if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text))
-            throw new ArgumentNullException
-            ("String is null, empty or consists only of white spaces!",
-                new InvalidDataException());
+        CheckStringValidity(text);
+        
+        var propertyInfo = typeof(Product).GetProperty("Name");
+        
+        var maxLengthAttribute = (MaxLengthAttribute)Attribute.
+            GetCustomAttribute(propertyInfo!, typeof(MaxLengthAttribute))!;
+
+        if (maxLengthAttribute is not null &&
+            maxLengthAttribute.Length < text.Length)
+            throw new ArgumentException("String's length is greater that maximum allowed length!");
+            
         assignedVariable = text;
     }
 
+    private static void CheckStringValidity(string text)
+    {
+        if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text)) 
+            ThrowArgumentNullException
+                ("String is null, empty or consists only of white spaces!");
+    }
+
+    private static void ThrowArgumentNullException(string message) =>
+        throw new ArgumentNullException(message, new InvalidDataException());
+    
     private static void CheckUrlsValidity(IEnumerable<string> urls)
     {
         if (urls.IsNullOrEmpty())
             return;
+
+        foreach (var url in urls)
+            CheckStringValidity(url);
+
         var pattern = new Regex(@"\bhttps?:\/\/\S+?\.(?:png|jpe?g)\b");
+        
         if (urls.Any(url => !pattern.IsMatch(url)))
             throw new InvalidDataException("URL of the image has incorrect format!");
     }
