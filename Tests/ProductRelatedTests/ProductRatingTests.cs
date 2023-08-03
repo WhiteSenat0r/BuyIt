@@ -85,6 +85,5 @@ public class ProductRatingTests
         Assert.NotEqual(initialProduct, _productRating.Product);
     }
     
-    private static ProductRating GetFullyInitializedProductRating() =>
-        new ProductRating(5);
+    private static ProductRating GetFullyInitializedProductRating() => new(5);
 }

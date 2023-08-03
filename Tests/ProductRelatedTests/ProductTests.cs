@@ -286,7 +286,7 @@ public class ProductTests
         _product.GetType().GetProperties().Where
             (p => p.PropertyType == typeof(string)).ToList();
 
-    private static Product GetFullyInitializedProduct() => new Product(
+    private static Product GetFullyInitializedProduct() => new(
         "Apple iPhone 14 Pro Max",
         "Some description",
         1499.99m,
