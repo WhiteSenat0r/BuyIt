@@ -8,16 +8,15 @@ public class ProductManufacturer : IProductManufacturer
     private string _name = null!;
     private string _registrationCountry = null!;
 
-    public ProductManufacturer() { }
+    public ProductManufacturer() { } // Required by EF Core for object's initialization from database
     
     public ProductManufacturer
-        (Product product, string name, string registrationCountry)
+        (string name, string registrationCountry) // Typically used in non-database initialization
     {
-        Product = product;
         Name = name;
         RegistrationCountry = registrationCountry;
     }
-    
+
     public Guid Id { get; set; } = Guid.NewGuid();
     
     [MaxLength(32)]

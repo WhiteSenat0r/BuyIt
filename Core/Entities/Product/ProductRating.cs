@@ -7,21 +7,19 @@ public class ProductRating : IProductRating
 {
     private double? _score;
 
-    public ProductRating() { }
+    public ProductRating() { } // Required by EF Core for object's initialization from database
     
-    public ProductRating
-        (Product product, int score)
+    public ProductRating(int score) // Typically used in non-database initialization
     {
-        Product = product;
         Score = Convert.ToDouble(score);
     }
-    
+
     public Guid Id { get; set; } = Guid.NewGuid();
     
     [Column(TypeName = "decimal(2, 1)")]
-    public double? Score // Product's score: calculates with update of the value
+    public double? Score // Product's score: calculates every time after the value is updated
     {
-        get => _score ?? Math.Round((double)_score!, 1);
+        get => _score is null ? null : Math.Round((double)_score!, 1);
         set
         {
             if (value is < 1 or > 5)

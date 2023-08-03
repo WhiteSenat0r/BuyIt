@@ -7,11 +7,11 @@ public class ProductType : IProductType
 {
     private string _name = null!;
 
-    public ProductType() { }
+    public ProductType() { } // Required by EF Core for object's initialization from database
+
     
-    public ProductType(Product product, string name)
+    public ProductType(string name) // Typically used in non-database initialization
     {
-        Product = product;
         Name = name;
     }
     
