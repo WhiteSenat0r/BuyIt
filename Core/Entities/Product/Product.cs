@@ -12,7 +12,7 @@ public class Product : IProduct
     private string _description = null!;
     private decimal _price;
     private IDictionary<string, IEnumerable<string>> _mainImagesUrls = null!;
-    private IEnumerable<string>? _descriptionImagesUrls;
+    private IEnumerable<string> _descriptionImagesUrls;
     private IDictionary<string, IDictionary<string, string>> _specifications;
 
     public Product() { } // Required by EF Core for object's initialization from database
@@ -27,7 +27,7 @@ public class Product : IProduct
         ProductType productType,
         ProductRating rating,
         IDictionary<string, IEnumerable<string>> mainImagesUrls,
-        IEnumerable<string>? descriptionImagesUrls,
+        IEnumerable<string> descriptionImagesUrls,
         IDictionary<string, IDictionary<string, string>> specifications)
     {
         Name = name;
@@ -94,13 +94,15 @@ public class Product : IProduct
         get => _mainImagesUrls;
         set
         {
+            if (value.IsNullOrEmpty())
+                ThrowArgumentNullException("Main images must be present!");
             foreach (var urls in value)
                 CheckUrlsValidity(urls.Value);
             _mainImagesUrls = value;
         }
     }
     
-    public IEnumerable<string>? DescriptionImagesUrls
+    public IEnumerable<string> DescriptionImagesUrls
     {
         get => _descriptionImagesUrls;
         set
@@ -117,7 +119,7 @@ public class Product : IProduct
         get => _specifications;
         set
         {
-            if (value is null) 
+            if (value.IsNullOrEmpty()) 
                 ThrowArgumentNullException("Specifications can not be null!");
             CheckSpecificationsValues(value);
             _specifications = value;
