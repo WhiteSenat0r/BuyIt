@@ -169,6 +169,20 @@ public class ProductTests
     }
     
     [Fact]
+    public void MainImagesUrlsProperty_Should_ThrowArgumentNullExceptionIfEmptyOrNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => _product = new Product()
+        {
+            MainImagesUrls = new Dictionary<string, IEnumerable<string>>()
+        });
+        
+        Assert.Throws<ArgumentNullException>(() => _product = new Product()
+        {
+            MainImagesUrls = null
+        });
+    }
+    
+    [Fact]
     public void DescriptionImagesUrlsProperty_Should_DefaultNotBeInitialized()
     {
         _product = new Product();
