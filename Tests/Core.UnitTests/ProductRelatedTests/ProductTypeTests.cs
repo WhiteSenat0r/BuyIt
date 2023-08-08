@@ -1,7 +1,7 @@
 ﻿using Core.Entities.Product;
 using Core.Entities.Product.Common.Interfaces;
 
-namespace Tests.ProductRelatedTests;
+namespace Tests.Core.UnitTests.ProductRelatedTests;
 
 public class ProductTypeTests
 {
