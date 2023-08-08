@@ -26,7 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="RepositoryRelatedTests\" />
+      <Folder Include="Core.UnitTests\" />
+      <Folder Include="Infrastructure.UnitTests\RepositoryRelatedTests\" />
     </ItemGroup>
 
 </Project>
