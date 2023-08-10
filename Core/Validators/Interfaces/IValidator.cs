@@ -1,6 +1,6 @@
 ﻿namespace Core.Validators.Interfaces;
 
-internal interface IValidator
+public interface IValidator
 {
     void Validate();
 }
