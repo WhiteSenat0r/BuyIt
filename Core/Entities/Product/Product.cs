@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 using Core.Entities.Product.Common.Interfaces;
+using Core.Validators;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Core.Entities.Product;
@@ -121,33 +122,9 @@ public class Product : IProduct
         {
             if (value.IsNullOrEmpty()) 
                 ThrowArgumentNullException("Specifications can not be null!");
-            CheckSpecificationsValues(value);
+            var validator = new ProductSpecificationValidator(ProductType, value);
+            validator.Validate();
             _specifications = value;
-        }
-    }
-
-    private static void CheckSpecificationsValues
-        (IDictionary<string, IDictionary<string, string>> value)
-    {
-        foreach (var specificationPair in value!)
-        {
-            if (string.IsNullOrEmpty(specificationPair.Key) ||
-                string.IsNullOrWhiteSpace(specificationPair.Key))
-                ThrowArgumentNullException
-                    ("One of specifications' keys is null, empty or consists only of whitespaces!");
-            if (specificationPair.Value.IsNullOrEmpty())
-                ThrowArgumentNullException("One of specifications' values is null!");
-            foreach (var attributePair in specificationPair.Value!)
-            {
-                if (string.IsNullOrEmpty(attributePair.Key) ||
-                    string.IsNullOrWhiteSpace(attributePair.Key))
-                    ThrowArgumentNullException
-                        ("One of attributes' keys is null, empty or consists only of whitespaces!");
-                if (string.IsNullOrEmpty(attributePair.Value) ||
-                    string.IsNullOrWhiteSpace(attributePair.Value))
-                    ThrowArgumentNullException
-                        ("One of attributes' values is null, empty or consists only of whitespaces!");
-            }
         }
     }
 
