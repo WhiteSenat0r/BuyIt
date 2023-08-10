@@ -22,12 +22,15 @@ public class ProductSpecificationValidator : IValidator
 
     private IProductType GivenProductType
     {
-        get => _givenProductType;
-        init => _givenProductType = 
-            value ?? throw new ArgumentNullException(nameof(value));
+        init
+        {
+            if (value is null || string.IsNullOrEmpty(value.Name) || string.IsNullOrWhiteSpace(value.Name))
+                ThrowArgumentNullException("Given product type is null or empty!");
+            _givenProductType = value;
+        }
     }
     
-    private IDictionary<string, IEnumerable<string>> RequiredSpecifications { get; init; }
+    private IDictionary<string, IEnumerable<string>> RequiredSpecifications { get; }
 
     private IDictionary<string, IDictionary<string, string>>
         ProductSpecifications
@@ -49,7 +52,7 @@ public class ProductSpecificationValidator : IValidator
         {
             if (!ProductSpecifications.ContainsKey(specification.Key))
                 throw new ArgumentException(
-                    @$"""{specification.Key}""specification is not present in the given product specification!");
+                    @$"""{specification.Key}"" specification is not present in the given product specification!");
 
             ProductSpecifications.TryGetValue
                 (specification.Key, out var productSpecificationAttributes);
@@ -57,7 +60,7 @@ public class ProductSpecificationValidator : IValidator
             if (productSpecificationAttributes!.Keys.Any(attribute => !specification.Value.Contains(attribute)))
             {
                 var keys = specification.Value
-                    .Where(item => !productSpecificationAttributes.Keys.Contains(item))
+                    .Where(item => !productSpecificationAttributes.ContainsKey(item))
                     .Select(item => item)
                     .ToList();
                 throw new ArgumentException(
