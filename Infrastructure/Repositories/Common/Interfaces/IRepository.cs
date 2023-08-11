@@ -4,8 +4,6 @@ public interface IRepository<TEntity>
     where TEntity : class
 {
     Task<IEnumerable<TEntity>> GetAllEntitiesAsync();
-    
-    Task<TEntity> GetSingleEntityAsync(Guid id);
 
     Task AddNewEntityAsync(TEntity entity);
     
