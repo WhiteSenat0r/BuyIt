@@ -8,12 +8,9 @@ public class ProductType : IProductType
     private string _name = null!;
 
     public ProductType() { } // Required by EF Core for object's initialization from database
-    
-    public ProductType(string name) // Typically used in non-database initialization
-    {
-        Name = name;
-    }
-    
+
+    public ProductType(string name) => Name = name; // Typically used in non-database initialization
+
     public Guid Id { get; set; } = Guid.NewGuid();
     
     [MaxLength(32)]
