@@ -1,5 +1,4 @@
-﻿using Core.Entities.Product;
-using Core.Validators;
+﻿using Core.Validators;
 using Core.Validators.Interfaces;
 
 namespace Tests.Core.UnitTests.ProductRelatedTests.ValidatorsRelatedTests;
@@ -14,7 +13,7 @@ public class ProductSpecificationValidatorTests
         try
         {
             _validator = new ProductSpecificationValidator
-                (new ProductType("An invalid name"), GetSpecifications());
+                ("An invalid name", GetSpecifications());
         }
         catch (Exception e)
         {
@@ -40,8 +39,7 @@ public class ProductSpecificationValidatorTests
     [Fact]
     public void ValidateMethod_Should_ThrowArgumentNullExceptionsIfAnySpecificationsKeyIsInvalid()
     {
-        _validator = new ProductSpecificationValidator(
-            new ProductType("Laptop"), 
+        _validator = new ProductSpecificationValidator("Laptop", 
             new Dictionary<string, IDictionary<string, string>>()
             {
                 {
@@ -60,8 +58,7 @@ public class ProductSpecificationValidatorTests
     [Fact]
     public void ValidateMethod_Should_ThrowArgumentNullExceptionsIfAnySpecificationsValueIsInvalid()
     {
-        _validator = new ProductSpecificationValidator(
-            new ProductType("Laptop"), 
+        _validator = new ProductSpecificationValidator("Laptop", 
             new Dictionary<string, IDictionary<string, string>>()
             {
                 {
@@ -75,8 +72,7 @@ public class ProductSpecificationValidatorTests
     [Fact]
     public void ValidateMethod_Should_ThrowArgumentNullExceptionsIfAnySpecsAttributeKeyIsInvalid()
     {
-        _validator = new ProductSpecificationValidator(
-            new ProductType("Laptop"), 
+        _validator = new ProductSpecificationValidator("Laptop", 
             new Dictionary<string, IDictionary<string, string>>()
             {
                 {
@@ -95,8 +91,7 @@ public class ProductSpecificationValidatorTests
     [Fact]
     public void ValidateMethod_Should_ThrowArgumentNullExceptionsIfAnySpecsAttributeValueIsInvalid()
     {
-        _validator = new ProductSpecificationValidator(
-            new ProductType("Laptop"), 
+        _validator = new ProductSpecificationValidator("Laptop", 
             new Dictionary<string, IDictionary<string, string>>()
             {
                 {
@@ -115,8 +110,7 @@ public class ProductSpecificationValidatorTests
     [Fact]
     public void ValidateMethod_Should_ThrowArgumentExceptionsIfAnySpecsKeyDoesNotMatchTemplate()
     {
-        _validator = new ProductSpecificationValidator(
-            new ProductType("Laptop"), 
+        _validator = new ProductSpecificationValidator("Laptop", 
             new Dictionary<string, IDictionary<string, string>>()
             {
                 {
@@ -135,8 +129,7 @@ public class ProductSpecificationValidatorTests
     [Fact]
     public void ValidateMethod_Should_ThrowArgumentExceptionsIfAnySpecsAttributeKeyDoesNotMatchTemplate()
     {
-        _validator = new ProductSpecificationValidator(
-            new ProductType("Laptop"), 
+        _validator = new ProductSpecificationValidator("Laptop", 
             new Dictionary<string, IDictionary<string, string>>()
             {
                 {
@@ -153,7 +146,7 @@ public class ProductSpecificationValidatorTests
     }
     
     private static ProductSpecificationValidator GetFullyValidatorInstance() => 
-        new(new ProductType("Laptop"),
+        new("Laptop",
             GetSpecifications());
 
     private static Dictionary<string, IDictionary<string, string>> GetSpecifications()

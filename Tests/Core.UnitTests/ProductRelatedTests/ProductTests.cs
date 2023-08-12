@@ -27,9 +27,9 @@ public class ProductTests
         Assert.True(_product.Name is not null);
         Assert.True(_product.Description is not null);
         Assert.True(_product.MainImagesUrls is not null);
-        Assert.True(_product.Manufacturer is not null);
-        Assert.True(_product.ProductType is not null);
-        Assert.True(_product.Rating is not null);
+        Assert.True(_product.ManufacturerId != Guid.Empty);
+        Assert.True(_product.ProductTypeId != Guid.Empty);
+        Assert.True(_product.RatingId != Guid.Empty);
         Assert.True(_product.Specifications is not null);
     }
 
