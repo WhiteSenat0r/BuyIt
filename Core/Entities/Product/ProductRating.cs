@@ -9,10 +9,8 @@ public class ProductRating : IProductRating
 
     public ProductRating() { } // Required by EF Core for object's initialization from database
     
-    public ProductRating(int score) // Typically used in non-database initialization
-    {
-        Score = Convert.ToDouble(score);
-    }
+    public ProductRating(int? score) =>
+        Score = score; // Typically used in non-database initialization
 
     public Guid Id { get; set; } = Guid.NewGuid();
     
@@ -22,19 +20,19 @@ public class ProductRating : IProductRating
         get => _score is null ? null : Math.Round((double)_score!, 1);
         set
         {
-            if (value is < 1 or > 5)
-                throw new ArgumentException
-                    ("Provided value can not be lesser than 1 and greater than 5!");
-            
-            if (Score is null)
+            if (Score is null && value is null)
             {
                 _score = value;
                 return;
             }
 
-            _score = (Score + value) / 2;
+            if (value!.GetType() == typeof(double)! && (value is < 1 or > 5))
+                throw new ArgumentException
+                        ("Provided value can not be lesser than 1 and greater than 5!");
+
+            _score = _score is null ? _score = value : (Score + value) / 2;
         }
     }
 
-    public Product Product { get; set; } = null!;
+    public Product Product { get; set; }
 }
