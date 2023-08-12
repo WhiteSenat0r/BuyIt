@@ -1,4 +1,5 @@
-﻿using Core.Entities.Product.Common.Interfaces;
+﻿using Core.Entities.Product;
+using Core.Entities.Product.Common.Interfaces;
 using Core.Validators.Interfaces;
 using Core.Validators.SpecificationTemplates.Factories;
 using Microsoft.IdentityModel.Tokens;
@@ -12,16 +13,17 @@ public class ProductSpecificationValidator : IValidator
     
     private readonly IProductType _givenProductType = null!;
     
-    public ProductSpecificationValidator(IProductType givenProductType,
+    public ProductSpecificationValidator(string productTypeName,
         IDictionary<string, IDictionary<string, string>> specifications)
     {
-        GivenProductType = givenProductType;
+        GivenProductType = new ProductType(productTypeName);
         ProductSpecifications = specifications;
-        RequiredSpecifications = GetRequiredSpecificationTemplate(givenProductType);
+        RequiredSpecifications = GetRequiredSpecificationTemplate(GivenProductType);
     }
 
     private IProductType GivenProductType
     {
+        get => _givenProductType;
         init
         {
             if (value is null || string.IsNullOrEmpty(value.Name) || string.IsNullOrWhiteSpace(value.Name))
