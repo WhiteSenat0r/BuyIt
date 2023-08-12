@@ -15,6 +15,7 @@ public class Product : IProduct
     private IDictionary<string, IEnumerable<string>> _mainImagesUrls = null!;
     private IEnumerable<string> _descriptionImagesUrls;
     private IDictionary<string, IDictionary<string, string>> _specifications;
+    private readonly string _productTypeName = null!;
 
     public Product() { } // Required by EF Core for object's initialization from database
 
@@ -35,15 +36,13 @@ public class Product : IProduct
         Description = description;
         Price = price;
         InStock = inStock;
-        Manufacturer = manufacturer;
-        ProductType = productType;
-        Rating = rating;
         MainImagesUrls = mainImagesUrls;
         DescriptionImagesUrls = descriptionImagesUrls;
+        ManufacturerId = manufacturer.Id;
+        ProductTypeId = productType.Id;
+        _productTypeName = productType.Name;
+        RatingId = rating.Id;
         Specifications = specifications;
-        ManufacturerId = Manufacturer.Id;
-        ProductTypeId = ProductType.Id;
-        RatingId = Rating.Id;
     }
     
     public Guid Id { get; set; } = Guid.NewGuid(); // Id of the product
@@ -61,7 +60,7 @@ public class Product : IProduct
     {
         get => _description;
         set => AssignStringValue
-            (value, ref _description);
+            (value, ref _description, false);
     }
 
     [Column(TypeName = "decimal(6, 2)")]
@@ -109,7 +108,7 @@ public class Product : IProduct
         set
         {
             CheckUrlsValidity(value);
-            if (!value!.Any())
+            if (value.IsNullOrEmpty())
                 value = null;
             _descriptionImagesUrls = value;
         }
@@ -122,27 +121,33 @@ public class Product : IProduct
         {
             if (value.IsNullOrEmpty()) 
                 ThrowArgumentNullException("Specifications can not be null!");
-            var validator = new ProductSpecificationValidator(ProductType, value);
+            var validator = new ProductSpecificationValidator(_productTypeName, value);
             validator.Validate();
             _specifications = value;
         }
     }
 
     private static void AssignStringValue
-        (string text, ref string assignedVariable)
+        (string text, ref string assignedVariable, bool isName = true)
     {
         CheckStringValidity(text);
         
-        var propertyInfo = typeof(Product).GetProperty("Name");
-        
-        var maxLengthAttribute = (MaxLengthAttribute)Attribute.
-            GetCustomAttribute(propertyInfo!, typeof(MaxLengthAttribute))!;
+        var maxLengthAttribute = GetSuitableMaxLengthAttribute(isName);
 
         if (maxLengthAttribute is not null &&
             maxLengthAttribute.Length < text.Length)
             throw new ArgumentException("String's length is greater that maximum allowed length!");
             
         assignedVariable = text;
+    }
+
+    private static MaxLengthAttribute GetSuitableMaxLengthAttribute(bool isName)
+    {
+        var propertyInfo = isName ? typeof(Product).GetProperty("Name") 
+            : typeof(Product).GetProperty("Description");
+
+        return (MaxLengthAttribute)Attribute.GetCustomAttribute
+            (propertyInfo!, typeof(MaxLengthAttribute))!;
     }
 
     private static void CheckStringValidity(string text)
