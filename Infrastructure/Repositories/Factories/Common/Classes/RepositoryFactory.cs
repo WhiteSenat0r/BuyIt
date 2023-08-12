@@ -1,10 +1,10 @@
 ﻿using Infrastructure.Contexts;
-using Infrastructure.Repositories.Common.Interfaces;
+using Infrastructure.Repositories.Common.Classes;
 
 namespace Infrastructure.Repositories.Factories.Common.Classes;
 
 public abstract class RepositoryFactory<TEntity> 
     where TEntity : class
 {
-    public abstract IRepository<TEntity> Create(StoreContext dbContext);
+    public abstract GenericRepository<TEntity> Create(StoreContext dbContext);
 }
