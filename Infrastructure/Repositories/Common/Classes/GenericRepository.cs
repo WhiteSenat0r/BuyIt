@@ -1,4 +1,5 @@
-﻿using Infrastructure.Contexts;
+﻿using System.Linq.Expressions;
+using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,12 @@ public abstract class GenericRepository<TEntity> : IRepository<TEntity>
     
     public async Task<IEnumerable<TEntity>> GetAllEntitiesAsync() => 
         await Context.Set<TEntity>().ToListAsync();
+
+    public virtual async Task<IEnumerable<TEntity>> GetEntitiesByFilterAsync
+        (Expression<Func<TEntity, bool>> filter) =>
+        await Context.Set<TEntity>().Where(filter).ToListAsync();
+
+    public abstract Task<TEntity?> GetSingleEntityAsync(Guid entityId);
 
     public async Task AddNewEntityAsync(TEntity entity)
     {
@@ -39,13 +46,13 @@ public abstract class GenericRepository<TEntity> : IRepository<TEntity>
         Context.SaveChanges();
     }
 
-    public void RemoveExistingEntity(TEntity removedEntity)
+    public virtual void RemoveExistingEntity(TEntity removedEntity)
     {
         Context.Set<TEntity>().Remove(removedEntity);
         Context.SaveChanges();
     }
 
-    public void RemoveRangeOfExistingEntities(IEnumerable<TEntity> removedEntities)
+    public virtual void RemoveRangeOfExistingEntities(IEnumerable<TEntity> removedEntities)
     {
         Context.Set<TEntity>().RemoveRange(removedEntities);
         Context.SaveChanges();
