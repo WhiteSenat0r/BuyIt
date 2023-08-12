@@ -27,9 +27,19 @@ public class ProductRatingTests
     [Theory]
     [InlineData(0)]
     [InlineData(6)]
-    public void ScoreProperty_Should_ThrowArgumentExceptionIfValueIsGreaterThanFiveOrLessThanOne(int score)
+    public void ScoreProperty_Should_ThrowArgumentExceptionIfValueIsGreaterThanFiveOrLessThanOne
+        (int score)
     {
         Assert.Throws<ArgumentException>(() => _productRating = new ProductRating(score));
+    }
+    
+    [Theory]
+    [InlineData(1)]
+    [InlineData(5)]
+    public void ScoreProperty_Should_EqualReceivedValueIfItIsValid(int score)
+    {
+        _productRating = new ProductRating(score);
+        Assert.Equal(score, _productRating.Score);
     }
     
     [Fact]
