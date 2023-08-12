@@ -1,14 +1,16 @@
 ﻿using Core.Entities.Product;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Classes;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-internal class ProductManufacturerRepository : GenericRepository<ProductManufacturer>
+public class ProductManufacturerRepository : GenericRepository<ProductManufacturer>
 {
-    public ProductManufacturerRepository
-        (StoreContext dbContext) : base(dbContext)
-    {
-        Context = dbContext;
-    }
+    internal ProductManufacturerRepository
+        (StoreContext dbContext) : base(dbContext) => Context = dbContext;
+
+    public override async Task<ProductManufacturer?> GetSingleEntityAsync(Guid entityId) =>
+        await Context.ProductManufacturers.SingleOrDefaultAsync
+            (p => p.Id == entityId); 
 }
