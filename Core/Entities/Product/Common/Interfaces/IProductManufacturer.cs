@@ -4,9 +4,7 @@ namespace Core.Entities.Product.Common.Interfaces;
 
 public interface IProductManufacturer : IEntity<Guid>
 {
-    string Name { get; set; }
+    string Name { get; }
     
-    string RegistrationCountry { get; set; }
-    
-    Product Product { get; set; }
+    string RegistrationCountry { get; }
 }
