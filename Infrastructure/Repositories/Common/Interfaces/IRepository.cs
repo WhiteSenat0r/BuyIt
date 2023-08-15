@@ -1,16 +1,17 @@
 ﻿using System.Linq.Expressions;
+using Core.Common.Interfaces;
 
 namespace Infrastructure.Repositories.Common.Interfaces;
 
 public interface IRepository<TEntity> 
-    where TEntity : class
+    where TEntity : class, IEntity<Guid>
 {
     Task<IEnumerable<TEntity>> GetAllEntitiesAsync();
 
     Task<IEnumerable<TEntity>> GetEntitiesByFilterAsync
         (Expression<Func<TEntity, bool>> filter);
 
-    Task<TEntity?> GetSingleEntityAsync(Guid entityId);
+    Task<TEntity> GetSingleEntityAsync(Guid entityId);
     
     Task AddNewEntityAsync(TEntity entity);
     
