@@ -12,16 +12,28 @@ public class ProductRepository : GenericRepository<Product>
     internal ProductRepository
         (StoreContext dbContext) : base(dbContext) => Context = dbContext;
 
+    public override async Task<IEnumerable<Product>> GetAllEntitiesAsync() =>
+        await Context.Products
+            .Include(t => t.ProductType)
+            .Include(m => m.Manufacturer)
+            .Include(r => r.Rating)
+            .ToListAsync();
+
     public override async Task<IEnumerable<Product>> GetEntitiesByFilterAsync
-        (Expression<Func<Product, bool>> filter) => await Context.Products
-        .Include(p => p.ProductType)
-        .Include(p => p.Manufacturer)
-        .Include(p => p.Rating)
-        .Where(filter).ToListAsync();
+        (Expression<Func<Product, bool>> filter) => 
+        await Context.Products
+            .Include(t => t.ProductType)
+            .Include(m => m.Manufacturer)
+            .Include(r => r.Rating)
+            .Where(filter).ToListAsync();
 
-    public override async Task<Product?> GetSingleEntityAsync(Guid entityId) =>
-        await Context.Products.SingleOrDefaultAsync(p => p.Id == entityId); 
-
+    public override async Task<Product> GetSingleEntityAsync(Guid entityId) => 
+        await Context.Products
+            .Include(t => t.ProductType)
+            .Include(m => m.Manufacturer)
+            .Include(r => r.Rating)
+            .SingleAsync();
+    
     public override void RemoveExistingEntity(Product removedEntity)
     {
         void RemoveEntity(IProduct product) =>
