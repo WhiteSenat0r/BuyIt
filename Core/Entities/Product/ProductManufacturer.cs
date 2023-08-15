@@ -35,8 +35,6 @@ public class ProductManufacturer : IProductManufacturer
             (value, ref _registrationCountry);
     }
 
-    public Product Product { get; set; } = null!;
-
     private static void AssignStringValue(string text, ref string assignedVariable)
     {
         if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text))

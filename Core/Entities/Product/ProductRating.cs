@@ -33,6 +33,4 @@ public class ProductRating : IProductRating
             _score = _score is null ? _score = value : (Score + value) / 2;
         }
     }
-
-    public Product Product { get; set; }
 }

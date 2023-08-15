@@ -21,8 +21,6 @@ public class ProductType : IProductType
             (value, ref _name);
     }
 
-    public Product Product { get; set; } = null!;
-
     private static void AssignStringValue(string text, ref string assignedVariable)
     {
         if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text))
