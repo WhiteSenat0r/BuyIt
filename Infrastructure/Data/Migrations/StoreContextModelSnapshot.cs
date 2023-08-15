@@ -62,14 +62,11 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ManufacturerId")
-                        .IsUnique();
+                    b.HasIndex("ManufacturerId");
 
-                    b.HasIndex("ProductTypeId")
-                        .IsUnique();
+                    b.HasIndex("ProductTypeId");
 
-                    b.HasIndex("RatingId")
-                        .IsUnique();
+                    b.HasIndex("RatingId");
 
                     b.ToTable("Products");
                 });
@@ -125,20 +122,20 @@ namespace Infrastructure.Data.Migrations
             modelBuilder.Entity("Core.Entities.Product.Product", b =>
                 {
                     b.HasOne("Core.Entities.Product.ProductManufacturer", "Manufacturer")
-                        .WithOne("Product")
-                        .HasForeignKey("Core.Entities.Product.Product", "ManufacturerId")
+                        .WithMany()
+                        .HasForeignKey("ManufacturerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Product.ProductType", "ProductType")
-                        .WithOne("Product")
-                        .HasForeignKey("Core.Entities.Product.Product", "ProductTypeId")
+                        .WithMany()
+                        .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Product.ProductRating", "Rating")
-                        .WithOne("Product")
-                        .HasForeignKey("Core.Entities.Product.Product", "RatingId")
+                        .WithMany()
+                        .HasForeignKey("RatingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -147,21 +144,6 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("ProductType");
 
                     b.Navigation("Rating");
-                });
-
-            modelBuilder.Entity("Core.Entities.Product.ProductManufacturer", b =>
-                {
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Core.Entities.Product.ProductRating", b =>
-                {
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Core.Entities.Product.ProductType", b =>
-                {
-                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }
