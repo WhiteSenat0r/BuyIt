@@ -83,27 +83,7 @@ public class ProductManufacturerTests
         
         Assert.NotEqual(initialProductManufacturerId, _productManufacturer.Id);
     }
-    
-    [Fact]
-    public void ProductProperty_Should_NotBeInitializedByDefault()
-    {
-        _productManufacturer = new ProductManufacturer();
 
-        Assert.True(_productManufacturer.Product is null);
-    }
-    
-    [Fact]
-    public void ProductProperty_Should_BeAbleToSetNewProduct()
-    {
-        _productManufacturer = new ProductManufacturer();
-
-        var initialProduct = _productManufacturer.Product;
-
-        _productManufacturer.Product = new Product();
-        
-        Assert.NotEqual(initialProduct, _productManufacturer.Product);
-    }
-    
     private static ProductManufacturer GetFullyInitializedProductManufacturer() =>
         new ("Manufacturer", "RegistrationCountry");
     

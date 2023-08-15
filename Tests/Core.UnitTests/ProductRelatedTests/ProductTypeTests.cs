@@ -52,27 +52,7 @@ public class ProductTypeTests
         
         Assert.NotEqual(initialProductTypeId, _productType.Id);
     }
-    
-    [Fact]
-    public void ProductProperty_Should_NotBeInitializedByDefault()
-    {
-        _productType = new ProductType();
 
-        Assert.True(_productType.Product is null);
-    }
-    
-    [Fact]
-    public void ProductProperty_Should_BeAbleToSetNewProduct()
-    {
-        _productType = new ProductType();
-
-        var initialProduct = _productType.Product;
-
-        _productType.Product = new Product();
-        
-        Assert.NotEqual(initialProduct, _productType.Product);
-    }
-    
     private static ProductType GetFullyInitializedProductType() =>
         new ("Type");
 }

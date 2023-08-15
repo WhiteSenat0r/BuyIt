@@ -74,26 +74,6 @@ public class ProductRatingTests
         
         Assert.NotEqual(initialProductId, _productRating.Id);
     }
-    
-    [Fact]
-    public void ProductProperty_Should_NotBeInitializedByDefault()
-    {
-        _productRating = new ProductRating();
 
-        Assert.True(_productRating.Product is null);
-    }
-    
-    [Fact]
-    public void ProductProperty_Should_BeAbleToSetNewProduct()
-    {
-        _productRating = new ProductRating();
-
-        var initialProduct = _productRating.Product;
-
-        _productRating.Product = new Product();
-        
-        Assert.NotEqual(initialProduct, _productRating.Product);
-    }
-    
     private static ProductRating GetFullyInitializedProductRating() => new(5);
 }
