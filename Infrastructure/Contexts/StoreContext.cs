@@ -19,20 +19,14 @@ public class StoreContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder) // Configuration of database's context
     {
         modelBuilder.Entity<Product>()
-            .HasOne(p => p.ProductType)
-            .WithOne(pt => pt.Product)
-            .HasForeignKey<Product>(p => p.ProductTypeId);
-        
+            .HasOne(p => p.ProductType);
+
         modelBuilder.Entity<Product>()
-            .HasOne(p => p.Rating)
-            .WithOne(pt => pt.Product)
-            .HasForeignKey<Product>(p => p.RatingId);
-        
+            .HasOne(p => p.Rating);
+
         modelBuilder.Entity<Product>()
-            .HasOne(p => p.Manufacturer)
-            .WithOne(pt => pt.Product)
-            .HasForeignKey<Product>(p => p.ManufacturerId);
-        
+            .HasOne(p => p.Manufacturer);
+
         modelBuilder.Entity<Product>(entity =>
         {
             // Convert IEnumerable<string> to JSON string for storage in the database
@@ -42,7 +36,7 @@ public class StoreContext : DbContext
                         JsonSerializer.Serialize(urls, new JsonSerializerOptions()),
                     str => 
                         JsonSerializer.Deserialize
-                            <List<string>>(str, new JsonSerializerOptions()));
+                            <List<string>>(str, new JsonSerializerOptions())!);
 
             // Convert IDictionary<string, IEnumerable<string>> to JSON string for storage in the database
             entity.Property(p => p.MainImagesUrls)
