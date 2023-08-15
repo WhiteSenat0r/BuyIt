@@ -6,6 +6,5 @@ namespace Infrastructure.Repositories.Factories;
 
 public class ProductRatingRepositoryFactory : RepositoryFactory<ProductRating>
 {
-    public override ProductRatingRepository Create(StoreContext dbContext) => 
-        new ProductRatingRepository(dbContext);
+    public override ProductRatingRepository Create(StoreContext dbContext) => new(dbContext);
 }
