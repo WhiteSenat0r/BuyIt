@@ -56,6 +56,14 @@ public class ProductRatingTests
     }
 
     [Fact]
+    public void ScoreProperty_Should_BeNullIfNullIsPassedAsConstructorArgument()
+    {
+        _productRating = new ProductRating(null);
+
+        Assert.Null(_productRating.Score);
+    }
+    
+    [Fact]
     public void IdProperty_Should_NotBeEmpty()
     {
         _productRating = new ProductRating();
