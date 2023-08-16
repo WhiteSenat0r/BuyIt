@@ -2,10 +2,10 @@
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Classes;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.Repositories.ProductRelated;
 
-public class ProductManufacturerRepository : GenericRepository<ProductManufacturer>
+public class ProductRatingRepository : GenericRepository<ProductRating>
 {
-    internal ProductManufacturerRepository
+    internal ProductRatingRepository
         (StoreContext dbContext) : base(dbContext) => Context = dbContext;
 }
