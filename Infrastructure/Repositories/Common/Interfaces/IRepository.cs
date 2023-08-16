@@ -1,18 +1,20 @@
-﻿using System.Linq.Expressions;
-using Core.Common.Interfaces;
+﻿using Core.Common.Interfaces;
+using Infrastructure.Repositories.Common.QuerySpecifications.Common.Interfaces;
 
 namespace Infrastructure.Repositories.Common.Interfaces;
 
 public interface IRepository<TEntity> 
     where TEntity : class, IEntity<Guid>
 {
-    Task<IEnumerable<TEntity>> GetAllEntitiesAsync();
+    Task<IEnumerable<TEntity>> GetAllEntitiesAsync
+        (IQuerySpecification<TEntity> querySpecification);
 
-    Task<IEnumerable<TEntity>> GetEntitiesByFilterAsync
-        (Expression<Func<TEntity, bool>> filter);
+    Task<IEnumerable<TEntity>> GetEntitiesBySpecificationAsync
+        (IQuerySpecification<TEntity> querySpecification);
 
-    Task<TEntity> GetSingleEntityAsync(Guid entityId);
-    
+    Task<TEntity> GetSingleEntityBySpecificationAsync
+        (IQuerySpecification<TEntity> querySpecification);
+
     Task AddNewEntityAsync(TEntity entity);
     
     Task AddNewRangeOfEntitiesAsync(IEnumerable<TEntity> entities);

@@ -1,7 +1,8 @@
-﻿using System.Linq.Expressions;
-using Core.Common.Interfaces;
+﻿using Core.Common.Interfaces;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Interfaces;
+using Infrastructure.Repositories.Common.QuerySpecifications.Common.Classes;
+using Infrastructure.Repositories.Common.QuerySpecifications.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories.Common.Classes;
@@ -13,16 +14,18 @@ public abstract class GenericRepository<TEntity> : IRepository<TEntity>
         Context = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 
     private protected StoreContext Context { get; init; }
+
+    public async Task<IEnumerable<TEntity>> GetAllEntitiesAsync
+        (IQuerySpecification<TEntity> querySpecification) => 
+        await ApplySpecification(querySpecification).ToListAsync();
+
+    public async Task<IEnumerable<TEntity>> GetEntitiesBySpecificationAsync
+        (IQuerySpecification<TEntity> querySpecification) =>
+        await ApplySpecification(querySpecification).ToListAsync();
     
-    public virtual async Task<IEnumerable<TEntity>> GetAllEntitiesAsync() => 
-        await Context.Set<TEntity>().ToListAsync();
-
-    public virtual async Task<IEnumerable<TEntity>> GetEntitiesByFilterAsync
-        (Expression<Func<TEntity, bool>> filter) =>
-        await Context.Set<TEntity>().Where(filter).ToListAsync();
-
-    public virtual async Task<TEntity> GetSingleEntityAsync(Guid entityId) => 
-        await Context.Set<TEntity>().SingleAsync(e => e.Id == entityId);
+    public async Task<TEntity> GetSingleEntityBySpecificationAsync
+        (IQuerySpecification<TEntity> querySpecification) =>
+        await ApplySpecification(querySpecification).SingleAsync();
 
     public async Task AddNewEntityAsync(TEntity entity)
     {
@@ -59,4 +62,7 @@ public abstract class GenericRepository<TEntity> : IRepository<TEntity>
         Context.Set<TEntity>().RemoveRange(removedEntities);
         Context.SaveChanges();
     }
+
+    private IQueryable<TEntity> ApplySpecification(IQuerySpecification<TEntity> querySpecification) =>
+        QuerySpecificationEvaluator.GetQuerySpecifications(Context.Set<TEntity>(), querySpecification);
 }
