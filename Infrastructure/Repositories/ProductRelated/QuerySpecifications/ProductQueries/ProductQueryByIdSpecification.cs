@@ -16,5 +16,7 @@ public class ProductQueryByIdSpecification : QuerySpecification<Product>
             p => p.ProductType,
             p => p.Rating
         });
+        
+        AddOrderByAscending(p => p.Name);
     }
 }
