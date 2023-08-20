@@ -1,7 +1,9 @@
 ﻿using Core.Entities.Product;
-using Core.Entities.Product.Common.Interfaces;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Classes;
+using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductManufacturerQueries;
+using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Repositories.ProductRelated;
 
@@ -10,10 +12,23 @@ public class ProductRepository : GenericRepository<Product>
     internal ProductRepository
         (StoreContext dbContext) : base(dbContext) => Context = dbContext;
 
-    public override void RemoveExistingEntity(Product removedEntity)
+    public override async void RemoveExistingEntity(Product removedEntity)
     {
-        void RemoveEntity(IProduct product) =>
-            new ProductRatingRepository(Context).RemoveExistingEntity(product.Rating);
-        RemoveEntity(removedEntity);
+        new ProductRatingRepository(Context).RemoveExistingEntity(removedEntity.Rating);
+
+        var productsWithIdenticalManufacturer = await new ProductRepository(Context)
+            .GetEntitiesBySpecificationAsync(new ProductQueryByManufacturerIdSpecification
+                (removedEntity.ManufacturerId));
+        
+        if (productsWithIdenticalManufacturer.IsNullOrEmpty())
+            new ProductManufacturerRepository(Context).RemoveExistingEntity
+                (await new ProductManufacturerRepository(Context).GetSingleEntityBySpecificationAsync
+                    (new ProductManufacturerQueryByIdSpecification(removedEntity.ManufacturerId)));
+    }
+
+    public override void RemoveRangeOfExistingEntities(IEnumerable<Product> removedEntities)
+    {
+        foreach (var removedEntity in removedEntities)
+            RemoveExistingEntity(removedEntity);
     }
 }
