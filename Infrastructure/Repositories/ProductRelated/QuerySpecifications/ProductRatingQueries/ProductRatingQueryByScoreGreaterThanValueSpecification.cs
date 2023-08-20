@@ -5,7 +5,7 @@ namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.Product
 
 public class ProductRatingQueryByScoreGreaterThanValueSpecification : QuerySpecification<ProductRating>
 {
-    public ProductRatingQueryByScoreGreaterThanValueSpecification(double score)
+    public ProductRatingQueryByScoreGreaterThanValueSpecification(double? score)
         : base(criteria => criteria.Score > score) 
         => AddOrderByDescending(r => r.Score);
 }
