@@ -45,7 +45,7 @@ public class StoreContext : DbContext
                         JsonSerializer.Serialize(urls, new JsonSerializerOptions()),
                     str => 
                         JsonSerializer.Deserialize
-                            <IDictionary<string, IEnumerable<string>>>(str, new JsonSerializerOptions())!);
+                            <List<string>>(str, new JsonSerializerOptions())!);
             
             // Convert IDictionary<string, IDictionary<string, string>>> to JSON string for storage in the database
             entity.Property(p => p.Specifications)
