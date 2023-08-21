@@ -12,12 +12,12 @@ public class Product : IProduct
     private string _name = null!;
     private string _description = null!;
     private decimal _price;
-    private IDictionary<string, IEnumerable<string>> _mainImagesUrls = null!;
+    private IEnumerable<string> _mainImagesUrls = null!;
     private IEnumerable<string> _descriptionImagesUrls;
     private IDictionary<string, IDictionary<string, string>> _specifications;
     private readonly string _productTypeName = null!;
 
-    public Product() { } // Required by EF Core for object's initialization from database
+    public Product() => ProductCode = Id.ToString()[..8].ToUpper(); // Required by EF Core for object's initialization from database
 
     public Product // Typically used in non-database initialization
     (
@@ -28,7 +28,7 @@ public class Product : IProduct
         ProductManufacturer manufacturer,
         ProductType productType,
         ProductRating rating,
-        IDictionary<string, IEnumerable<string>> mainImagesUrls,
+        IEnumerable<string> mainImagesUrls,
         IEnumerable<string> descriptionImagesUrls,
         IDictionary<string, IDictionary<string, string>> specifications)
     {
@@ -37,6 +37,7 @@ public class Product : IProduct
         Price = price;
         InStock = inStock;
         MainImagesUrls = mainImagesUrls;
+        ProductCode = Id.ToString()[..8].ToUpper();
         DescriptionImagesUrls = descriptionImagesUrls;
         ManufacturerId = manufacturer.Id;
         ProductTypeId = productType.Id;
@@ -88,21 +89,23 @@ public class Product : IProduct
     public ProductType ProductType { get; set; } = null!; // Product type reference
     
     public Guid ProductTypeId { get; set; }
+    
+    [MaxLength(8)]
+    public string ProductCode { get; set; } = null!; // Description of the product
 
-    public IDictionary<string, IEnumerable<string>> MainImagesUrls                                        
+    public IEnumerable<string> MainImagesUrls                                        
     {
         get => _mainImagesUrls;
         set
         {
             if (value.IsNullOrEmpty())
                 ThrowArgumentNullException("Main images must be present!");
-            foreach (var urls in value)
-                CheckUrlsValidity(urls.Value);
+            CheckUrlsValidity(value);
             _mainImagesUrls = value;
         }
     }
     
-    public IEnumerable<string> DescriptionImagesUrls
+    public IEnumerable<string>? DescriptionImagesUrls
     {
         get => _descriptionImagesUrls;
         set
@@ -168,7 +171,7 @@ public class Product : IProduct
         foreach (var url in urls)
             CheckStringValidity(url);
 
-        var pattern = new Regex(@"\bhttps?:\/\/\S+?\.(?:png|jpe?g)\b");
+        var pattern = new Regex(@"\bhttps?:\/\/\S+?\.(jpg|jpeg|png|gif|bmp|svg|webp|tiff|ico)\b");
         
         if (urls.Any(url => !pattern.IsMatch(url)))
             throw new InvalidDataException("URL of the image has incorrect format!");

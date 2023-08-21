@@ -4,29 +4,31 @@ namespace Core.Entities.Product.Common.Interfaces;
 
 public interface IProduct : IEntity<Guid>
 {
-    string Name { get; set; }
+    string Name { get; }
     
-    string Description { get; set; }
+    string Description { get; }
     
     decimal Price { get; set; }
     
-    bool InStock { get; set; }
+    bool InStock { get; }
     
-    ProductManufacturer Manufacturer { get; set; } 
+    ProductManufacturer Manufacturer { get; } 
     
-    Guid ManufacturerId { get; set; }
+    Guid ManufacturerId { get; }
     
-    ProductRating Rating { get; set; }
+    ProductRating Rating { get; }
     
-    Guid RatingId { get; set; }
+    Guid RatingId { get; }
     
-    ProductType ProductType { get; set; }
+    ProductType ProductType { get; }
     
-    Guid ProductTypeId { get; set; }
+    Guid ProductTypeId { get; }
     
-    IDictionary<string, IEnumerable<string>> MainImagesUrls { get; set; }
+    string ProductCode { get; }
+    
+    IEnumerable<string> MainImagesUrls { get; }
     
     IEnumerable<string>? DescriptionImagesUrls { get; set; }
     
-    IDictionary<string, IDictionary<string, string>> Specifications { get; set; }
+    IDictionary<string, IDictionary<string, string>> Specifications { get; }
 }
