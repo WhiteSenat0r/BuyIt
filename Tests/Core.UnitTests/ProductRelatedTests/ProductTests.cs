@@ -169,11 +169,19 @@ public class ProductTests
     }
     
     [Fact]
+    public void ProductCodeProperty_Should_EqualFirstEightGuidsChars()
+    {
+        _product = new Product();
+        
+        Assert.Equal(_product.ProductCode, _product.Id.ToString()[..8].ToUpper());
+    }
+    
+    [Fact]
     public void MainImagesUrlsProperty_Should_ThrowArgumentNullExceptionIfEmptyOrNull()
     {
         Assert.Throws<ArgumentNullException>(() => _product = new Product()
         {
-            MainImagesUrls = new Dictionary<string, IEnumerable<string>>()
+            MainImagesUrls = new List<string>()
         });
         
         Assert.Throws<ArgumentNullException>(() => _product = new Product()
@@ -301,7 +309,7 @@ public class ProductTests
             (p => p.PropertyType == typeof(string)).ToList();
 
     private static Product GetFullyInitializedProduct() => new(
-        "ASUS ZenBook Pro",
+        "ASUS ZenBook Pro Space Black",
         "Some description",
         1499.99m,
         true,
@@ -309,17 +317,12 @@ public class ProductTests
             ("Apple", "United States of America"),
         new ProductType("Laptop"),
         new ProductRating(5),
-        new Dictionary<string, IEnumerable<string>>()
+        new List<string>
         {
-            {
-                "Space Black", new List<string>()
-                {
-                    "https://somewebpage.com/iphone14promax1.jpg",
-                    "https://somewebpage.com/iphone14promax2.jpg",
-                    "https://somewebpage.com/iphone14promax3.jpg",
-                    "https://somewebpage.com/iphone14promax4.jpg",
-                }
-            }
+            "https://somewebpage.com/iphone14promax1.jpg",
+            "https://somewebpage.com/iphone14promax2.jpg",
+            "https://somewebpage.com/iphone14promax3.jpg",
+            "https://somewebpage.com/iphone14promax4.jpg",
         },
         new List<string>()
         {
