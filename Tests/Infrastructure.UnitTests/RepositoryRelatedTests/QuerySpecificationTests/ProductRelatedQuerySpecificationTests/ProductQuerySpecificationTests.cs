@@ -27,6 +27,15 @@ public class ProductQuerySpecificationTests
     }
     
     [Fact]
+    public void ProductQueryByProductCodeSpecificationConstructor_Should_CreateNewQuerySpecificationInstance()
+    {
+        _querySpecification = new ProductQueryByProductCodeSpecification("A12B32CD");
+        
+        Assert.IsType<ProductQueryByProductCodeSpecification>(_querySpecification);
+        Assert.NotNull(_querySpecification);
+    }
+    
+    [Fact]
     public void ProductQueryByRatingIdSpecificationConstructor_Should_CreateNewQuerySpecificationInstance()
     {
         _querySpecification = new ProductQueryByRatingIdSpecification(Guid.NewGuid());
