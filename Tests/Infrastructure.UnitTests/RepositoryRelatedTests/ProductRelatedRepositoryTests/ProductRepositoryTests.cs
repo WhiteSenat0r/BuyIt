@@ -81,7 +81,7 @@ public class ProductRepositoryTests
     
     private Product GetFullyInitializedProduct
         (ProductManufacturer manufacturer, ProductRating rating, ProductType type) => new(
-        @"ASUS Zenbook 14X OLED UX5401ZA-L7065X",
+        @"ASUS Zenbook 14X OLED UX5401ZA-L7065X Pine Grey",
         "Zenbook 14X UX540 is a modern solution for creatives. " +
         "Weighing just 1.4 kg and 16 mm thick, it's portable and fits comfortably in any bag. " +
         "With a high-res screen, wide color range, and proprietary tech, it's perfect for content editing " +
@@ -95,18 +95,13 @@ public class ProductRepositoryTests
         manufacturer,
         type,
         rating,
-        new Dictionary<string, IEnumerable<string>>()
+        new List<string>()
         {
-            {
-                "Pine Grey", new List<string>()
-                {
-                    "https://i.imgur.com/t8nTGmY.jpg",
-                    "https://i.imgur.com/p69Qtwy.jpg",
-                    "https://i.imgur.com/8KBW5Ax.jpg",
-                    "https://i.imgur.com/zXa5aZu.jpg",
-                    "https://i.imgur.com/QBPblx7.jpg"
-                }
-            }
+            "https://i.imgur.com/t8nTGmY.jpg",
+            "https://i.imgur.com/p69Qtwy.jpg",
+            "https://i.imgur.com/8KBW5Ax.jpg",
+            "https://i.imgur.com/zXa5aZu.jpg",
+            "https://i.imgur.com/QBPblx7.jpg"
         },
         null,
         new Dictionary<string, IDictionary<string, string>>()
