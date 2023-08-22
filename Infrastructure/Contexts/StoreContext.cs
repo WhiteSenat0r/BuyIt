@@ -29,17 +29,8 @@ public class StoreContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            // Convert IEnumerable<string> to JSON string for storage in the database
-            entity.Property(p => p.DescriptionImagesUrls)
-                .HasConversion(
-                    urls => 
-                        JsonSerializer.Serialize(urls, new JsonSerializerOptions()),
-                    str => 
-                        JsonSerializer.Deserialize
-                            <List<string>>(str, new JsonSerializerOptions())!);
-
             // Convert IDictionary<string, IEnumerable<string>> to JSON string for storage in the database
-            entity.Property(p => p.MainImagesUrls)
+            entity.Property(p => p.MainImagesNames)
                 .HasConversion(
                     urls => 
                         JsonSerializer.Serialize(urls, new JsonSerializerOptions()),
