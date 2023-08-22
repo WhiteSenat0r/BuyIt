@@ -1,4 +1,5 @@
 ﻿using API.Helpers.DataTransferObjects.ProductRelated;
+using API.Helpers.Resolvers;
 using AutoMapper;
 using Core.Entities.Product.Common.Interfaces;
 
@@ -22,7 +23,5 @@ public class MappingProfiles : Profile
             .ForMember(r => r.Category, p =>
                 p.MapFrom(t => t.ProductType.Name))
             .ForMember(r => r.Images, p =>
-                p.MapFrom(t => t.MainImagesUrls))
-            .ForMember(r => r.DescriptionImagesUrls, p =>
-                p.MapFrom(t => t.DescriptionImagesUrls));
+                p.MapFrom<ProductUrlResolver>());
 }
