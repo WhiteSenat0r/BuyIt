@@ -26,7 +26,7 @@ public class ProductTests
         Assert.True(_product.GetType() == typeof(Product));
         Assert.True(_product.Name is not null);
         Assert.True(_product.Description is not null);
-        Assert.True(_product.MainImagesUrls is not null);
+        Assert.True(_product.MainImagesNames is not null);
         Assert.True(_product.ManufacturerId != Guid.Empty);
         Assert.True(_product.ProductTypeId != Guid.Empty);
         Assert.True(_product.RatingId != Guid.Empty);
@@ -181,44 +181,15 @@ public class ProductTests
     {
         Assert.Throws<ArgumentNullException>(() => _product = new Product()
         {
-            MainImagesUrls = new List<string>()
+            MainImagesNames = new List<string>()
         });
         
         Assert.Throws<ArgumentNullException>(() => _product = new Product()
         {
-            MainImagesUrls = null
+            MainImagesNames = null
         });
     }
-    
-    [Fact]
-    public void DescriptionImagesUrlsProperty_Should_DefaultNotBeInitialized()
-    {
-        _product = new Product();
-        
-        Assert.Null(_product.DescriptionImagesUrls);
-    }
-    
-    [Fact]
-    public void DescriptionImagesUrlsProperty_Should_ThrowInvalidDataExceptionIfInvalidUrlsWerePassed()
-    {
-        _product = new Product();
-        
-        Assert.Throws<InvalidDataException>(() => 
-            _product.DescriptionImagesUrls = new List<string>()
-        {
-            "https://validurl.com/image.jpg",
-            "Invalid URL"
-        });
-    }
-    
-    [Fact]
-    public void DescriptionImagesUrlsProperty_Should_BeEmptyIfEmptyListWasPassed()
-    {
-        _product = new Product();
-        
-        Assert.Empty(_product.DescriptionImagesUrls = new List<string>());
-    }
-    
+
     [Fact]
     public void SpecificationsProperty_Should_ThrowArgumentNullExceptionIfNullIsPassed()
     {
@@ -236,6 +207,7 @@ public class ProductTests
     {
         Assert.Throws<ArgumentNullException>(() => _product = new Product()
         {
+            ProductType = new ProductType("Laptop"),
             Specifications = new Dictionary<string, IDictionary<string, string>>()
             {
                 {
@@ -253,6 +225,7 @@ public class ProductTests
     {
         Assert.Throws<ArgumentNullException>(() => _product = new Product()
         {
+            ProductType = new ProductType("Laptop"),
             Specifications = new Dictionary<string, IDictionary<string, string>>()
             {
                 {
@@ -318,13 +291,6 @@ public class ProductTests
         new ProductType("Laptop"),
         new ProductRating(5),
         new List<string>
-        {
-            "https://somewebpage.com/iphone14promax1.jpg",
-            "https://somewebpage.com/iphone14promax2.jpg",
-            "https://somewebpage.com/iphone14promax3.jpg",
-            "https://somewebpage.com/iphone14promax4.jpg",
-        },
-        new List<string>()
         {
             "https://somewebpage.com/iphone14promax1.jpg",
             "https://somewebpage.com/iphone14promax2.jpg",
