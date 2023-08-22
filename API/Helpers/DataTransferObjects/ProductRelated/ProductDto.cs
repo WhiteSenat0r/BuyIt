@@ -1,6 +1,8 @@
-﻿namespace API.Helpers.DataTransferObjects.ProductRelated;
+﻿using API.Helpers.DataTransferObjects.ProductRelated.Common.Interfaces;
 
-public class ProductDto
+namespace API.Helpers.DataTransferObjects.ProductRelated;
+
+public class ProductDto : IProductDto
 {
     public string Name { get; set; } = null!;
     
@@ -19,9 +21,6 @@ public class ProductDto
     public string ProductCode { get; set; } = null!;
     
     public IEnumerable<string> Images { get; set; } = null!;
-    
-    public IEnumerable<string>? DescriptionImagesUrls { get; set; }
-    
+
     public IDictionary<string, IDictionary<string, string>> Specifications { get; set; } = null!;
-    
 }
