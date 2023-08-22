@@ -26,9 +26,7 @@ public interface IProduct : IEntity<Guid>
     
     string ProductCode { get; }
     
-    IEnumerable<string> MainImagesUrls { get; }
-    
-    IEnumerable<string>? DescriptionImagesUrls { get; set; }
-    
+    IEnumerable<string> MainImagesNames { get; }
+
     IDictionary<string, IDictionary<string, string>> Specifications { get; }
 }

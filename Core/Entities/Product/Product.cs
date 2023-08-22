@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
+using Core.Builders.PathBuilders;
 using Core.Entities.Product.Common.Interfaces;
 using Core.Validators;
 using Microsoft.IdentityModel.Tokens;
@@ -12,10 +13,8 @@ public class Product : IProduct
     private string _name = null!;
     private string _description = null!;
     private decimal _price;
-    private IEnumerable<string> _mainImagesUrls = null!;
-    private IEnumerable<string> _descriptionImagesUrls;
+    private IEnumerable<string> _mainImagesNames = null!;
     private IDictionary<string, IDictionary<string, string>> _specifications;
-    private readonly string _productTypeName = null!;
 
     public Product() => ProductCode = Id.ToString()[..8].ToUpper(); // Required by EF Core for object's initialization from database
 
@@ -28,22 +27,23 @@ public class Product : IProduct
         ProductManufacturer manufacturer,
         ProductType productType,
         ProductRating rating,
-        IEnumerable<string> mainImagesUrls,
-        IEnumerable<string> descriptionImagesUrls,
+        IEnumerable<string> mainImagesNames,
         IDictionary<string, IDictionary<string, string>> specifications)
     {
         Name = name;
         Description = description;
         Price = price;
         InStock = inStock;
-        MainImagesUrls = mainImagesUrls;
         ProductCode = Id.ToString()[..8].ToUpper();
-        DescriptionImagesUrls = descriptionImagesUrls;
+        Manufacturer = manufacturer;
         ManufacturerId = manufacturer.Id;
+        ProductType = productType;
         ProductTypeId = productType.Id;
-        _productTypeName = productType.Name;
         RatingId = rating.Id;
+        MainImagesNames = mainImagesNames;
         Specifications = specifications;
+        Manufacturer = null!;
+        ProductType = null!;
     }
     
     public Guid Id { get; set; } = Guid.NewGuid(); // Id of the product
@@ -93,27 +93,16 @@ public class Product : IProduct
     [MaxLength(8)]
     public string ProductCode { get; set; } = null!; // Description of the product
 
-    public IEnumerable<string> MainImagesUrls                                        
+    public IEnumerable<string> MainImagesNames                                        
     {
-        get => _mainImagesUrls;
+        get => _mainImagesNames;
         set
         {
             if (value.IsNullOrEmpty())
                 ThrowArgumentNullException("Main images must be present!");
-            CheckUrlsValidity(value);
-            _mainImagesUrls = value;
-        }
-    }
-    
-    public IEnumerable<string>? DescriptionImagesUrls
-    {
-        get => _descriptionImagesUrls;
-        set
-        {
-            CheckUrlsValidity(value);
-            if (value.IsNullOrEmpty())
-                value = null;
-            _descriptionImagesUrls = value;
+            CheckFileFormatValidity(value);
+            value = ImagePathBuilder.Build(value, ProductType, Manufacturer, ProductCode);
+            _mainImagesNames = value;
         }
     }
 
@@ -124,7 +113,7 @@ public class Product : IProduct
         {
             if (value.IsNullOrEmpty()) 
                 ThrowArgumentNullException("Specifications can not be null!");
-            var validator = new ProductSpecificationValidator(_productTypeName, value);
+            var validator = new ProductSpecificationValidator(ProductType.Name, value);
             validator.Validate();
             _specifications = value;
         }
@@ -163,17 +152,20 @@ public class Product : IProduct
     private static void ThrowArgumentNullException(string message) =>
         throw new ArgumentNullException(message, new InvalidDataException());
     
-    private static void CheckUrlsValidity(IEnumerable<string> urls)
+    private static void CheckFileFormatValidity(IEnumerable<string> fileNames)
     {
-        if (urls.IsNullOrEmpty())
+        if (fileNames.IsNullOrEmpty())
             return;
 
-        foreach (var url in urls)
-            CheckStringValidity(url);
+        foreach (var fileName in fileNames)
+            CheckStringValidity(fileName);
 
-        var pattern = new Regex(@"\bhttps?:\/\/\S+?\.(jpg|jpeg|png|gif|bmp|svg|webp|tiff|ico)\b");
+        if (fileNames.Distinct().Count() != fileNames.Count())
+            throw new ArgumentException("Some files have an identical name!");
+
+        var pattern = new Regex(@"\.(jpe?g|png|webp|bmp)$");
         
-        if (urls.Any(url => !pattern.IsMatch(url)))
-            throw new InvalidDataException("URL of the image has incorrect format!");
+        if (fileNames.Any(url => !pattern.IsMatch(url)))
+            throw new InvalidDataException("Name of the image has incorrect format!");
     }
 }
