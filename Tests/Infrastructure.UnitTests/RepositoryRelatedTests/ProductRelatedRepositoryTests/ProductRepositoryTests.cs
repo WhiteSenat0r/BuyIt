@@ -103,7 +103,6 @@ public class ProductRepositoryTests
             "https://i.imgur.com/zXa5aZu.jpg",
             "https://i.imgur.com/QBPblx7.jpg"
         },
-        null,
         new Dictionary<string, IDictionary<string, string>>()
         {
             {
