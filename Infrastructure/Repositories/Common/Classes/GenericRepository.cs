@@ -25,7 +25,7 @@ public abstract class GenericRepository<TEntity> : IRepository<TEntity>
     
     public async Task<TEntity> GetSingleEntityBySpecificationAsync
         (IQuerySpecification<TEntity> querySpecification) =>
-        await ApplySpecification(querySpecification).SingleAsync();
+        await ApplySpecification(querySpecification).SingleOrDefaultAsync();
 
     public async Task AddNewEntityAsync(TEntity entity)
     {
