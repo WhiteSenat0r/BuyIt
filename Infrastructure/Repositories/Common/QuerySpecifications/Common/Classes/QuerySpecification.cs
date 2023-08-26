@@ -9,15 +9,15 @@ public abstract class QuerySpecification<TEntity> : IQuerySpecification<TEntity>
 {
     protected QuerySpecification() { }
     
-    protected QuerySpecification(Expression<Func<TEntity, bool>>? criteria) => Criteria = criteria;
+    protected QuerySpecification(Expression<Func<TEntity, bool>> criteria) => Criteria = criteria;
 
-    public Expression<Func<TEntity, bool>>? Criteria { get; }
+    public Expression<Func<TEntity, bool>> Criteria { get; }
 
     public List<Expression<Func<TEntity, object>>> IncludedExpressions { get; } = new();
     
-    public Expression<Func<TEntity, object>>? OrderByAscendingExpression { get; private set; }
+    public Expression<Func<TEntity, object>> OrderByAscendingExpression { get; private set; }
     
-    public Expression<Func<TEntity, object>>? OrderByDescendingExpression { get; private set; }
+    public Expression<Func<TEntity, object>> OrderByDescendingExpression { get; private set; }
 
     protected void AddInclude(Expression<Func<TEntity, object>> includedExpression)
         => IncludedExpressions.Add(includedExpression);

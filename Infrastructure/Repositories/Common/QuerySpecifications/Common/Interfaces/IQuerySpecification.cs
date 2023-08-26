@@ -6,11 +6,11 @@ namespace Infrastructure.Repositories.Common.QuerySpecifications.Common.Interfac
 public interface IQuerySpecification<TEntity> 
     where TEntity : class, IEntity<Guid>
 {
-    Expression<Func<TEntity, bool>>? Criteria { get; }
-    
+    Expression<Func<TEntity, bool>> Criteria { get; }
+
     List<Expression<Func<TEntity, object>>> IncludedExpressions { get; } 
     
-    Expression<Func<TEntity, object>>? OrderByAscendingExpression { get; }
+    Expression<Func<TEntity, object>> OrderByAscendingExpression { get; }
     
-    Expression<Func<TEntity, object>>? OrderByDescendingExpression { get; }
+    Expression<Func<TEntity, object>> OrderByDescendingExpression { get; }
 }
