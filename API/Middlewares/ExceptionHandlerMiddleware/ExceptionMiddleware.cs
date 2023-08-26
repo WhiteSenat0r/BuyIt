@@ -2,7 +2,6 @@
 using System.Text.Json;
 using API.Middlewares.ExceptionHandlerMiddleware.Common.Classes;
 using API.Responses.Common.Classes;
-using API.Responses.Common.Interfaces;
 
 namespace API.Middlewares.ExceptionHandlerMiddleware;
 
