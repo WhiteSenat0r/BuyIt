@@ -10,7 +10,7 @@ public class ApiResponse : IApiResponse
         ResponseMessage = responseMessage ?? GetDefaultResponseMessage();
     }
     
-    public int ResponseCode { get; }
+    public int ResponseCode { get; set; }
     
     public string ResponseMessage { get; set; }
 

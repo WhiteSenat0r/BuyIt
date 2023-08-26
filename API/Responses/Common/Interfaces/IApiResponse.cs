@@ -2,7 +2,7 @@
 
 public interface IApiResponse
 {
-    int ResponseCode { get; }
+    int ResponseCode { get; set; }
     
-    string ResponseMessage { set; }
+    string ResponseMessage { get; set; }
 }
