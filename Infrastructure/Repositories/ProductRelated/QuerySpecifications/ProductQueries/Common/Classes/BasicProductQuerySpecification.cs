@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Core.Entities.Product;
+using Core.Entities.Product.Common.Interfaces;
 using Infrastructure.Repositories.Common.QuerySpecifications.Common.Classes;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common
     .FilteringModels.Common.Interfaces;
@@ -49,15 +50,26 @@ public abstract class BasicProductQuerySpecification : QuerySpecification<Produc
     
     public Expression<Func<Product, bool>> SpecificationCriteria { get; protected init; }
     
-    protected static bool FilterBySpecificationAspect(string incomeAspect, string parentKey, 
+    protected static bool GetSpecificationCategoryFilteringModel
+        (string parentKey, IEnumerable<string> childKeys, IEnumerable<string> incomeAspects, IProduct criteria)
+    {
+        var childKeysList = childKeys.ToList();
+        var incomeAspectsList = incomeAspects.ToList();
+
+        return !childKeysList.Where((t, i) => 
+            !FilterBySpecificationAspect
+                (incomeAspectsList[i], parentKey, t, criteria.Specifications, GetRequiredCriteria)).Any();
+    }
+
+    private static bool FilterBySpecificationAspect(string incomeAspect, string parentKey, 
         string childKey, IDictionary<string, IDictionary<string,string>> specifications,
         Func<IDictionary<string, IDictionary<string,string>>, string, string, string, bool> getCriteria) =>
         string.IsNullOrEmpty(incomeAspect) || getCriteria(specifications, incomeAspect, parentKey, childKey);
 
     private static string GetConvertedInputSpecificationAspectValue(string inputValue, char containedChar) =>
         inputValue.Contains(containedChar) ? inputValue.Replace(containedChar, ' ') : inputValue;
-    
-    protected static bool GetRequiredCriteria(IDictionary<string, IDictionary<string,string>> specifications,
+
+    private static bool GetRequiredCriteria(IDictionary<string, IDictionary<string,string>> specifications,
         string classification, string parentKey, string childKey) =>
         specifications.ContainsKey(parentKey) &&
         specifications[parentKey].ContainsKey(childKey) &&
