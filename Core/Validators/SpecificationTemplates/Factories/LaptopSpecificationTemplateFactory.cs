@@ -1,6 +1,6 @@
 ﻿namespace Core.Validators.SpecificationTemplates.Factories;
 
-internal class LaptopSpecificationTemplateFactory : ComputerSpecificationTemplateFactory
+internal class LaptopSpecificationTemplateFactory : BasicComputerSpecificationTemplateFactory
 {
     // Current class creates a template, which is used for validation of laptop's
     // specifications. An example of specifications is described below: 
@@ -198,7 +198,7 @@ internal class LaptopSpecificationTemplateFactory : ComputerSpecificationTemplat
         var template = base.Create();
 
         template["General"] = GetNewDictionaryValue
-            (template, "General", new List<string>(){ "Model family" });
+            (template, "General", new List<string> { "Model family" });
         
         template["Interfaces and connection"] = GetNewDictionaryValue
             (template, "Interfaces and connection", new List<string>()
