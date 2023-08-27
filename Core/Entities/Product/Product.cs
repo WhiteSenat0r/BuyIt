@@ -64,7 +64,7 @@ public class Product : IProduct
             (value, ref _description, false);
     }
 
-    [Column(TypeName = "decimal(6, 2)")]
+    [Column(TypeName = "decimal(8, 2)")]
     public decimal Price // Price of the product (for example: $USD 199.99)
     {
         get => _price;
