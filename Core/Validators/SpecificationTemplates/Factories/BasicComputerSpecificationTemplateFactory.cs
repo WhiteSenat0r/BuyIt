@@ -2,12 +2,11 @@
 
 namespace Core.Validators.SpecificationTemplates.Factories;
 
-internal class ComputerSpecificationTemplateFactory
+internal class BasicComputerSpecificationTemplateFactory
     : SpecificationTemplateFactory
 {
-    internal override IDictionary<string, IEnumerable<string>> Create()
-    {
-        return new Dictionary<string, IEnumerable<string>>
+    internal override IDictionary<string, IEnumerable<string>> Create() =>
+        new Dictionary<string, IEnumerable<string>>
         {
             {
                 "General", new List<string>
@@ -73,5 +72,4 @@ internal class ComputerSpecificationTemplateFactory
                 }
             }
         };
-    }
 }
