@@ -1,0 +1,13 @@
+﻿namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries
+    .Common.FilteringModels.ComputerRelated;
+
+public class AioComputerFilteringModel : PersonalComputerFilteringModel
+{
+    public string DisplayDiagonal { get; set; }
+
+    public string DisplayResolution { get; set; }
+
+    public string DisplayMatrixType { get; set; }
+
+    public string DisplayRefreshRate { get; set; }
+}
