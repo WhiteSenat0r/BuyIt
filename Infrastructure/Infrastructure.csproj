@@ -14,6 +14,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.9" />
+      <PackageReference Include="PredicateBuilder" Version="1.0.0" />
     </ItemGroup>
 
     <ItemGroup>
