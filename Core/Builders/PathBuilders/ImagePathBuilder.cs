@@ -38,22 +38,34 @@ public static class ImagePathBuilder
         string categoryNameEnding, StringBuilder pathBuilder, IProductType category)
     {
         var vowels = new[] { 'a', 'e', 'i', 'o', 'u' };
+
+        var categoryName = category.Name;
+
+        if (categoryName.Contains(' '))
+            categoryName = categoryName.Replace(' ', '-');
         
+        DeterminateCategoryEnding(categoryNameEnding, pathBuilder, categoryName, vowels);
+        
+        pathBuilder.Append('/');
+    }
+
+    private static void DeterminateCategoryEnding
+        (string categoryNameEnding, StringBuilder pathBuilder, string categoryName, char[] vowels)
+    {
         if (categoryNameEnding.Equals("es"))
-            pathBuilder.Append(category.Name.ToLower());
-        else if (categoryNameEnding[^1].Equals('s') 
+            pathBuilder.Append(categoryName.ToLower());
+        else if (categoryNameEnding[^1].Equals('s')
                  || categoryNameEnding[^1].Equals('x') || categoryNameEnding[^1].Equals('z')
                  || categoryNameEnding.Equals("ch") || categoryNameEnding.Equals("sh")
                  || vowels.Any(c => c.Equals
                      (categoryNameEnding[0]) && categoryNameEnding[^1].Equals('o')))
-            pathBuilder.Append(category.Name.ToLower() + 'e' + 's');
+            pathBuilder.Append(categoryName.ToLower() + 'e' + 's');
         else if (vowels.Any(c => c.Equals(categoryNameEnding[^1])) &&
                  categoryNameEnding[categoryNameEnding[0]].Equals('f'))
-            pathBuilder.Append(category.Name.ToLower().Replace
+            pathBuilder.Append(categoryName.ToLower().Replace
                 ($"f{categoryNameEnding[^1]}", $"v{categoryNameEnding[^1]}"));
-        else 
-            pathBuilder.Append(category.Name.ToLower() + 's');
-        pathBuilder.Append('/');
+        else
+            pathBuilder.Append(categoryName.ToLower() + 's');
     }
 
     private static string GetCategoryNameEnding(IProductType productType) =>
