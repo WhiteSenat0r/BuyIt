@@ -4,6 +4,7 @@ using Core.Entities.Product.Common.Interfaces;
 using Infrastructure.Repositories.Common.QuerySpecifications.Common.Classes;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common
     .FilteringModels.Common.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.Classes;
 
@@ -11,6 +12,8 @@ public abstract class BasicProductQuerySpecification : QuerySpecification<Produc
 {
     protected BasicProductQuerySpecification(IProductFilteringModel filteringModel) 
         : base(product => 
+            (filteringModel.Category.IsNullOrEmpty() || product.ProductType.Name.ToLower().Equals
+                (filteringModel.Category.ToLower())) &&
             (!filteringModel.LowerPriceLimit.HasValue || product.Price >= filteringModel.LowerPriceLimit) &&
             (!filteringModel.UpperPriceLimit.HasValue || product.Price <= filteringModel.UpperPriceLimit) &&
             (string.IsNullOrEmpty(filteringModel.BrandName) || product.Manufacturer.Name.ToLower().Equals
