@@ -179,12 +179,12 @@ public class ProductTests
     [Fact]
     public void MainImagesUrlsProperty_Should_ThrowArgumentNullExceptionIfEmptyOrNull()
     {
-        Assert.Throws<ArgumentNullException>(() => _product = new Product()
+        Assert.Throws<ArgumentNullException>(() => _product = new Product
         {
             MainImagesNames = new List<string>()
         });
         
-        Assert.Throws<ArgumentNullException>(() => _product = new Product()
+        Assert.Throws<ArgumentNullException>(() => _product = new Product
         {
             MainImagesNames = null
         });
@@ -193,7 +193,7 @@ public class ProductTests
     [Fact]
     public void SpecificationsProperty_Should_ThrowArgumentNullExceptionIfNullIsPassed()
     {
-        Assert.Throws<ArgumentNullException>(() => _product = new Product()
+        Assert.Throws<ArgumentNullException>(() => _product = new Product
         {
             Specifications = null
         });
@@ -205,10 +205,10 @@ public class ProductTests
     public void SpecificationsProperty_Should_ThrowArgumentNullExceptionIfKeyOrValueIsNullOrEmpty
         (string key, IDictionary<string,string> attributes)
     {
-        Assert.Throws<ArgumentNullException>(() => _product = new Product()
+        Assert.Throws<ArgumentNullException>(() => _product = new Product
         {
             ProductType = new ProductType("Laptop"),
-            Specifications = new Dictionary<string, IDictionary<string, string>>()
+            Specifications = new Dictionary<string, IDictionary<string, string>>
             {
                 {
                     key, attributes
@@ -223,13 +223,13 @@ public class ProductTests
     public void SpecificationsProperty_Should_ThrowArgumentNullExceptionIfValuesKeyOrValueIsNullOrEmpty
         (string key, string value)
     {
-        Assert.Throws<ArgumentNullException>(() => _product = new Product()
+        Assert.Throws<ArgumentNullException>(() => _product = new Product
         {
             ProductType = new ProductType("Laptop"),
-            Specifications = new Dictionary<string, IDictionary<string, string>>()
+            Specifications = new Dictionary<string, IDictionary<string, string>>
             {
                 {
-                    "Key", new Dictionary<string, string>()
+                    "Key", new Dictionary<string, string>
                     {
                         {
                             key, value
@@ -257,7 +257,7 @@ public class ProductTests
             },
             new object[]
             {
-                "", new Dictionary<string, string>()
+                "", new Dictionary<string, string>
                 {
                     {
                         "Attribute1", "AttributeValue1"
@@ -297,10 +297,10 @@ public class ProductTests
             "https://somewebpage.com/iphone14promax3.jpg",
             "https://somewebpage.com/iphone14promax4.jpg",
         },
-        new Dictionary<string, IDictionary<string, string>>()
-    {
+        new Dictionary<string, IDictionary<string, string>>
         {
-            "Processor", new Dictionary<string, string>()
+        {
+            "Processor", new Dictionary<string, string>
             {
                 {
                     "Manufacturer", "Intel"
@@ -329,7 +329,7 @@ public class ProductTests
             }
         },
         {
-            "General", new Dictionary<string, string>()
+            "General", new Dictionary<string, string>
             {
                 {
                     "Classification", "Premium"
@@ -343,7 +343,7 @@ public class ProductTests
             }
         },
         {
-            "Graphics card", new Dictionary<string, string>()
+            "Graphics card", new Dictionary<string, string>
             {
                 {
                     "Type", "Integrated"
@@ -369,7 +369,7 @@ public class ProductTests
             }
         },
         {
-            "Storage", new Dictionary<string, string>()
+            "Storage", new Dictionary<string, string>
             {
                 {
                     "Type", "SSD"
@@ -383,7 +383,7 @@ public class ProductTests
             }
         },
         {
-            "Random access memory", new Dictionary<string, string>()
+            "Random access memory", new Dictionary<string, string>
             {
                 {
                     "Type", "DDR5"
@@ -394,7 +394,7 @@ public class ProductTests
             }
         },
         {
-            "Measurements", new Dictionary<string, string>()
+            "Measurements", new Dictionary<string, string>
             {
                 {
                     "Width", "311 mm"
@@ -411,7 +411,7 @@ public class ProductTests
             }
         },
         {
-            "Interfaces and connection", new Dictionary<string, string>()
+            "Interfaces and connection", new Dictionary<string, string>
             {
                 {
                     "Network adapters", "Bluetooth, WiFi 802.11ax"
@@ -437,7 +437,7 @@ public class ProductTests
             }
         },
         {
-            "Display", new Dictionary<string, string>()
+            "Display", new Dictionary<string, string>
             {
                 {
                     "Diagonal", "14\""
@@ -460,7 +460,7 @@ public class ProductTests
             }
         },
         {
-            "Battery", new Dictionary<string, string>()
+            "Battery", new Dictionary<string, string>
             {
                 {
                     "Type", "Li-ion"
@@ -471,7 +471,7 @@ public class ProductTests
             }
         },
         {
-            "Additional options", new Dictionary<string, string>()
+            "Additional", new Dictionary<string, string>
             {
                 {
                     "Optical drive", "Absent"

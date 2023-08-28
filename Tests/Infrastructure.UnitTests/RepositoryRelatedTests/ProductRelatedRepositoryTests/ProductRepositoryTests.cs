@@ -95,7 +95,7 @@ public class ProductRepositoryTests
         manufacturer,
         type,
         rating,
-        new List<string>()
+        new List<string>
         {
             "https://i.imgur.com/t8nTGmY.jpg",
             "https://i.imgur.com/p69Qtwy.jpg",
@@ -103,10 +103,10 @@ public class ProductRepositoryTests
             "https://i.imgur.com/zXa5aZu.jpg",
             "https://i.imgur.com/QBPblx7.jpg"
         },
-        new Dictionary<string, IDictionary<string, string>>()
+        new Dictionary<string, IDictionary<string, string>>
         {
             {
-                "Processor", new Dictionary<string, string>()
+                "Processor", new Dictionary<string, string>
                 {
                     {
                         "Manufacturer", "Intel"
@@ -135,7 +135,7 @@ public class ProductRepositoryTests
                 }
             },
             {
-                "General", new Dictionary<string, string>()
+                "General", new Dictionary<string, string>
                 {
                     {
                         "Classification", "Premium"
@@ -149,7 +149,7 @@ public class ProductRepositoryTests
                 }
             },
             {
-                "Graphics card", new Dictionary<string, string>()
+                "Graphics card", new Dictionary<string, string>
                 {
                     {
                         "Type", "Integrated"
@@ -175,7 +175,7 @@ public class ProductRepositoryTests
                 }
             },
             {
-                "Storage", new Dictionary<string, string>()
+                "Storage", new Dictionary<string, string>
                 {
                     {
                         "Type", "SSD"
@@ -189,7 +189,7 @@ public class ProductRepositoryTests
                 }
             },
             {
-                "Random access memory", new Dictionary<string, string>()
+                "Random access memory", new Dictionary<string, string>
                 {
                     {
                         "Type", "DDR5"
@@ -200,7 +200,7 @@ public class ProductRepositoryTests
                 }
             },
             {
-                "Measurements", new Dictionary<string, string>()
+                "Measurements", new Dictionary<string, string>
                 {
                     {
                         "Width", "311 mm"
@@ -217,7 +217,7 @@ public class ProductRepositoryTests
                 }
             },
             {
-                "Interfaces and connection", new Dictionary<string, string>()
+                "Interfaces and connection", new Dictionary<string, string>
                 {
                     {
                         "Network adapters", "Bluetooth, WiFi 802.11ax"
@@ -243,7 +243,7 @@ public class ProductRepositoryTests
                 }
             },
             {
-                "Display", new Dictionary<string, string>()
+                "Display", new Dictionary<string, string>
                 {
                     {
                         "Diagonal", "14\""
@@ -266,7 +266,7 @@ public class ProductRepositoryTests
                 }
             },
             {
-                "Battery", new Dictionary<string, string>()
+                "Battery", new Dictionary<string, string>
                 {
                     {
                         "Type", "Built-in"
@@ -277,7 +277,7 @@ public class ProductRepositoryTests
                 }
             },
             {
-                "Additional options", new Dictionary<string, string>()
+                "Additional", new Dictionary<string, string>
                 {
                     {
                         "Optical drive", "Absent"

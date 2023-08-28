@@ -40,10 +40,10 @@ public class ProductSpecificationValidatorTests
     public void ValidateMethod_Should_ThrowArgumentNullExceptionsIfAnySpecificationsKeyIsInvalid()
     {
         _validator = new ProductSpecificationValidator("Laptop", 
-            new Dictionary<string, IDictionary<string, string>>()
+            new Dictionary<string, IDictionary<string, string>>
             {
                 {
-                    "", new Dictionary<string, string>()
+                    "", new Dictionary<string, string>
                     {
                         {
                             "Test", "test"
@@ -59,7 +59,7 @@ public class ProductSpecificationValidatorTests
     public void ValidateMethod_Should_ThrowArgumentNullExceptionsIfAnySpecificationsValueIsInvalid()
     {
         _validator = new ProductSpecificationValidator("Laptop", 
-            new Dictionary<string, IDictionary<string, string>>()
+            new Dictionary<string, IDictionary<string, string>>
             {
                 {
                     "Test", null
@@ -73,10 +73,10 @@ public class ProductSpecificationValidatorTests
     public void ValidateMethod_Should_ThrowArgumentNullExceptionsIfAnySpecsAttributeKeyIsInvalid()
     {
         _validator = new ProductSpecificationValidator("Laptop", 
-            new Dictionary<string, IDictionary<string, string>>()
+            new Dictionary<string, IDictionary<string, string>>
             {
                 {
-                    "Test", new Dictionary<string, string>()
+                    "Test", new Dictionary<string, string>
                     {
                         {
                             " ", "test"
@@ -92,10 +92,10 @@ public class ProductSpecificationValidatorTests
     public void ValidateMethod_Should_ThrowArgumentNullExceptionsIfAnySpecsAttributeValueIsInvalid()
     {
         _validator = new ProductSpecificationValidator("Laptop", 
-            new Dictionary<string, IDictionary<string, string>>()
+            new Dictionary<string, IDictionary<string, string>>
             {
                 {
-                    "Test", new Dictionary<string, string>()
+                    "Test", new Dictionary<string, string>
                     {
                         {
                             "Test", " "
@@ -111,10 +111,10 @@ public class ProductSpecificationValidatorTests
     public void ValidateMethod_Should_ThrowArgumentExceptionsIfAnySpecsKeyDoesNotMatchTemplate()
     {
         _validator = new ProductSpecificationValidator("Laptop", 
-            new Dictionary<string, IDictionary<string, string>>()
+            new Dictionary<string, IDictionary<string, string>>
             {
                 {
-                    "General ", new Dictionary<string, string>()
+                    "General ", new Dictionary<string, string>
                     {
                         {
                             "Test", "Test"
@@ -130,10 +130,10 @@ public class ProductSpecificationValidatorTests
     public void ValidateMethod_Should_ThrowArgumentExceptionsIfAnySpecsAttributeKeyDoesNotMatchTemplate()
     {
         _validator = new ProductSpecificationValidator("Laptop", 
-            new Dictionary<string, IDictionary<string, string>>()
+            new Dictionary<string, IDictionary<string, string>>
             {
                 {
-                    "General", new Dictionary<string, string>()
+                    "General", new Dictionary<string, string>
                     {
                         {
                             "Operating_null_system", "Test"
@@ -325,7 +325,7 @@ public class ProductSpecificationValidatorTests
                 }
             },
             {
-                "Additional options", new Dictionary<string, string>
+                "Additional", new Dictionary<string, string>
                 {
                     {
                         "Optical drive", "Absent"

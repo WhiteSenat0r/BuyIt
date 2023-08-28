@@ -45,7 +45,7 @@ public class ProductRatingTests
     [Fact]
     public void ScoreProperty_Should_CalculateRatingAfterNewValueIsAssigned()
     {
-        _productRating = new ProductRating()
+        _productRating = new ProductRating
         {
             Score = 4.7
         };
