@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common
     .FilteringModels.Common.Classes;
-using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels.Common.Interfaces;
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries
     .Common.FilteringModels.ComputerRelated;
