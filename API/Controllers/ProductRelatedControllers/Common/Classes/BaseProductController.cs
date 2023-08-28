@@ -45,7 +45,7 @@ public abstract class BaseProductController<TFilteringModel, TQuerySpecification
             : Ok(Mapper.Map<IEnumerable<ProductDto>>(items));
     }
     
-    [HttpGet("[controller]/item/{productCode}")]
+    [HttpGet("item/{productCode}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IProductDto>> GetSingle(string productCode)
