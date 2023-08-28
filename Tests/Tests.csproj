@@ -27,6 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Api.UnitTests\" />
       <Folder Include="Core.UnitTests\" />
     </ItemGroup>
 
