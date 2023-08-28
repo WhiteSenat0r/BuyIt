@@ -1,8 +1,8 @@
 ﻿using Core.Validators.SpecificationTemplates.Factories.Common;
 
-namespace Core.Validators.SpecificationTemplates.Factories;
+namespace Core.Validators.SpecificationTemplates.Factories.ComputerRelated;
 
-internal class BasicComputerSpecificationTemplateFactory
+internal class PersonalComputerSpecificationTemplateFactory
     : SpecificationTemplateFactory
 {
     internal override IDictionary<string, IEnumerable<string>> Create() =>
@@ -63,7 +63,7 @@ internal class BasicComputerSpecificationTemplateFactory
                 }
             },
             {
-                "Measurements", new List<string>()
+                "Measurements", new List<string>
                 {
                     "Width",
                     "Depth",

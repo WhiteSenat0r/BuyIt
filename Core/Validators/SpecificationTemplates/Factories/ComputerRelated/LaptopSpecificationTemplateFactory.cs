@@ -1,6 +1,6 @@
-﻿namespace Core.Validators.SpecificationTemplates.Factories;
+﻿namespace Core.Validators.SpecificationTemplates.Factories.ComputerRelated;
 
-internal class LaptopSpecificationTemplateFactory : BasicComputerSpecificationTemplateFactory
+internal class LaptopSpecificationTemplateFactory : PersonalComputerSpecificationTemplateFactory
 {
     // Current class creates a template, which is used for validation of laptop's
     // specifications. An example of specifications is described below: 
@@ -59,7 +59,7 @@ internal class LaptopSpecificationTemplateFactory : BasicComputerSpecificationTe
     //                 "Manufacturer", "Intel"
     //             },
     //             {
-    //                 "Model", "Intel Iris Xe Graphics G7 96EU"
+    //                 "Model", "Iris Xe G7 96EU"
     //             },
     //             {
     //                 "Series", "Intel Iris"
@@ -198,52 +198,31 @@ internal class LaptopSpecificationTemplateFactory : BasicComputerSpecificationTe
         var template = base.Create();
 
         template["General"] = GetNewDictionaryValue
-            (template, "General", new List<string> { "Model family" });
+            (template, "General", new List<string> { "Model family", "Main color" });
         
         template["Interfaces and connection"] = GetNewDictionaryValue
-            (template, "Interfaces and connection", new List<string>()
+            (template, "Interfaces and connection", new List<string>
             {
                 "Web-camera", "Web-camera resolution", "Built-in microphone",
                 "Built-in card reader", "Supported card types"
             });
 
-        AddNewSpecificationToTemplate(template, "Battery", new List<string>()
+        AddNewSpecificationToTemplate(template, "Battery", new List<string>
         {
             "Type", "Capacity"
         });
         
-        AddNewSpecificationToTemplate(template, "Additional options", new List<string>()
+        AddNewSpecificationToTemplate(template, "Additional", new List<string>
         {
             "Optical drive", "Numeric keypad", "Keyboard backlight"
         });
         
-        AddNewSpecificationToTemplate(template, "Display", new List<string>()
+        AddNewSpecificationToTemplate(template, "Display", new List<string>
         {
             "Diagonal", "Resolution", "Coating",
             "Matrix type", "Display type", "Refresh rate"
         });
 
         return template;
-    }
-    
-    private static IEnumerable<string> GetNewDictionaryValue(
-        IDictionary<string, IEnumerable<string>> dictionary,
-        string key, IEnumerable<string> addedItems)
-    {
-        dictionary.TryGetValue(key, out var collection);
-
-        var extractedCollection = collection!.ToList();
-        
-        extractedCollection.AddRange(addedItems);
-
-        return extractedCollection;
-    }
-
-    private static void AddNewSpecificationToTemplate(
-        IDictionary<string, IEnumerable<string>> dictionary,
-        string newKey, IEnumerable<string> newValue)
-    {
-        dictionary.Add
-            (new KeyValuePair<string, IEnumerable<string>>(newKey, newValue));
     }
 }
