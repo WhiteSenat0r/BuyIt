@@ -3,6 +3,8 @@
 
 public class AioComputerFilteringModel : PersonalComputerFilteringModel
 {
+    public AioComputerFilteringModel() => Category = "All-in-one computer";
+    
     public string DisplayDiagonal { get; set; }
 
     public string DisplayResolution { get; set; }

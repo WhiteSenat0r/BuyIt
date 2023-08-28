@@ -6,8 +6,10 @@ namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.Product
 
 public abstract class BasicProductFilteringModel : IProductFilteringModel
 {
+    public string Category { get; protected init; }
+
     public string BrandName { get; set; }
-    
+
     public decimal? LowerPriceLimit { get; set; }
     
     public decimal? UpperPriceLimit { get; set; }

@@ -1,11 +1,14 @@
 ﻿using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common
     .FilteringModels.Common.Classes;
+using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels.Common.Interfaces;
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries
     .Common.FilteringModels.ComputerRelated;
 
 public class PersonalComputerFilteringModel : BasicProductFilteringModel
 {
+    public PersonalComputerFilteringModel() => Category = "Personal computer";
+    
     public string Classification { get; set; }
 
     public string OperatingSystem { get; set; }

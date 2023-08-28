@@ -2,8 +2,10 @@
 
 public interface IProductFilteringModel
 {
-    string BrandName { get; }
+    string Category { get; }
     
+    string BrandName { get; }
+
     decimal? LowerPriceLimit { get; }
     
     decimal? UpperPriceLimit { get; }

@@ -3,6 +3,8 @@
 
 public class LaptopFilteringModel : PersonalComputerFilteringModel
 {
+    public LaptopFilteringModel() => Category = "Laptop";
+    
     public string ModelFamily { get; set; }
 
     public string DisplayDiagonal { get; set; }
