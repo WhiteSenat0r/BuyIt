@@ -21,6 +21,8 @@ public class PersonalComputerFilteringModel : BasicProductFilteringModel
     public string GraphicsCardBrand { get; set; }
 
     public string GraphicsCardType { get; set; }
+    
+    public string GraphicsCardModel { get; set; }
 
     public string GraphicsCardSeries { get; set; }
 

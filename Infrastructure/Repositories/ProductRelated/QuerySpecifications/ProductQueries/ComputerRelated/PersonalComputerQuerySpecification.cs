@@ -15,15 +15,15 @@ public class PersonalComputerQuerySpecification : BasicProductQuerySpecification
                 new[] { "Manufacturer", "Series", "Quantity of cores" },
                 new[]
                 {
-                    filteringModel.ProcessorBrand, filteringModel.ProcessorSeries,
-                    filteringModel.CoresQuantity
+                    filteringModel.ProcessorBrand, filteringModel.ProcessorSeries, filteringModel.CoresQuantity
                 }, criteria) &&
             GetSpecificationCategoryFilteringModel("Graphics card",
-                new[] { "Manufacturer", "Series", "Type", "Amount of memory" },
+                new[] { "Manufacturer", "Series", "Model", "Type", "Amount of memory" },
                 new[]
                 {
                     filteringModel.GraphicsCardBrand, filteringModel.GraphicsCardSeries,
-                    filteringModel.GraphicsCardType, filteringModel.GraphicsCardMemoryCapacity
+                    filteringModel.GraphicsCardModel, filteringModel.GraphicsCardType,
+                    filteringModel.GraphicsCardMemoryCapacity
                 }, criteria) &&
             GetSpecificationCategoryFilteringModel("Storage", new[] { "Type", "Amount of memory" },
                 new[] { filteringModel.StorageType, filteringModel.StorageCapacity }, criteria) &&
