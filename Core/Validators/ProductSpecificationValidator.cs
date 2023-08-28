@@ -1,7 +1,7 @@
 ﻿using Core.Entities.Product;
 using Core.Entities.Product.Common.Interfaces;
 using Core.Validators.Interfaces;
-using Core.Validators.SpecificationTemplates.Factories;
+using Core.Validators.SpecificationTemplates.Factories.ComputerRelated;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Core.Validators;
@@ -50,6 +50,12 @@ public class ProductSpecificationValidator : IValidator
 
     private void CheckProductSpecificationTemplateMatching()
     {
+        CheckProductSpecificationForRedundantAttributes();
+        CheckAllAttributesPresence();
+    }
+
+    private void CheckAllAttributesPresence()
+    {
         foreach (var specification in RequiredSpecifications)
         {
             if (!ProductSpecifications.ContainsKey(specification.Key))
@@ -59,16 +65,24 @@ public class ProductSpecificationValidator : IValidator
             ProductSpecifications.TryGetValue
                 (specification.Key, out var productSpecificationAttributes);
 
-            if (productSpecificationAttributes!.Keys.Any(attribute => !specification.Value.Contains(attribute)))
-            {
-                var keys = specification.Value
-                    .Where(item => !productSpecificationAttributes.ContainsKey(item))
-                    .Select(item => item)
-                    .ToList();
-                throw new ArgumentException(
-                    @$"""{keys.First()}"" attribute key is not present in the given ""{specification.Key}"" specification!");
-            }
+            if (productSpecificationAttributes!.Keys.All(attribute => specification.Value.Contains(attribute)))
+                continue;
+            var keys = specification.Value
+                .Where(item => !productSpecificationAttributes.ContainsKey(item))
+                .Select(item => item)
+                .ToList();
+            throw new ArgumentException(
+                @$"""{keys.First()}"" attribute key is not present in the given ""{specification.Key}"" specification!");
         }
+    }
+
+    private void CheckProductSpecificationForRedundantAttributes()
+    {
+        foreach (var specification in ProductSpecifications)
+            if (!RequiredSpecifications.ContainsKey(specification.Key) &&
+                !specification.Key.ToLower().Equals("additional"))
+                throw new ArgumentException(@$"""{specification.Key}"" 
+                    specification attribute must not be present in current product specifications!");
     }
 
     private void CheckSpecificationsForNullOrEmptyValues()
@@ -92,11 +106,12 @@ public class ProductSpecificationValidator : IValidator
                 ("One of attributes' keys is null, empty or consists only of whitespaces!");
     }
 
-    private static IDictionary<string, IEnumerable<string>>
-        GetRequiredSpecificationTemplate
+    private static IDictionary<string, IEnumerable<string>> GetRequiredSpecificationTemplate
         (IProductType productType) => productType.Name switch
     {
         "Laptop" => new LaptopSpecificationTemplateFactory().Create(),
+        "All-in-one computer" => new AioComputerSpecificationTemplateFactory().Create(),
+        "Personal computer" => new PersonalComputerSpecificationTemplateFactory().Create(),
         _ => throw new ArgumentException("Invalid product type was received!")
     };
     
