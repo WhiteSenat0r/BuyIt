@@ -9,9 +9,6 @@ public interface IRepository<TEntity>
     Task<IEnumerable<TEntity>> GetAllEntitiesAsync
         (IQuerySpecification<TEntity> querySpecification);
 
-    Task<IEnumerable<TEntity>> GetEntitiesBySpecificationAsync
-        (IQuerySpecification<TEntity> querySpecification);
-
     Task<TEntity> GetSingleEntityBySpecificationAsync
         (IQuerySpecification<TEntity> querySpecification);
 
