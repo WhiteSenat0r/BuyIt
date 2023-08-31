@@ -1,6 +1,8 @@
 ﻿using API.Controllers.Common.Classes;
 using API.Helpers.DataTransferObjects.ProductRelated;
 using API.Helpers.DataTransferObjects.ProductRelated.Common.Interfaces;
+using API.Helpers.PaginationResultModels;
+using API.Helpers.PaginationResultModels.Common.Interfaces;
 using API.Responses.Common.Classes;
 using AutoMapper;
 using Infrastructure.Contexts;
@@ -10,7 +12,6 @@ using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQuer
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels
     .Common.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers.ProductRelatedControllers.Common.Classes;
 
@@ -18,8 +19,7 @@ public abstract class BaseProductController<TFilteringModel, TQuerySpecification
     where TFilteringModel : IProductFilteringModel
     where TQuerySpecification : BasicProductQuerySpecification
 {
-    protected BaseProductController
-        (StoreContext storeContext, IMapper mapper)
+    protected BaseProductController(StoreContext storeContext, IMapper mapper)
     {
         Context = storeContext;
         Mapper = mapper;
@@ -32,17 +32,12 @@ public abstract class BaseProductController<TFilteringModel, TQuerySpecification
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<IProductDto>>> Get([FromQuery] TFilteringModel filteringModel)
+    public async Task<ActionResult<IPaginationResult<IProductDto>>> Get([FromQuery] TFilteringModel filteringModel)
     {
-        var specification = (TQuerySpecification)Activator
-            .CreateInstance(typeof(TQuerySpecification), filteringModel);
-        
-        var items = (await new ProductRepositoryFactory().Create(Context)
-            .GetAllEntitiesAsync(specification)).Where(specification!.SpecificationCriteria.Compile());
-
-        return items.IsNullOrEmpty()
-            ? NotFound(new ApiResponse(404, @"No products were found!"))
-            : Ok(Mapper.Map<IEnumerable<ProductDto>>(items));
+        return Ok(Mapper.Map<ProductPaginationResult>(new ProductPaginationResult(
+            await new ProductRepositoryFactory().Create(Context).GetAllEntitiesAsync(
+                (TQuerySpecification)Activator.CreateInstance(typeof(TQuerySpecification),
+                    filteringModel)), filteringModel)));
     }
     
     [HttpGet("item/{productCode}")]
