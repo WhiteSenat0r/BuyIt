@@ -17,7 +17,7 @@ public class ProductRepository : GenericRepository<Product>
         new ProductRatingRepository(Context).RemoveExistingEntity(removedEntity.Rating);
 
         var productsWithIdenticalManufacturer = await new ProductRepository(Context)
-            .GetEntitiesBySpecificationAsync(new ProductQueryByManufacturerIdSpecification
+            .GetAllEntitiesAsync(new ProductQueryByManufacturerIdSpecification
                 (removedEntity.ManufacturerId));
         
         if (productsWithIdenticalManufacturer.IsNullOrEmpty())
