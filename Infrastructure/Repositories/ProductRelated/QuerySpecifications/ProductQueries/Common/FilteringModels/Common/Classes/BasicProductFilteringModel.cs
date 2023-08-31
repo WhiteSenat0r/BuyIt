@@ -6,6 +6,18 @@ namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.Product
 
 public abstract class BasicProductFilteringModel : IProductFilteringModel
 {
+    private int _itemQuantity = MaximumItemQuantity;
+
+    public const int MaximumItemQuantity = 24;
+
+    public int PageIndex { get; set; } = 1;
+
+    public int ItemQuantity
+    {
+        get => _itemQuantity;
+        set => _itemQuantity = value > MaximumItemQuantity ? MaximumItemQuantity : value;
+    }
+    
     public string Category { get; protected init; }
 
     public string BrandName { get; set; }

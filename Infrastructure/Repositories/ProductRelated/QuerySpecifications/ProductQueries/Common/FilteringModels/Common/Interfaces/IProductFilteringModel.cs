@@ -11,4 +11,8 @@ public interface IProductFilteringModel
     decimal? UpperPriceLimit { get; }
     
     string SortingType { get; }
+    
+    public int PageIndex { get; set; }
+
+    public int ItemQuantity { get; set; }
 }
