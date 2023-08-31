@@ -26,6 +26,10 @@ public static class QuerySpecificationEvaluator
                  && querySpecification.OrderByAscendingExpression is null)
             queryable = queryable.OrderByDescending(querySpecification.OrderByDescendingExpression);
 
+        if (querySpecification.IsPagingEnabled)
+            queryable = queryable.Skip(querySpecification.SkippedItemsQuantity)
+                .Take(querySpecification.TakenItemsQuantity);
+        
         return queryable;
     }
 }

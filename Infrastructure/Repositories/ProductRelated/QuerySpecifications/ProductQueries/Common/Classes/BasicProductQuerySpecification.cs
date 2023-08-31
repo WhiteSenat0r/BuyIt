@@ -27,6 +27,8 @@ public abstract class BasicProductQuerySpecification : QuerySpecification<Produc
         });
 
         DeterminateSortingType(filteringModel);
+
+        AddPaging(filteringModel.ItemQuantity, filteringModel.ItemQuantity * ((filteringModel.PageIndex - 1)));
     }
 
     private void DeterminateSortingType(IProductFilteringModel filteringModel)
@@ -50,9 +52,7 @@ public abstract class BasicProductQuerySpecification : QuerySpecification<Produc
                 break;
         }
     }
-    
-    public Expression<Func<Product, bool>> SpecificationCriteria { get; protected init; }
-    
+
     protected static bool GetSpecificationCategoryFilteringModel
         (string parentKey, IEnumerable<string> childKeys, IEnumerable<string> incomeAspects, IProduct criteria)
     {
