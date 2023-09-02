@@ -2,7 +2,7 @@
 using AutoMapper;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels.ComputerRelated;
-using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.ComputerRelated;
+using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.ComputerRelatedSpecifications;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.ProductRelatedControllers.ComputerRelated;
