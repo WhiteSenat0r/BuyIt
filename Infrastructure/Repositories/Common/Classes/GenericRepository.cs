@@ -16,13 +16,8 @@ public abstract class GenericRepository<TEntity> : IRepository<TEntity>
     private protected StoreContext Context { get; init; }
 
     public async Task<IEnumerable<TEntity>> GetAllEntitiesAsync
-        (IQuerySpecification<TEntity> querySpecification)
-    {
-        var items = await ApplySpecification(querySpecification).ToListAsync();
-        
-        return querySpecification.SpecificationCriteria is not null ?
-            items.Where(querySpecification.SpecificationCriteria.Compile()) : items;
-    }
+        (IQuerySpecification<TEntity> querySpecification) =>
+        await ApplySpecification(querySpecification).ToListAsync();
 
     public async Task<TEntity> GetSingleEntityBySpecificationAsync
         (IQuerySpecification<TEntity> querySpecification) =>
