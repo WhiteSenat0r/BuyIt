@@ -13,6 +13,8 @@ public class PersonalComputerFilteringModel : BasicProductFilteringModel
     public string OperatingSystem { get; set; }
 
     public string ProcessorBrand { get; set; }
+    
+    public string ProcessorModel { get; set; }
 
     public string ProcessorSeries { get; set; }
 
