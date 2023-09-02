@@ -1,0 +1,9 @@
+﻿using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.Classes;
+
+namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.RegularSpecifications;
+
+public class ProductQueryByIdSpecification : BasicProductQuerySpecification
+{
+    public ProductQueryByIdSpecification(Guid productId) 
+        : base(criteria => criteria.Id == productId) => AddOrderByAscending(p => p.Name);
+}
