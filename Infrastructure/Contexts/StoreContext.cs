@@ -15,6 +15,8 @@ public class StoreContext : DbContext
     public DbSet<ProductType> ProductTypes { get; set; } = null!;
 
     public DbSet<ProductRating> ProductRatings { get; set; } = null!;
+    
+    public DbSet<ProductSpecification> ProductSpecifications { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) // Configuration of database's context
     {
@@ -27,6 +29,12 @@ public class StoreContext : DbContext
         modelBuilder.Entity<Product>()
             .HasOne(p => p.Manufacturer);
 
+        modelBuilder.Entity<Product>()
+            .HasMany(p => p.Specifications);
+        
+        modelBuilder.Entity<ProductSpecification>()
+            .HasKey(p => p.Id);
+
         modelBuilder.Entity<Product>(entity =>
         {
             // Convert IDictionary<string, IEnumerable<string>> to JSON string for storage in the database
@@ -37,15 +45,6 @@ public class StoreContext : DbContext
                     str => 
                         JsonSerializer.Deserialize
                             <List<string>>(str, new JsonSerializerOptions())!);
-            
-            // Convert IDictionary<string, IDictionary<string, string>>> to JSON string for storage in the database
-            entity.Property(p => p.Specifications)
-                .HasConversion(
-                    specifications => 
-                        JsonSerializer.Serialize(specifications, new JsonSerializerOptions()),
-                    str => 
-                        JsonSerializer.Deserialize
-                            <IDictionary<string, IDictionary<string, string>>>(str, new JsonSerializerOptions())!);
         });
     }
 }
