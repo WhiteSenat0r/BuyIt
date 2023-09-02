@@ -70,6 +70,10 @@ public static class ApplicationServicesExtensions
         serviceCollection.AddScoped<IRepository<ProductRating>>(provider =>
             new ProductRatingRepositoryFactory().Create(
                 provider.GetService<StoreContext>()!));
+        
+        serviceCollection.AddScoped<IRepository<ProductSpecification>>(provider =>
+            new ProductSpecificationRepositoryFactory().Create(
+                provider.GetService<StoreContext>()!));
     }
 
     private static void AddRequiredDbContexts(IServiceCollection serviceCollection, IConfiguration configuration)
