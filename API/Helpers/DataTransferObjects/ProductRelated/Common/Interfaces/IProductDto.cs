@@ -19,6 +19,4 @@ public interface IProductDto
     string ProductCode { get; }
     
     IEnumerable<string> Images { get; }
-
-    IDictionary<string, IDictionary<string, string>> Specifications { get; }
 }

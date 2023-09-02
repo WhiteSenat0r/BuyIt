@@ -21,6 +21,4 @@ public class ProductDto : IProductDto
     public string ProductCode { get; set; } = null!;
     
     public IEnumerable<string> Images { get; set; } = null!;
-
-    public IDictionary<string, IDictionary<string, string>> Specifications { get; set; } = null!;
 }
