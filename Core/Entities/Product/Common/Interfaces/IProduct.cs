@@ -28,5 +28,5 @@ public interface IProduct : IEntity<Guid>
     
     IEnumerable<string> MainImagesNames { get; }
 
-    IDictionary<string, IDictionary<string, string>> Specifications { get; }
+    IEnumerable<ProductSpecification> Specifications { get; }
 }

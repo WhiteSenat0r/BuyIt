@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 using Core.Builders.PathBuilders;
 using Core.Entities.Product.Common.Interfaces;
-using Core.Validators;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Core.Entities.Product;
@@ -14,7 +13,6 @@ public class Product : IProduct
     private string _description = null!;
     private decimal _price;
     private IEnumerable<string> _mainImagesNames = null!;
-    private IDictionary<string, IDictionary<string, string>> _specifications;
 
     public Product() => ProductCode = Id.ToString()[..8].ToUpper(); // Required by EF Core for object's initialization from database
 
@@ -27,8 +25,7 @@ public class Product : IProduct
         ProductManufacturer manufacturer,
         ProductType productType,
         ProductRating rating,
-        IEnumerable<string> mainImagesNames,
-        IDictionary<string, IDictionary<string, string>> specifications)
+        IEnumerable<string> mainImagesNames)
     {
         Name = name;
         Description = description;
@@ -41,27 +38,25 @@ public class Product : IProduct
         ProductTypeId = productType.Id;
         RatingId = rating.Id;
         MainImagesNames = mainImagesNames;
-        Specifications = specifications;
         Manufacturer = null!;
         ProductType = null!;
     }
     
     public Guid Id { get; set; } = Guid.NewGuid(); // Id of the product
     
-    [MaxLength(96)]
     public string Name // Name of the product
     {
         get => _name;
         set => AssignStringValue
-            (value, ref _name);
+            (value, ref _name!);
     }
     
-    [MaxLength(1024)]
+    [MaxLength(2048)]
     public string Description // Description of the product
     {
         get => _description;
         set => AssignStringValue
-            (value, ref _description, false);
+            (value, ref _description!, false);
     }
 
     [Column(TypeName = "decimal(8, 2)")]
@@ -106,18 +101,7 @@ public class Product : IProduct
         }
     }
 
-    public IDictionary<string, IDictionary<string, string>> Specifications
-    {
-        get => _specifications;
-        set
-        {
-            if (value.IsNullOrEmpty()) 
-                ThrowArgumentNullException("Specifications can not be null!");
-            var validator = new ProductSpecificationValidator(ProductType.Name, value);
-            validator.Validate();
-            _specifications = value;
-        }
-    }
+    public IEnumerable<ProductSpecification> Specifications { get; set; }
 
     private static void AssignStringValue
         (string text, ref string assignedVariable, bool isName = true)
