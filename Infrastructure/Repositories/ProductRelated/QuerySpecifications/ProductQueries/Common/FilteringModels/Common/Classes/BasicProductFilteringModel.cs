@@ -26,5 +26,7 @@ public abstract class BasicProductFilteringModel : IProductFilteringModel
     
     public decimal? UpperPriceLimit { get; set; }
     
+    public string InStock { get; set; }
+
     public string SortingType { get; set; }
 }

@@ -10,6 +10,8 @@ public interface IProductFilteringModel
     
     decimal? UpperPriceLimit { get; }
     
+    string InStock { get; } // true - in stock, false - not in stock
+    
     string SortingType { get; }
     
     public int PageIndex { get; set; }
