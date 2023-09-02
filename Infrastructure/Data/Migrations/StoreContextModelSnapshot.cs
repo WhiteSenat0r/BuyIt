@@ -29,8 +29,8 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<bool>("InStock")
                         .HasColumnType("bit");
@@ -42,8 +42,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(96)
-                        .HasColumnType("nvarchar(96)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(8, 2)");
@@ -57,9 +56,6 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<Guid>("RatingId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Specifications")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -105,6 +101,34 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("ProductRatings");
                 });
 
+            modelBuilder.Entity("Core.Entities.Product.ProductSpecification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Attribute")
+                        .HasMaxLength(48)
+                        .HasColumnType("nvarchar(48)");
+
+                    b.Property<string>("Category")
+                        .HasMaxLength(48)
+                        .HasColumnType("nvarchar(48)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .HasMaxLength(192)
+                        .HasColumnType("nvarchar(192)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductSpecifications");
+                });
+
             modelBuilder.Entity("Core.Entities.Product.ProductType", b =>
                 {
                     b.Property<Guid>("Id")
@@ -145,6 +169,22 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("ProductType");
 
                     b.Navigation("Rating");
+                });
+
+            modelBuilder.Entity("Core.Entities.Product.ProductSpecification", b =>
+                {
+                    b.HasOne("Core.Entities.Product.Product", "Product")
+                        .WithMany("Specifications")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Core.Entities.Product.Product", b =>
+                {
+                    b.Navigation("Specifications");
                 });
 #pragma warning restore 612, 618
         }
