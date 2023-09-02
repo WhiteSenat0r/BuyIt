@@ -6,8 +6,6 @@ public interface IQuerySpecification<TEntity>
     where TEntity : class
 {
     Expression<Func<TEntity, bool>> Criteria { get; }
-    
-    Expression<Func<TEntity, bool>> SpecificationCriteria { get; protected init; }
 
     List<Expression<Func<TEntity, object>>> IncludedExpressions { get; } 
     
