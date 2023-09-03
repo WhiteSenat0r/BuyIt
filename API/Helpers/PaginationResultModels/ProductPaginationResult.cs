@@ -1,7 +1,6 @@
 ﻿using API.Helpers.DataTransferObjects.ProductRelated.Common.Interfaces;
 using API.Helpers.PaginationResultModels.Common.Interfaces;
 using Core.Entities.Product;
-using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels.Common.Classes;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels.Common.Interfaces;
 
 namespace API.Helpers.PaginationResultModels;
