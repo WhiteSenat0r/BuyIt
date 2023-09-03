@@ -35,7 +35,7 @@ public abstract class BaseProductController<TFilteringModel, TQuerySpecification
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IPaginationResult<IProductDto>>> GetAll([FromQuery] TFilteringModel filteringModel)
     {
-        var items = Mapper.Map<IEnumerable<ProductDto>>(
+        var items = Mapper.Map<IEnumerable<GeneralizedProductDto>>(
             await new ProductRepositoryFactory().Create(Context).GetAllEntitiesAsync(
             (TQuerySpecification)Activator.CreateInstance(typeof(TQuerySpecification), filteringModel)));
         
@@ -55,6 +55,6 @@ public abstract class BaseProductController<TFilteringModel, TQuerySpecification
         return item is null
             ? NotFound(new ApiResponse(404, 
                 $"Item with given product code ({productCode}) was not found!"))
-            : Ok(Mapper.Map<ProductDto>(item));
+            : Ok(Mapper.Map<FullProductDto>(item));
     }
 }
