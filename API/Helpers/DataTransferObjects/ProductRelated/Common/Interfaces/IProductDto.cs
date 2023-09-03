@@ -9,13 +9,9 @@ public interface IProductDto
     decimal Price { get; }
     
     string InStock { get; }
-    
-    string Brand { get; }
-    
-    string Rating { get; }
-    
-    string Category { get; }
-    
+
+    double? Rating { get; }
+
     string ProductCode { get; }
     
     IEnumerable<string> Images { get; }
