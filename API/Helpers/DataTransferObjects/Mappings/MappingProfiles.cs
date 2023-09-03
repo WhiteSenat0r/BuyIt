@@ -9,19 +9,31 @@ public class MappingProfiles : Profile
 {
     public MappingProfiles()
     {
-        CreateMappingProfileForProduct();
+        CreateMappingProfileForProductInCatalog();
+        CreateMappingProfileForSingleProduct();
     }
 
-    private void CreateMappingProfileForProduct() =>
-        CreateMap<IProduct, ProductDto>()
-            .ForMember(r => r.Brand, p =>
-                p.MapFrom(b => b.Manufacturer.Name))
+    private void CreateMappingProfileForProductInCatalog() =>
+        CreateMap<IProduct, GeneralizedProductDto>()
+            .ForMember(d => d.Description, p =>
+                p.MapFrom<ProductShortDescriptionResolver>())
             .ForMember(r => r.ProductCode, p =>
                 p.MapFrom(b => b.ProductCode))
             .ForMember(r => r.Rating, p =>
                 p.MapFrom(r => r.Rating.Score))
-            .ForMember(r => r.Category, p =>
-                p.MapFrom(t => t.ProductType.Name))
             .ForMember(r => r.Images, p =>
                 p.MapFrom<ProductUrlResolver>());
+    
+    private void CreateMappingProfileForSingleProduct() =>
+        CreateMap<IProduct, FullProductDto>()
+            .ForMember(b => b.Brand, p =>
+                p.MapFrom(m => m.Manufacturer.Name))
+            .ForMember(r => r.ProductCode, p =>
+                p.MapFrom(b => b.ProductCode))
+            .ForMember(r => r.Rating, p =>
+                p.MapFrom(r => r.Rating.Score))
+            .ForMember(r => r.Images, p =>
+                p.MapFrom<ProductUrlResolver>())
+            .ForMember(r => r.Specifications, p =>
+                p.MapFrom<ProductSpecificationResolver>());
 }
