@@ -16,7 +16,7 @@ public class ProductSpecification : IProductSpecification
         ProductId = productId;
     }
 
-    public Guid Id { get; }
+    public Guid Id { get; } = Guid.NewGuid();
     
     [MaxLength(48)]
     public string Category { get; set; }
