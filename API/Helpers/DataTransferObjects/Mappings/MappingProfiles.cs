@@ -28,6 +28,8 @@ public class MappingProfiles : Profile
         CreateMap<IProduct, FullProductDto>()
             .ForMember(b => b.Brand, p =>
                 p.MapFrom(m => m.Manufacturer.Name))
+            .ForMember(d => d.ShortDescription, p =>
+                p.MapFrom<ProductShortDescriptionResolver>())
             .ForMember(r => r.ProductCode, p =>
                 p.MapFrom(b => b.ProductCode))
             .ForMember(r => r.Rating, p =>
