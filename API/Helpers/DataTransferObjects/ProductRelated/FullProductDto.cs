@@ -8,6 +8,8 @@ public class FullProductDto : IProductDto
     
     public string Description { get; set; } = null!;
     
+    public string ShortDescription { get; set; } = null!;
+    
     public decimal Price { get; set; }
     
     public string InStock { get; set; } = null!;
