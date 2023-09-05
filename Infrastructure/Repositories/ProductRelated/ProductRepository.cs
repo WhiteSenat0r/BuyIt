@@ -12,18 +12,16 @@ public class ProductRepository : GenericRepository<Product>
     internal ProductRepository
         (StoreContext dbContext) : base(dbContext) => Context = dbContext;
 
-    public override async void RemoveExistingEntity(Product removedEntity)
+    public override void RemoveExistingEntity(Product removedEntity)
     {
-        new ProductRatingRepository(Context).RemoveExistingEntity(removedEntity.Rating);
-
-        var productsWithIdenticalManufacturer = await new ProductRepository(Context)
-            .GetAllEntitiesAsync(new ProductQueryByManufacturerIdSpecification
-                (removedEntity.ManufacturerId));
+        if (Context.Products.Count(p => p.ManufacturerId == removedEntity.ManufacturerId) == 1)
+            Context.ProductManufacturers.Remove
+                (Context.ProductManufacturers.Single(m => m.Id == removedEntity.ManufacturerId));
         
-        if (productsWithIdenticalManufacturer.IsNullOrEmpty())
-            new ProductManufacturerRepository(Context).RemoveExistingEntity
-                (await new ProductManufacturerRepository(Context).GetSingleEntityBySpecificationAsync
-                    (new ProductManufacturerQueryByIdSpecification(removedEntity.ManufacturerId)));
+        Context.ProductSpecifications.RemoveRange(removedEntity.Specifications);
+        Context.ProductRatings.Remove(Context.ProductRatings.Single(r => r.Id == removedEntity.RatingId));
+
+        Context.SaveChanges();
     }
 
     public override void RemoveRangeOfExistingEntities(IEnumerable<Product> removedEntities)
