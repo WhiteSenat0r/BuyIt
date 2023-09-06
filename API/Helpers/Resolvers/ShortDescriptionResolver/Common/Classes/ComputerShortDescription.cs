@@ -14,7 +14,7 @@ internal class ComputerShortDescription : IShortDescription
         };
 
     private static string GetAllInOneComputerShortDescription(IProduct product) =>
-        GetPersonalComputerShortDescription(product) 
+        GetLaptopShortDescription(product) 
         + $" | OS: {product.Specifications.Single(s => s.Category.Equals
             ("General") && s.Attribute.Equals("Operating system")).Value}";
 
