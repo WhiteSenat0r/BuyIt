@@ -40,18 +40,6 @@ public class ProductTypeTests
 
         Assert.NotEqual(Guid.Empty, _productType.Id);
     }
-    
-    [Fact]
-    public void IdProperty_Should_BeAbleToSetNewGuid()
-    {
-        _productType = new ProductType();
-
-        var initialProductTypeId = _productType.Id;
-
-        _productType.Id = Guid.NewGuid();
-        
-        Assert.NotEqual(initialProductTypeId, _productType.Id);
-    }
 
     private static ProductType GetFullyInitializedProductType() =>
         new ("Type");

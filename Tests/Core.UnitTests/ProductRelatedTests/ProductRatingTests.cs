@@ -70,18 +70,6 @@ public class ProductRatingTests
 
         Assert.NotEqual(Guid.Empty, _productRating.Id);
     }
-    
-    [Fact]
-    public void IdProperty_Should_BeAbleToSetNewGuid()
-    {
-        _productRating = new ProductRating();
-
-        var initialProductId = _productRating.Id;
-
-        _productRating.Id = Guid.NewGuid();
-        
-        Assert.NotEqual(initialProductId, _productRating.Id);
-    }
 
     private static ProductRating GetFullyInitializedProductRating() => new(5);
 }

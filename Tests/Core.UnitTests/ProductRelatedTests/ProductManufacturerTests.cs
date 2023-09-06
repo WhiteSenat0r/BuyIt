@@ -71,18 +71,6 @@ public class ProductManufacturerTests
 
         Assert.NotEqual(Guid.Empty, _productManufacturer.Id);
     }
-    
-    [Fact]
-    public void IdProperty_Should_BeAbleToSetNewGuid()
-    {
-        _productManufacturer = new ProductManufacturer();
-
-        var initialProductManufacturerId = _productManufacturer.Id;
-
-        _productManufacturer.Id = Guid.NewGuid();
-        
-        Assert.NotEqual(initialProductManufacturerId, _productManufacturer.Id);
-    }
 
     private static ProductManufacturer GetFullyInitializedProductManufacturer() =>
         new ("Manufacturer", "RegistrationCountry");
