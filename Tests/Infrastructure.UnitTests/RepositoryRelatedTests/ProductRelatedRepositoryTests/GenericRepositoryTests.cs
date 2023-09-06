@@ -71,7 +71,26 @@ public class GenericRepositoryTests // Tests of default repository implementatio
     }
     
     [Fact]
-    public async void RemoveRangeOfExistingEntitiesMethod_Should_RemoveRangeOfEntitiesInDatabase()
+    public async void RemoveExistingEntityMethod_Should_RemoveEntityFromDatabase()
+    {
+        _context = new StoreContext(new DbContextOptionsBuilder<StoreContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+
+        _repository = new ProductTypeRepositoryFactory().Create(_context);
+
+        var type = new ProductType("Test");
+
+        await _repository.AddNewEntityAsync(type);
+        
+        Assert.NotEmpty(await _repository.GetAllEntitiesAsync(new ProductTypeQuerySpecification()));
+        
+        _repository.RemoveExistingEntity(type);
+        
+        Assert.Empty(await _repository.GetAllEntitiesAsync(new ProductTypeQuerySpecification()));
+    }
+    
+    [Fact]
+    public async void RemoveRangeOfExistingEntitiesMethod_Should_RemoveRangeOfEntitiesFromDatabase()
     {
         _context = new StoreContext(new DbContextOptionsBuilder<StoreContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
