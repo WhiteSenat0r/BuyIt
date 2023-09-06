@@ -1,6 +1,6 @@
 ﻿using Core.Entities.Product;
 using Infrastructure.Repositories.Common.QuerySpecifications.Common.Interfaces;
-using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries;
+using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.RegularSpecifications;
 
 namespace Tests.Infrastructure.UnitTests.RepositoryRelatedTests.QuerySpecificationTests.ProductRelatedQuerySpecificationTests;
 

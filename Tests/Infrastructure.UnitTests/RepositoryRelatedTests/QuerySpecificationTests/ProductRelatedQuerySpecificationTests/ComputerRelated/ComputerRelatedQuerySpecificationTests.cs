@@ -2,7 +2,7 @@
 using Infrastructure.Repositories.Common.QuerySpecifications.Common.Interfaces;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels.Common.Interfaces;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels.ComputerRelated;
-using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.ComputerRelated;
+using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.ComputerRelatedSpecifications;
 
 namespace Tests.Infrastructure.UnitTests.RepositoryRelatedTests.QuerySpecificationTests.ProductRelatedQuerySpecificationTests.ComputerRelated;
 
