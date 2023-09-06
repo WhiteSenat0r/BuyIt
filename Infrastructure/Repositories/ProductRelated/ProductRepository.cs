@@ -1,9 +1,6 @@
 ﻿using Core.Entities.Product;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Classes;
-using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductManufacturerQueries;
-using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.RegularSpecifications;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Repositories.ProductRelated;
 
