@@ -52,4 +52,15 @@ public class RepositoryFactoryTests
         Assert.NotNull(repository);
         Assert.IsType<ProductRatingRepository>(repository);
     }
+    
+    [Fact]
+    public void ProductSpecificationRepositoryFactoryClass_Should_CreateNewInstanceAfterCreateMethodWasInvoked()
+    {
+        _dbContext = new StoreContext(new DbContextOptions<StoreContext>());
+        
+        var repository = new ProductSpecificationRepositoryFactory().Create(_dbContext);
+        
+        Assert.NotNull(repository);
+        Assert.IsType<ProductSpecificationRepository>(repository);
+    }
 }
