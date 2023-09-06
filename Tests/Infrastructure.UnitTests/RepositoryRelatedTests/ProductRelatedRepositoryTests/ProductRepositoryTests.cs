@@ -3,7 +3,7 @@ using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Interfaces;
 using Infrastructure.Repositories.Factories.ProductRelated;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductManufacturerQueries;
-using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries;
+using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.RegularSpecifications;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductRatingQueries;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +29,7 @@ public class ProductRepositoryTests
         await ratingRepo.AddNewEntityAsync(rating);
 
         var typeRepo = new ProductTypeRepositoryFactory().Create(_context);
-        var type = new ProductType("Laptop");
+        var type = new ProductType("Personal computer");
         await typeRepo.AddNewEntityAsync(type);
         
         _repository = new ProductRepositoryFactory().Create(_context);
@@ -55,11 +55,11 @@ public class ProductRepositoryTests
         await manufacturerRepo.AddNewEntityAsync(manufacturer);
         
         var ratingRepo = new ProductRatingRepositoryFactory().Create(_context);
-        var ratings = new List<ProductRating> { new ProductRating(null), new ProductRating(null) };
+        var ratings = new List<ProductRating> { new(null), new(null) };
         await ratingRepo.AddNewRangeOfEntitiesAsync(ratings);
 
         var typeRepo = new ProductTypeRepositoryFactory().Create(_context);
-        var type = new ProductType("Laptop");
+        var type = new ProductType("Personal computer");
         await typeRepo.AddNewEntityAsync(type);
         
         _repository = new ProductRepositoryFactory().Create(_context);
@@ -69,6 +69,16 @@ public class ProductRepositoryTests
             GetFullyInitializedProduct(manufacturer, ratings[0], type),
             GetFullyInitializedProduct(manufacturer, ratings[1], type),
         };
+
+        var specsRepo = new ProductSpecificationRepositoryFactory().Create(_context);
+
+        var specs = new List<ProductSpecification>
+        {
+            new ("Test1", "Test1", "Test1", products[0].Id),
+            new ("Test2", "Test2", "Test2", products[1].Id)
+        };
+
+        await specsRepo.AddNewRangeOfEntitiesAsync(specs);
         
         await _repository.AddNewRangeOfEntitiesAsync(products);
         
@@ -79,216 +89,32 @@ public class ProductRepositoryTests
         Assert.Empty(await ratingRepo.GetAllEntitiesAsync(new ProductRatingQuerySpecification()));
     }
     
-    private Product GetFullyInitializedProduct
+    private static Product GetFullyInitializedProduct
         (ProductManufacturer manufacturer, ProductRating rating, ProductType type) => new(
-        @"ASUS Zenbook 14X OLED UX5401ZA-L7065X Pine Grey",
-        "Zenbook 14X UX540 is a modern solution for creatives. " +
-        "Weighing just 1.4 kg and 16 mm thick, it's portable and fits comfortably in any bag. " +
-        "With a high-res screen, wide color range, and proprietary tech, it's perfect for content editing " +
-        "and movie-watching. The slim bezel enhances immersion, and the 180° hinge adds versatility. Powered" +
-        " by the latest Intel Core i9-12900H processor, it ensures efficient work with ample memory. " +
-        "The ClearVoice Mic function makes it ideal for remote work and video calls. Its sleek design suits " +
-        "those on the move, offering both style and performance. Zenbook 14X is an artful choice for success-driven" +
-        " individuals.",
-        2115.99m,
-        true,
+        @"Apple Mac Studio M2 Ultra 2023 (MQH63)",
+        "M2 Ultra delivers the power to tackle virtually any size project. From recording your own beats or " +
+        "mixing professional-quality music to editing your first video or adding effects to a feature film, the" +
+        " lightning-fast M2 Ultra has your back. The 7.7-square-inch Mac Studio enclosure houses a revolutionary " +
+        "thermal system designed to enable the M2 Ultra to perform intensive tasks at lightning speed. Despite this" +
+        " incredible power, Mac Studio can remain quiet so it never interferes with your workflow. Mac Studio lets" +
+        " you create the studio of your dreams with an array of 12 high-performance ports. Send photos and videos with" +
+        " the SDXC card reader. Connect to TVs or displays with enhanced HDMI output supporting resolutions up to 8K." +
+        " Synchronize with next-generation accessories with Bluetooth 5.3. And enjoy twice the bandwidth with Wi-Fi 6E." +
+        " With an incredibly compact form factor and a variety of ports, Mac Studio lets you reimagine your workspace" +
+        " and unleash your creativity. macOS was designed not only to be powerful, intuitive, and constantly updated, but" +
+        " also to scale with Apple Silicon. That means the system automatically benefits from increased graphics, more " +
+        "memory, and powerful M2 Ultra and machine learning. And with thousands of apps to choose from, you can work," +
+        " play, and create in ways you never thought possible.",
+        5810.99m,
+        false,
         manufacturer,
         type,
         rating,
         new List<string>
         {
-            "https://i.imgur.com/t8nTGmY.jpg",
-            "https://i.imgur.com/p69Qtwy.jpg",
-            "https://i.imgur.com/8KBW5Ax.jpg",
-            "https://i.imgur.com/zXa5aZu.jpg",
-            "https://i.imgur.com/QBPblx7.jpg"
-        },
-        new Dictionary<string, IDictionary<string, string>>
-        {
-            {
-                "Processor", new Dictionary<string, string>
-                {
-                    {
-                        "Manufacturer", "Intel"
-                    },
-                    {
-                        "Series", "Intel Core i9"
-                    },
-                    {
-                        "Model", "12900H"
-                    },
-                    {
-                        "Quantity of cores", "14"
-                    },
-                    {
-                        "Quantity of threads", "28"
-                    },
-                    {
-                        "Base clock", "3.8 Ghz"
-                    },
-                    {
-                        "Max clock", "5.0 Ghz"
-                    },
-                    {
-                        "Processor technology", "Intel 7"
-                    }
-                }
-            },
-            {
-                "General", new Dictionary<string, string>
-                {
-                    {
-                        "Classification", "Premium"
-                    },
-                    {
-                        "Model family", "ASUS ZenBook"
-                    },
-                    {
-                        "Operating system", "Windows 11 Professional"
-                    }
-                }
-            },
-            {
-                "Graphics card", new Dictionary<string, string>
-                {
-                    {
-                        "Type", "Integrated"
-                    },
-                    {
-                        "Manufacturer", "Intel"
-                    },
-                    {
-                        "Model", "Intel Iris Xe Graphics G7 96EU"
-                    },
-                    {
-                        "Series", "Intel Iris Xe Graphics"
-                    },
-                    {
-                        "Memory bus", "Dynamic"
-                    },
-                    {
-                        "Type of memory", "Dynamic"
-                    },
-                    {
-                        "Amount of memory", "Dynamic"
-                    }
-                }
-            },
-            {
-                "Storage", new Dictionary<string, string>
-                {
-                    {
-                        "Type", "SSD"
-                    },
-                    {
-                        "Drive's interface", "PCI-ex SSD"
-                    },
-                    {
-                        "Amount of memory", "1 TB"
-                    }
-                }
-            },
-            {
-                "Random access memory", new Dictionary<string, string>
-                {
-                    {
-                        "Type", "DDR5"
-                    },
-                    {
-                        "Amount of memory", "32 GB"
-                    }
-                }
-            },
-            {
-                "Measurements", new Dictionary<string, string>
-                {
-                    {
-                        "Width", "311 mm"
-                    },
-                    {
-                        "Length", "221 mm"
-                    },
-                    {
-                        "Depth", "16 mm"
-                    },
-                    {
-                        "Weight", "1.4 Kg"
-                    }
-                }
-            },
-            {
-                "Interfaces and connection", new Dictionary<string, string>
-                {
-                    {
-                        "Network adapters", "Bluetooth, WiFi 802.11ax"
-                    },
-                    {
-                        "Web-camera", "Present"
-                    },
-                    {
-                        "Web-camera resolution", "1280x720 1.0 Mp"
-                    },
-                    {
-                        "Built-in microphone", "Present"
-                    },
-                    {
-                        "Built-in card reader", "Present"
-                    },
-                    {
-                        "Supported card types", "MicroSD"
-                    },
-                    {
-                        "Connectors and I/O ports", "Audio Line out, HDMi, Thunderbolt, USB 3.2"
-                    }
-                }
-            },
-            {
-                "Display", new Dictionary<string, string>
-                {
-                    {
-                        "Diagonal", "14\""
-                    },
-                    {
-                        "Resolution", "2880x1800"
-                    },
-                    {
-                        "Coating", "Glossy"
-                    },
-                    {
-                        "Matrix type", "OLED"
-                    },
-                    {
-                        "Display type", "Regular"
-                    },
-                    {
-                        "Refresh rate", "90 Hz"
-                    }
-                }
-            },
-            {
-                "Battery", new Dictionary<string, string>
-                {
-                    {
-                        "Type", "Built-in"
-                    },
-                    {
-                        "Capacity", "63 Watt-hours"
-                    }
-                }
-            },
-            {
-                "Additional", new Dictionary<string, string>
-                {
-                    {
-                        "Optical drive", "Absent"
-                    },
-                    {
-                        "Numeric keypad", "Present"
-                    },
-                    {
-                        "Keyboard backlight", "Present"
-                    }
-                }
-            },
+            "1.jpg",
+            "2.jpg",
+            "3.jpg",
+            "4.jpg"
         });
 }
