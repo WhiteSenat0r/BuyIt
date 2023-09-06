@@ -5,8 +5,8 @@ using API.Helpers.PaginationResultModels;
 using API.Helpers.PaginationResultModels.Common.Interfaces;
 using API.Responses.Common.Classes;
 using AutoMapper;
-using Infrastructure.Contexts;
-using Infrastructure.Repositories.Factories.ProductRelated;
+using Core.Entities.Product;
+using Infrastructure.Repositories.Common.Interfaces;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.Classes;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels
     .Common.Interfaces;
@@ -20,23 +20,22 @@ public abstract class BaseProductController<TFilteringModel, TQuerySpecification
     where TFilteringModel : IProductFilteringModel
     where TQuerySpecification : BasicProductFilteringQuerySpecification
 {
-    protected BaseProductController(StoreContext storeContext, IMapper mapper)
+    protected BaseProductController(IRepository<Product> products, IMapper mapper)
     {
-        Context = storeContext;
+        Products = products;
         Mapper = mapper;
     }
-
-    protected StoreContext Context { get; init; }
     
     protected IMapper Mapper { get; init; }
+
+    private IRepository<Product> Products { get; }
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IPaginationResult<IProductDto>>> GetAll([FromQuery] TFilteringModel filteringModel)
     {
-        var items = Mapper.Map<IEnumerable<GeneralizedProductDto>>(
-            await new ProductRepositoryFactory().Create(Context).GetAllEntitiesAsync(
+        var items = Mapper.Map<IEnumerable<GeneralizedProductDto>>(await Products.GetAllEntitiesAsync(
             (TQuerySpecification)Activator.CreateInstance(typeof(TQuerySpecification), filteringModel)));
         
         return !items.IsNullOrEmpty() ? Ok(new ProductPaginationResult(items, filteringModel)) 
@@ -48,8 +47,7 @@ public abstract class BaseProductController<TFilteringModel, TQuerySpecification
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IProductDto>> Get(string productCode)
     {
-        var item = await new ProductRepositoryFactory().Create(Context)
-            .GetSingleEntityBySpecificationAsync
+        var item = await Products.GetSingleEntityBySpecificationAsync
                 (new ProductQueryByProductCodeSpecification(productCode));
 
         return item is null
