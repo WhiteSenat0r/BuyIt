@@ -20,5 +20,4 @@ public class ProductUrlResolver : IValueResolver<IProduct, IProductDto, IEnumera
                 (path => _configuration["ApiUrl"] + path).ToList() :
             source.MainImagesNames.Select
                 (path => _configuration["ApiUrl"] + path).Take(1).ToList();
-    
 }

@@ -1,6 +1,7 @@
 ﻿using API.Helpers.DataTransferObjects.ProductRelated;
 using AutoMapper;
 using Core.Entities.Product.Common.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Helpers.Resolvers;
 
@@ -10,6 +11,9 @@ public class ProductSpecificationResolver : IValueResolver<IProduct, FullProduct
         (IProduct source, FullProductDto destination, 
             IDictionary<string, IDictionary<string, string>> destMember, ResolutionContext context)
     {
+        if (source.Specifications.IsNullOrEmpty()) 
+            throw new ArgumentNullException(nameof(source), "Product has no specifications!");
+        
         var categories = source.Specifications
             .DistinctBy(s => s.Category).Select(c => c.Category);
 
