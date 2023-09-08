@@ -7,7 +7,7 @@ namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.Product
 
 public abstract class BasicProductFilteringQuerySpecification : BasicProductQuerySpecification
 {
-    protected BasicProductFilteringQuerySpecification(IProductFilteringModel filteringModel)
+    protected BasicProductFilteringQuerySpecification(IFilteringModel filteringModel)
         : base(product =>
             (string.IsNullOrEmpty(filteringModel.BrandName) || product.Manufacturer.Name.ToLower().Equals
                 (filteringModel.BrandName.ToLower())) &&
@@ -30,7 +30,7 @@ public abstract class BasicProductFilteringQuerySpecification : BasicProductQuer
         AddPaging(filteringModel.ItemQuantity, filteringModel.ItemQuantity * (filteringModel.PageIndex - 1));
     }
     
-    private void DeterminateSortingType(IProductFilteringModel filteringModel)
+    private void DeterminateSortingType(IFilteringModel filteringModel)
     {
         switch (filteringModel.SortingType)
         {

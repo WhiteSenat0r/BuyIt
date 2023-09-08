@@ -8,7 +8,7 @@ namespace Tests.Infrastructure.UnitTests.RepositoryRelatedTests.QuerySpecificati
 
 public class ComputerRelatedQuerySpecificationTests
 {
-    private IProductFilteringModel _filteringModel = null!;
+    private IFilteringModel _filteringModel = null!;
     private IQuerySpecification<Product> _querySpecification = null!;
     
     [Theory]
@@ -17,7 +17,7 @@ public class ComputerRelatedQuerySpecificationTests
         (Type querySpecificationType, Type filteringModelType)
     {
         _filteringModel = Activator.CreateInstance(filteringModelType)
-            as IProductFilteringModel;
+            as IFilteringModel;
         
         _querySpecification = Activator.CreateInstance(querySpecificationType, _filteringModel)
             as IQuerySpecification<Product>;

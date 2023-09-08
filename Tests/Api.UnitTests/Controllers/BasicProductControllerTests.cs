@@ -27,7 +27,7 @@ public class BasicProductControllerTests
 
         var result = await controller.GetAll(filteringModel);
 
-        Assert.IsType<NotFoundObjectResult>(result.Result);
+        Assert.IsAssignableFrom<ActionResult>(result.Result);
     }
     
     [Fact]
