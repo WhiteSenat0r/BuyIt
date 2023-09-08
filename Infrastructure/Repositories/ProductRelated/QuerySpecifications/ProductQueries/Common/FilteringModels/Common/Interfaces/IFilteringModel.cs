@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels.Common.Interfaces;
 
-public interface IProductFilteringModel
+public interface IFilteringModel
 {
     string Category { get; }
     
