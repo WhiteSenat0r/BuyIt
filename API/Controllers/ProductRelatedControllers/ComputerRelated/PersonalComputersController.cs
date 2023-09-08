@@ -13,5 +13,5 @@ public class PersonalComputersController : BaseProductController
     <PersonalComputerFilteringModel, PersonalComputerQuerySpecification>
 {
     public PersonalComputersController (IRepository<Product> products, IMapper mapper)
-        : base(products, mapper) => Mapper = mapper;
+        : base(products, mapper) { }
 }

@@ -12,5 +12,5 @@ namespace API.Controllers.ProductRelatedControllers.ComputerRelated;
 public class LaptopsController : BaseProductController<LaptopFilteringModel, LaptopQuerySpecification>
 {
     public LaptopsController(IRepository<Product> products, IMapper mapper) 
-        : base(products, mapper) => Mapper = mapper;
+        : base(products, mapper) { }
 }

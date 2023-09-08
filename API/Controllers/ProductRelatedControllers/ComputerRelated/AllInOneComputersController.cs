@@ -13,5 +13,5 @@ public class AllInOneComputersController : BaseProductController
     <AioComputerFilteringModel, AioComputerQuerySpecification>
 {
     public AllInOneComputersController(IRepository<Product> products, IMapper mapper) 
-        : base(products, mapper) => Mapper = mapper;
+        : base(products, mapper) { }
 }
