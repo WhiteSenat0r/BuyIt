@@ -51,6 +51,14 @@ public static class ApplicationServicesExtensions
                 return new BadRequestObjectResult(errorResponse);
             };
         });
+
+        serviceCollection.AddCors(option =>
+        {
+            option.AddPolicy("ApplicationCorsPolicy", policy =>
+            {
+                policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:7001");
+            });
+        });
     }
 
     private static void AddRequiredRepositories(IServiceCollection serviceCollection)
