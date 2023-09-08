@@ -8,7 +8,7 @@ namespace API.Helpers.PaginationResultModels;
 public class ProductPaginationResult : IPaginationResult<Product>
 {
     public ProductPaginationResult
-        (IEnumerable<IProductDto> items, IProductFilteringModel filteringModel)
+        (IEnumerable<IProductDto> items, IFilteringModel filteringModel)
     {
         Items = items;
         ItemsQuantity = Items.Count();
