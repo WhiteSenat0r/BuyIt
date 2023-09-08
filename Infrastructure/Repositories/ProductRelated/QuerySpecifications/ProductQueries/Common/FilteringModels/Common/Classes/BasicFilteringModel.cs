@@ -4,7 +4,7 @@
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common
     .FilteringModels.Common.Classes;
 
-public abstract class BasicProductFilteringModel : IProductFilteringModel
+public abstract class BasicFilteringModel : IFilteringModel
 {
     private int _itemQuantity = MaximumItemQuantity;
 
