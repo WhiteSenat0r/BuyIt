@@ -4,7 +4,7 @@
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries
     .Common.FilteringModels.ComputerRelated;
 
-public class PersonalComputerFilteringModel : BasicProductFilteringModel
+public class PersonalComputerFilteringModel : BasicFilteringModel
 {
     public PersonalComputerFilteringModel() => Category = "Personal computer";
     
