@@ -56,7 +56,7 @@ public static class ApplicationServicesExtensions
         {
             option.AddPolicy("ApplicationCorsPolicy", policy =>
             {
-                policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:7001");
+                policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
             });
         });
     }
