@@ -1,7 +1,7 @@
 ﻿namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries
     .Common.FilteringModels.ComputerRelated;
 
-public class LaptopFilteringModel : PersonalComputerFilteringModel
+public sealed class LaptopFilteringModel : PersonalComputerFilteringModel
 {
     public LaptopFilteringModel() => Category = "Laptop";
     

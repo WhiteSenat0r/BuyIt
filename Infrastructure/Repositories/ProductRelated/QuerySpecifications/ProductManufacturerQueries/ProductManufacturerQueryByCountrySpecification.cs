@@ -3,7 +3,7 @@ using Infrastructure.Repositories.Common.QuerySpecifications.Common.Classes;
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductManufacturerQueries;
 
-public class ProductManufacturerQueryByCountrySpecification : QuerySpecification<ProductManufacturer>
+public sealed class ProductManufacturerQueryByCountrySpecification : QuerySpecification<ProductManufacturer>
 {
     public ProductManufacturerQueryByCountrySpecification(string countryName)
         : base(criteria => 

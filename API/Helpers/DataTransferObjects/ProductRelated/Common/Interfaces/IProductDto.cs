@@ -6,6 +6,8 @@ public interface IProductDto
 
     string Description { get; }
     
+    public string Category { get; }
+    
     decimal Price { get; }
     
     string InStock { get; }

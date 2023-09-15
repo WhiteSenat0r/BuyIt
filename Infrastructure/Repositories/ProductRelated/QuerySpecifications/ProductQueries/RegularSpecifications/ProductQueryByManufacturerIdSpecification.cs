@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.RegularSpecifications;
 
-public class ProductQueryByManufacturerIdSpecification : BasicProductQuerySpecification
+public sealed class ProductQueryByManufacturerIdSpecification : BasicProductQuerySpecification
 {
     public ProductQueryByManufacturerIdSpecification(Guid manufacturerId) 
         : base(criteria => criteria.ManufacturerId == manufacturerId) => 

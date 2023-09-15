@@ -5,7 +5,7 @@ using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQuer
 
 namespace API.Helpers.PaginationResultModels;
 
-public class ProductPaginationResult : IPaginationResult<Product>
+public sealed class ProductPaginationResult : IPaginationResult<Product>
 {
     public ProductPaginationResult
         (IEnumerable<IProductDto> items, IFilteringModel filteringModel)

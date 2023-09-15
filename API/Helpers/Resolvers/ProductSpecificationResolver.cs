@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace API.Helpers.Resolvers;
 
-public class ProductSpecificationResolver : IValueResolver<IProduct, FullProductDto, IDictionary<string, IDictionary<string, string>>>
+public sealed class ProductSpecificationResolver : IValueResolver<IProduct, FullProductDto, IDictionary<string, IDictionary<string, string>>>
 {
     public IDictionary<string, IDictionary<string, string>> Resolve
         (IProduct source, FullProductDto destination, 

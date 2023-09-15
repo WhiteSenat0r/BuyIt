@@ -1,10 +1,11 @@
 ﻿using System.Text.Json;
 using Core.Entities.Product;
+using Core.Entities.Product.ProductSpecification;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Contexts;
 
-public class StoreContext : DbContext
+public sealed class StoreContext : DbContext
 {
     public StoreContext(DbContextOptions<StoreContext> options) : base(options) { }
 

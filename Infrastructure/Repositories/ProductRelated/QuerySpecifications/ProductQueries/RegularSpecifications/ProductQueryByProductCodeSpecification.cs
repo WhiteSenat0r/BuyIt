@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.RegularSpecifications;
 
-public class ProductQueryByProductCodeSpecification : BasicProductQuerySpecification
+public sealed class ProductQueryByProductCodeSpecification : BasicProductQuerySpecification
 {
     public ProductQueryByProductCodeSpecification(string productCode) 
         : base(criteria => criteria.ProductCode.ToLower().Equals(productCode.ToLower())) =>

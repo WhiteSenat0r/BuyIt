@@ -22,7 +22,9 @@ public class MappingProfiles : Profile
             .ForMember(r => r.Rating, p =>
                 p.MapFrom(r => r.Rating.Score))
             .ForMember(r => r.Images, p =>
-                p.MapFrom<ProductUrlResolver>());
+                p.MapFrom<ProductUrlResolver>())
+            .ForMember(b => b.Category, p =>
+                p.MapFrom(m => m.ProductType.Name));
     
     private void CreateMappingProfileForSingleProduct() =>
         CreateMap<IProduct, FullProductDto>()

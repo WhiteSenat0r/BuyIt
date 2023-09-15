@@ -1,4 +1,5 @@
 ﻿using Core.Entities.Product;
+using Core.Entities.Product.ProductSpecification;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Factories.Common.Classes;
 using Infrastructure.Repositories.ProductRelated;

@@ -3,7 +3,7 @@ using Core.Entities.Product.Common.Interfaces;
 
 namespace Core.Entities.Product;
 
-public class ProductType : IProductType
+public sealed class ProductType : IProductType
 {
     private string _name = null!;
 

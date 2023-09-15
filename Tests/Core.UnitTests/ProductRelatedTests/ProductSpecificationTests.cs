@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Core.Entities.Product;
+using Core.Entities.Product.ProductSpecification;
 
 namespace Tests.Core.UnitTests.ProductRelatedTests;
 

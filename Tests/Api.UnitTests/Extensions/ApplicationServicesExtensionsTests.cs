@@ -1,6 +1,7 @@
 ﻿using API.Extensions;
 using AutoMapper;
 using Core.Entities.Product;
+using Core.Entities.Product.ProductSpecification;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Interfaces;
 using Microsoft.AspNetCore.Mvc;

@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.RegularSpecifications;
 
-public class ProductQuerySpecification : BasicProductQuerySpecification
+public sealed class ProductQuerySpecification : BasicProductQuerySpecification
 {
     public ProductQuerySpecification() => AddOrderByAscending(p => p.Name);
 }

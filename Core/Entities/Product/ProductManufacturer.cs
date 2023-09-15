@@ -3,7 +3,7 @@ using Core.Entities.Product.Common.Interfaces;
 
 namespace Core.Entities.Product;
 
-public class ProductManufacturer : IProductManufacturer
+public sealed class ProductManufacturer : IProductManufacturer
 {
     private string _name = null!;
     private string _registrationCountry = null!;

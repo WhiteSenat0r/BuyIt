@@ -1,7 +1,7 @@
 ﻿namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries
     .Common.FilteringModels.ComputerRelated;
 
-public class AioComputerFilteringModel : PersonalComputerFilteringModel
+public sealed class AioComputerFilteringModel : PersonalComputerFilteringModel
 {
     public AioComputerFilteringModel() => Category = "All-in-one computer";
     

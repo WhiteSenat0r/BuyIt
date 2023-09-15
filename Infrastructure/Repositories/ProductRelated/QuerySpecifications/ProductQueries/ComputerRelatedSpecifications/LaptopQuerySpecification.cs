@@ -3,7 +3,7 @@ using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQuer
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.ComputerRelatedSpecifications;
 
-public class LaptopQuerySpecification : PersonalComputerQuerySpecification
+public sealed class LaptopQuerySpecification : PersonalComputerQuerySpecification
 {
     public LaptopQuerySpecification(LaptopFilteringModel filteringModel) : base(filteringModel) =>
         Criteria = Criteria.And(product => 

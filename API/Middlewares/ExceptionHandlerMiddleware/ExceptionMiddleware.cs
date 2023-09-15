@@ -5,7 +5,7 @@ using API.Responses.Common.Classes;
 
 namespace API.Middlewares.ExceptionHandlerMiddleware;
 
-public class ExceptionMiddleware
+public sealed class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionMiddleware> _logger;

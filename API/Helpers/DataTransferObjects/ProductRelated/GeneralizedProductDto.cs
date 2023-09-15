@@ -2,7 +2,7 @@
 
 namespace API.Helpers.DataTransferObjects.ProductRelated;
 
-public class GeneralizedProductDto : IProductDto
+public sealed class GeneralizedProductDto : IProductDto
 {
     public string Name { get; set; } = null!;
     

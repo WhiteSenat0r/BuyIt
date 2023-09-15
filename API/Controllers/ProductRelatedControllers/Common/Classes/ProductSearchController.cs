@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers.ProductRelatedControllers.Common.Classes;
 
 [ApiController]
-public class ProductSearchController : BaseProductRelatedController
+public sealed class ProductSearchController : BaseProductRelatedController
     <ProductSearchFilteringModel, ProductSearchQuerySpecification>
 {
     public ProductSearchController(IRepository<Product> products, IMapper mapper) : base(products, mapper) { }

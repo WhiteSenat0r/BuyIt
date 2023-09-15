@@ -3,7 +3,7 @@ using Infrastructure.Repositories.Common.QuerySpecifications.Common.Classes;
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductRatingQueries;
 
-public class ProductRatingQueryByScoreGreaterThanValueSpecification : QuerySpecification<ProductRating>
+public sealed class ProductRatingQueryByScoreGreaterThanValueSpecification : QuerySpecification<ProductRating>
 {
     public ProductRatingQueryByScoreGreaterThanValueSpecification(double? score)
         : base(criteria => criteria.Score > score) 

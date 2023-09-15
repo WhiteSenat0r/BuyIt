@@ -5,7 +5,7 @@ using Core.Entities.Product.Common.Interfaces;
 
 namespace API.Helpers.Resolvers;
 
-public class ProductShortDescriptionResolver : IValueResolver<IProduct, IProductDto, string>
+public sealed class ProductShortDescriptionResolver : IValueResolver<IProduct, IProductDto, string>
 {
     public string Resolve
         (IProduct source, IProductDto destination, string destMember, ResolutionContext context) =>

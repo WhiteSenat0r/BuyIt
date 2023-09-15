@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels;
 
-public class ProductSearchFilteringModel : BasicFilteringModel
+public sealed class ProductSearchFilteringModel : BasicFilteringModel
 {
     public string Text { get; set; }
 }

@@ -3,7 +3,7 @@ using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQuer
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.Classes;
 
-public class ProductSearchQuerySpecification : BasicProductFilteringQuerySpecification
+public sealed class ProductSearchQuerySpecification : BasicProductFilteringQuerySpecification
 {
     public ProductSearchQuerySpecification(ProductSearchFilteringModel filteringModel) : base(filteringModel)
     {

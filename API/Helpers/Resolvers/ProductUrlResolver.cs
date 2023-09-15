@@ -5,7 +5,7 @@ using Core.Entities.Product.Common.Interfaces;
 
 namespace API.Helpers.Resolvers;
 
-public class ProductUrlResolver : IValueResolver<IProduct, IProductDto, IEnumerable<string>>
+public sealed class ProductUrlResolver : IValueResolver<IProduct, IProductDto, IEnumerable<string>>
 {
     private readonly IConfiguration _configuration;
 

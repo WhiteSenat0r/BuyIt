@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Core.Entities.Product;
 
-public class Product : IProduct
+public sealed class Product : IProduct
 {
     private string _name = null!;
     private string _description = null!;
@@ -101,7 +101,7 @@ public class Product : IProduct
         }
     }
 
-    public IEnumerable<ProductSpecification> Specifications { get; set; }
+    public IEnumerable<ProductSpecification.ProductSpecification> Specifications { get; set; }
 
     private static void AssignStringValue
         (string text, ref string assignedVariable, bool isName = true)

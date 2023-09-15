@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers.ProductRelatedControllers.ComputerRelated;
 
 [ApiController]
-public class LaptopsController : BaseProductController<LaptopFilteringModel, LaptopQuerySpecification>
+public sealed class LaptopsController : BaseProductController<LaptopFilteringModel, LaptopQuerySpecification>
 {
     public LaptopsController(IRepository<Product> products, IMapper mapper) 
         : base(products, mapper) { }

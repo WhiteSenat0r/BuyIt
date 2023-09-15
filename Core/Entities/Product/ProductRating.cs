@@ -3,7 +3,7 @@ using Core.Entities.Product.Common.Interfaces;
 
 namespace Core.Entities.Product;
 
-public class ProductRating : IProductRating
+public sealed class ProductRating : IProductRating
 {
     private double? _score;
 

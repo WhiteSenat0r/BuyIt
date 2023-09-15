@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers.ProductRelatedControllers.ComputerRelated;
 
 [ApiController]
-public class AllInOneComputersController : BaseProductController
+public sealed class AllInOneComputersController : BaseProductController
     <AioComputerFilteringModel, AioComputerQuerySpecification>
 {
     public AllInOneComputersController(IRepository<Product> products, IMapper mapper) 

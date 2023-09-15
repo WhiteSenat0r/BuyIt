@@ -4,7 +4,7 @@ using Infrastructure.Repositories.Common.Classes;
 
 namespace Infrastructure.Repositories.ProductRelated;
 
-public class ProductRepository : GenericRepository<Product>
+public sealed class ProductRepository : GenericRepository<Product>
 {
     internal ProductRepository
         (StoreContext dbContext) : base(dbContext) => Context = dbContext;
