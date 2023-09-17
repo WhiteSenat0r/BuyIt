@@ -6,7 +6,7 @@ namespace Infrastructure.Repositories.Common.Interfaces;
 public interface IRepository<TEntity> 
     where TEntity : class, IEntity<Guid>
 {
-    Task<IEnumerable<TEntity>> GetAllEntitiesAsync
+    Task<List<TEntity>> GetAllEntitiesAsync
         (IQuerySpecification<TEntity> querySpecification);
 
     Task<TEntity> GetSingleEntityBySpecificationAsync

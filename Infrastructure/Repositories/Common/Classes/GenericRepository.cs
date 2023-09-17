@@ -15,13 +15,13 @@ public abstract class GenericRepository<TEntity> : IRepository<TEntity>
 
     private protected StoreContext Context { get; init; }
 
-    public async Task<IEnumerable<TEntity>> GetAllEntitiesAsync
+    public Task<List<TEntity>> GetAllEntitiesAsync
         (IQuerySpecification<TEntity> querySpecification) =>
-        await ApplySpecification(querySpecification).ToListAsync();
+        ApplySpecification(querySpecification).ToListAsync();
 
-    public async Task<TEntity> GetSingleEntityBySpecificationAsync
+    public Task<TEntity> GetSingleEntityBySpecificationAsync
         (IQuerySpecification<TEntity> querySpecification) =>
-        await ApplySpecification(querySpecification).SingleOrDefaultAsync();
+        ApplySpecification(querySpecification).SingleOrDefaultAsync();
 
     public async Task AddNewEntityAsync(TEntity entity)
     {
