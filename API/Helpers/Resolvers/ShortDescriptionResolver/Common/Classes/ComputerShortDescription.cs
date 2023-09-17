@@ -15,21 +15,21 @@ internal class ComputerShortDescription : IShortDescription
 
     private static string GetAllInOneComputerShortDescription(IProduct product) =>
         GetLaptopShortDescription(product) 
-        + $" | OS: {product.Specifications.Single(s => s.Category.Equals
-            ("General") && s.Attribute.Equals("Operating system")).Value}";
+        + $" | OS: {product.Specifications.Single(s => s.SpecificationCategory.Value.Equals
+            ("General") && s.SpecificationAttribute.Value.Equals("Operating system")).SpecificationValue.Value}";
 
     private static string GetLaptopShortDescription(IProduct product) =>
-        $"Display: {product.Specifications.Single(s => s.Category.Equals
-            ("Display") && s.Attribute.Equals("Diagonal")).Value} | " +
+        $"Display: {product.Specifications.Single(s => s.SpecificationCategory.Value.Equals
+            ("Display") && s.SpecificationAttribute.Value.Equals("Diagonal")).SpecificationValue.Value} | " +
         GetPersonalComputerShortDescription(product);
 
     private static string GetPersonalComputerShortDescription(IProduct product) =>
-        $"CPU: {product.Specifications.Single(s => s.Category.Equals
-            ("Processor") && s.Attribute.Equals("Model")).Value} | " +
-        $"GPU: {product.Specifications.Single(s => s.Category.Equals
-            ("Graphics card") && s.Attribute.Equals("Model")).Value} | " +
-        $"RAM: {product.Specifications.Single(s => s.Category.Equals
-            ("Random access memory") && s.Attribute.Equals("Amount of memory")).Value} | " +
-        $"ROM: {product.Specifications.Single(s => s.Category.Equals
-            ("Storage") && s.Attribute.Equals("Amount of memory")).Value}";
+        $"CPU: {product.Specifications.Single(s => s.SpecificationCategory.Value.Equals
+            ("Processor") && s.SpecificationAttribute.Value.Equals("Model")).SpecificationValue.Value} | " +
+        $"GPU: {product.Specifications.Single(s => s.SpecificationCategory.Value.Equals
+            ("Graphics card") && s.SpecificationAttribute.Value.Equals("Model")).SpecificationValue.Value} | " +
+        $"RAM: {product.Specifications.Single(s => s.SpecificationCategory.Value.Equals
+            ("Random access memory") && s.SpecificationAttribute.Value.Equals("Amount of memory")).SpecificationValue.Value} | " +
+        $"ROM: {product.Specifications.Single(s => s.SpecificationCategory.Value.Equals
+            ("Storage") && s.SpecificationAttribute.Value.Equals("Amount of memory")).SpecificationValue.Value}";
 }

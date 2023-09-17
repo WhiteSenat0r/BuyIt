@@ -15,15 +15,15 @@ public sealed class ProductSpecificationResolver : IValueResolver<IProduct, Full
             throw new ArgumentNullException(nameof(source), "Product has no specifications!");
         
         var categories = source.Specifications
-            .DistinctBy(s => s.Category).Select(c => c.Category);
+            .DistinctBy(s => s.SpecificationCategory.Value).Select(c => c.SpecificationCategory.Value);
 
         IDictionary<string, IDictionary<string, string>> result = new Dictionary<string, IDictionary<string, string>>();
 
         foreach (var category in categories)
         {
             var attributesAndValues = 
-                source.Specifications.Where(c => c.Category.Equals(category))
-                    .ToDictionary(specification => specification.Attribute, specification => specification.Value);
+                source.Specifications.Where(c => c.SpecificationCategory.Value.Equals(category))
+                    .ToDictionary(specification => specification.SpecificationAttribute.Value, specification => specification.SpecificationValue.Value);
 
             result.Add(category, attributesAndValues);
         }

@@ -12,6 +12,6 @@ public sealed class ProductSearchQuerySpecification : BasicProductFilteringQuery
                 .Contains(filteringModel.Text.ToLower()) || product.ProductCode.ToLower()
                 .Equals(filteringModel.Text.ToLower()) || product.ProductType.Name.ToLower()
                 .Equals(filteringModel.Text.ToLower()) || product.Specifications.Any
-                (s => s.Value.ToLower().Equals(filteringModel.Text.ToLower().Replace('_', ' '))));
+                (s => s.SpecificationValue.Value.ToLower().Equals(filteringModel.Text.ToLower().Replace('_', ' '))));
     }
 }
