@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers.ProductRelatedControllers.ComputerRelated;
 
 [ApiController]
-public sealed class AllInOneComputersController : BaseProductController
-    <AioComputerFilteringModel, AioComputerQuerySpecification>
+[Route("api/[controller]s")]
+public sealed class LaptopController : BaseProductController<LaptopFilteringModel, LaptopQuerySpecification>
 {
-    public AllInOneComputersController(IRepository<Product> products, IMapper mapper) 
+    public LaptopController(IRepository<Product> products, IMapper mapper) 
         : base(products, mapper) { }
 }

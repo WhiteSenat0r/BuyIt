@@ -1,12 +1,19 @@
 ﻿using Core.Common.Interfaces;
+using Core.Entities.Product.ProductSpecification;
 
 namespace Core.Entities.Product.Common.Interfaces;
 
 public interface IProductSpecification : IEntity<Guid>
 {
-    string Category { get; }
+    Guid SpecificationCategoryId { get; }
     
-    string Attribute { get; }
+    ProductSpecificationCategory SpecificationCategory { get; }
     
-    string Value { get; }
+    Guid SpecificationAttributeId { get; }
+    
+    ProductSpecificationAttribute SpecificationAttribute { get; }
+    
+    Guid SpecificationValueId { get; }
+    
+    ProductSpecificationValue SpecificationValue { get; }
 }

@@ -9,9 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers.ProductRelatedControllers.ComputerRelated;
 
 [ApiController]
-public class PersonalComputersController : BaseProductController
+[Route("api/[controller]s")]
+public class PersonalComputerController : BaseProductController
     <PersonalComputerFilteringModel, PersonalComputerQuerySpecification>
 {
-    public PersonalComputersController (IRepository<Product> products, IMapper mapper)
+    public PersonalComputerController (IRepository<Product> products, IMapper mapper)
         : base(products, mapper) { }
 }
