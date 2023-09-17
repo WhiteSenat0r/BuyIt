@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Contexts;
 using Infrastructure.Repositories.Factories.ProductRelated;
 using Infrastructure.Repositories.ProductRelated;
+using Infrastructure.Repositories.ProductRelated.ProductSpecificationRelated;
 using Microsoft.EntityFrameworkCore;
 
 namespace Tests.Infrastructure.UnitTests.RepositoryRelatedTests.RepositoryFactoryRelatedTests;

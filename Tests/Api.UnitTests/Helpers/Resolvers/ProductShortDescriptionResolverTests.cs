@@ -1,6 +1,5 @@
 ﻿using API.Helpers.Resolvers;
 using Core.Entities.Product;
-using Core.Entities.Product.Common.Interfaces;
 using Core.Entities.Product.ProductSpecification;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Interfaces;
@@ -38,11 +37,87 @@ public class ProductShortDescriptionResolverTests
         
         await _repository.AddNewEntityAsync(item);
         
-        var personalComputerSpecs = GetPersonalComputerSpecs(item);
+        var categories = new ProductSpecificationCategoryRepositoryFactory().Create(_context);
+
+        var cat = new List<ProductSpecificationCategory>
+        {
+            new("General"), new("Processor"), new("Graphics card"),
+            new("Storage"), new("Random access memory"), new("Interfaces and connection"), new("Measurements")
+        };
+
+        await categories.AddNewRangeOfEntitiesAsync(cat);
+
+        var values = new ProductSpecificationValueRepositoryFactory().Create(_context);
+
+        var val = new List<ProductSpecificationValue>
+        {
+            new("For business"), new("Mac OS"), new("Apple"), new("M2 CPU Series"),
+            new("M2 Ultra"), new("24"), new("2.4 GHz"), new("3.5 GHz"),
+            new("5 nm"), new("Integrated"), new("M2 GPU Series"), new("M2 Ultra GPU"),
+            new("Dynamic"), new("SSD"), new("PCI-ex SSD"), new("1 TB"),
+            new("LPDDR5"), new("64 GB"), new("Ethernet (RJ-45), Wi-Fi 6E, Bluetooth 5.3"),
+            new("Audio Line in, HDMi, USB 3.1, Thunderbolt 4"), new("197 mm"), new("95 mm"), new("2.7 kg")
+        };
+
+        await values.AddNewRangeOfEntitiesAsync(val);
+
+        var attributes =
+            new ProductSpecificationAttributeRepositoryFactory().Create(_context);
+
+        var att = new List<ProductSpecificationAttribute>
+        {
+            new("Classification"), new("Operating system"), new("Manufacturer"),
+            new("Series"), new("Model"), new("Quantity of cores"),
+            new("Quantity of threads"), new("Base clock"), new("Max clock"),
+            new("Processor technology"), new("Type"), new("Memory bus"),
+            new("Type of memory"), new("Amount of memory"), new("Drive's interface"),
+            new("Network adapters"), new("Connectors and I/O ports"), new("Width"),
+            new("Depth"), new("Height"), new("Weight")
+        };
+
+        await attributes.AddNewRangeOfEntitiesAsync(att);
+
+        var specs = new ProductSpecificationRepositoryFactory().Create(_context);
+
+        var personalComputerSpecs = new List<ProductSpecification>
+        {
+            new(cat[0].Id, att[0].Id, val[0].Id, item.Id),
+            new(cat[0].Id, att[1].Id, val[1].Id, item.Id),
+
+            new(cat[1].Id, att[2].Id, val[2].Id, item.Id),
+            new(cat[1].Id, att[3].Id, val[3].Id, item.Id),
+            new(cat[1].Id, att[4].Id, val[4].Id, item.Id),
+            new(cat[1].Id, att[5].Id, val[5].Id, item.Id),
+            new(cat[1].Id, att[6].Id, val[5].Id, item.Id),
+            new(cat[1].Id, att[7].Id, val[6].Id, item.Id),
+            new(cat[1].Id, att[8].Id, val[7].Id, item.Id),
+            new(cat[1].Id, att[9].Id, val[8].Id, item.Id),
+
+            new(cat[2].Id, att[10].Id, val[9].Id, item.Id),
+            new(cat[2].Id, att[2].Id, val[2].Id, item.Id),
+            new(cat[2].Id, att[3].Id, val[10].Id, item.Id),
+            new(cat[2].Id, att[4].Id, val[11].Id, item.Id),
+            new(cat[2].Id, att[11].Id, val[12].Id, item.Id),
+            new(cat[2].Id, att[12].Id, val[12].Id, item.Id),
+            new(cat[2].Id, att[13].Id, val[12].Id, item.Id),
+
+            new(cat[3].Id, att[10].Id, val[13].Id, item.Id),
+            new(cat[3].Id, att[14].Id, val[14].Id, item.Id),
+            new(cat[3].Id, att[13].Id, val[15].Id, item.Id),
+
+            new(cat[4].Id, att[10].Id, val[16].Id, item.Id),
+            new(cat[4].Id, att[13].Id, val[17].Id, item.Id),
+
+            new(cat[5].Id, att[15].Id, val[18].Id, item.Id),
+            new(cat[5].Id, att[16].Id, val[19].Id, item.Id),
+
+            new(cat[6].Id, att[17].Id, val[20].Id, item.Id),
+            new(cat[6].Id, att[18].Id, val[20].Id, item.Id),
+            new(cat[6].Id, att[19].Id, val[21].Id, item.Id),
+            new(cat[6].Id, att[20].Id, val[22].Id, item.Id)
+        };
         
-        var specsRepo = new ProductSpecificationRepositoryFactory().Create(_context);
-        
-        await specsRepo.AddNewRangeOfEntitiesAsync(personalComputerSpecs);
+        await specs.AddNewRangeOfEntitiesAsync(personalComputerSpecs);
         
         var resolver = new ProductShortDescriptionResolver();
 
@@ -77,11 +152,91 @@ public class ProductShortDescriptionResolverTests
         
         await _repository.AddNewEntityAsync(item);
         
-        var personalComputerSpecs = GetExtendedComputerSpecs(item);
+        var categories = new ProductSpecificationCategoryRepositoryFactory().Create(_context);
+
+        var cat = new List<ProductSpecificationCategory>
+        {
+            new("General"), new("Processor"), new("Graphics card"),
+            new("Storage"), new("Random access memory"), new("Interfaces and connection"), new("Measurements"),
+            new("Display")
+        };
+
+        await categories.AddNewRangeOfEntitiesAsync(cat);
+
+        var values = new ProductSpecificationValueRepositoryFactory().Create(_context);
+
+        var val = new List<ProductSpecificationValue>
+        {
+            new("For business"), new("Mac OS"), new("Apple"), new("M2 CPU Series"),
+            new("M2 Ultra"), new("24"), new("2.4 GHz"), new("3.5 GHz"),
+            new("5 nm"), new("Integrated"), new("M2 GPU Series"), new("M2 Ultra GPU"),
+            new("Dynamic"), new("SSD"), new("PCI-ex SSD"), new("1 TB"),
+            new("LPDDR5"), new("64 GB"), new("Ethernet (RJ-45), Wi-Fi 6E, Bluetooth 5.3"),
+            new("Audio Line in, HDMi, USB 3.1, Thunderbolt 4"), new("197 mm"), new("95 mm"), new("2.7 kg"),
+            new("15.3\"")
+        };
+
+        await values.AddNewRangeOfEntitiesAsync(val);
+
+        var attributes =
+            new ProductSpecificationAttributeRepositoryFactory().Create(_context);
+
+        var att = new List<ProductSpecificationAttribute>
+        {
+            new("Classification"), new("Operating system"), new("Manufacturer"),
+            new("Series"), new("Model"), new("Quantity of cores"),
+            new("Quantity of threads"), new("Base clock"), new("Max clock"),
+            new("Processor technology"), new("Type"), new("Memory bus"),
+            new("Type of memory"), new("Amount of memory"), new("Drive's interface"),
+            new("Network adapters"), new("Connectors and I/O ports"), new("Width"),
+            new("Depth"), new("Height"), new("Weight"), new("Diagonal")
+        };
+
+        await attributes.AddNewRangeOfEntitiesAsync(att);
+
+        var specs = new ProductSpecificationRepositoryFactory().Create(_context);
+
+        var personalComputerSpecs = new List<ProductSpecification>
+        {
+            new(cat[0].Id, att[0].Id, val[0].Id, item.Id),
+            new(cat[0].Id, att[1].Id, val[1].Id, item.Id),
+
+            new(cat[1].Id, att[2].Id, val[2].Id, item.Id),
+            new(cat[1].Id, att[3].Id, val[3].Id, item.Id),
+            new(cat[1].Id, att[4].Id, val[4].Id, item.Id),
+            new(cat[1].Id, att[5].Id, val[5].Id, item.Id),
+            new(cat[1].Id, att[6].Id, val[5].Id, item.Id),
+            new(cat[1].Id, att[7].Id, val[6].Id, item.Id),
+            new(cat[1].Id, att[8].Id, val[7].Id, item.Id),
+            new(cat[1].Id, att[9].Id, val[8].Id, item.Id),
+
+            new(cat[2].Id, att[10].Id, val[9].Id, item.Id),
+            new(cat[2].Id, att[2].Id, val[2].Id, item.Id),
+            new(cat[2].Id, att[3].Id, val[10].Id, item.Id),
+            new(cat[2].Id, att[4].Id, val[11].Id, item.Id),
+            new(cat[2].Id, att[11].Id, val[12].Id, item.Id),
+            new(cat[2].Id, att[12].Id, val[12].Id, item.Id),
+            new(cat[2].Id, att[13].Id, val[12].Id, item.Id),
+
+            new(cat[3].Id, att[10].Id, val[13].Id, item.Id),
+            new(cat[3].Id, att[14].Id, val[14].Id, item.Id),
+            new(cat[3].Id, att[13].Id, val[15].Id, item.Id),
+
+            new(cat[4].Id, att[10].Id, val[16].Id, item.Id),
+            new(cat[4].Id, att[13].Id, val[17].Id, item.Id),
+
+            new(cat[5].Id, att[15].Id, val[18].Id, item.Id),
+            new(cat[5].Id, att[16].Id, val[19].Id, item.Id),
+
+            new(cat[6].Id, att[17].Id, val[20].Id, item.Id),
+            new(cat[6].Id, att[18].Id, val[20].Id, item.Id),
+            new(cat[6].Id, att[19].Id, val[21].Id, item.Id),
+            new(cat[6].Id, att[20].Id, val[22].Id, item.Id),
+            
+            new(cat[7].Id, att[21].Id, val[23].Id, item.Id)
+        };
         
-        var specsRepo = new ProductSpecificationRepositoryFactory().Create(_context);
-        
-        await specsRepo.AddNewRangeOfEntitiesAsync(personalComputerSpecs);
+        await specs.AddNewRangeOfEntitiesAsync(personalComputerSpecs);
         
         var resolver = new ProductShortDescriptionResolver();
 
@@ -116,11 +271,91 @@ public class ProductShortDescriptionResolverTests
         
         await _repository.AddNewEntityAsync(item);
         
-        var personalComputerSpecs = GetExtendedComputerSpecs(item);
+        var categories = new ProductSpecificationCategoryRepositoryFactory().Create(_context);
+
+        var cat = new List<ProductSpecificationCategory>
+        {
+            new("General"), new("Processor"), new("Graphics card"),
+            new("Storage"), new("Random access memory"), new("Interfaces and connection"), new("Measurements"),
+            new("Display")
+        };
+
+        await categories.AddNewRangeOfEntitiesAsync(cat);
+
+        var values = new ProductSpecificationValueRepositoryFactory().Create(_context);
+
+        var val = new List<ProductSpecificationValue>
+        {
+            new("For business"), new("Mac OS"), new("Apple"), new("M2 CPU Series"),
+            new("M2 Ultra"), new("24"), new("2.4 GHz"), new("3.5 GHz"),
+            new("5 nm"), new("Integrated"), new("M2 GPU Series"), new("M2 Ultra GPU"),
+            new("Dynamic"), new("SSD"), new("PCI-ex SSD"), new("1 TB"),
+            new("LPDDR5"), new("64 GB"), new("Ethernet (RJ-45), Wi-Fi 6E, Bluetooth 5.3"),
+            new("Audio Line in, HDMi, USB 3.1, Thunderbolt 4"), new("197 mm"), new("95 mm"), new("2.7 kg"),
+            new("15.3\"")
+        };
+
+        await values.AddNewRangeOfEntitiesAsync(val);
+
+        var attributes =
+            new ProductSpecificationAttributeRepositoryFactory().Create(_context);
+
+        var att = new List<ProductSpecificationAttribute>
+        {
+            new("Classification"), new("Operating system"), new("Manufacturer"),
+            new("Series"), new("Model"), new("Quantity of cores"),
+            new("Quantity of threads"), new("Base clock"), new("Max clock"),
+            new("Processor technology"), new("Type"), new("Memory bus"),
+            new("Type of memory"), new("Amount of memory"), new("Drive's interface"),
+            new("Network adapters"), new("Connectors and I/O ports"), new("Width"),
+            new("Depth"), new("Height"), new("Weight"), new("Diagonal")
+        };
+
+        await attributes.AddNewRangeOfEntitiesAsync(att);
+
+        var specs = new ProductSpecificationRepositoryFactory().Create(_context);
+
+        var personalComputerSpecs = new List<ProductSpecification>
+        {
+            new(cat[0].Id, att[0].Id, val[0].Id, item.Id),
+            new(cat[0].Id, att[1].Id, val[1].Id, item.Id),
+
+            new(cat[1].Id, att[2].Id, val[2].Id, item.Id),
+            new(cat[1].Id, att[3].Id, val[3].Id, item.Id),
+            new(cat[1].Id, att[4].Id, val[4].Id, item.Id),
+            new(cat[1].Id, att[5].Id, val[5].Id, item.Id),
+            new(cat[1].Id, att[6].Id, val[5].Id, item.Id),
+            new(cat[1].Id, att[7].Id, val[6].Id, item.Id),
+            new(cat[1].Id, att[8].Id, val[7].Id, item.Id),
+            new(cat[1].Id, att[9].Id, val[8].Id, item.Id),
+
+            new(cat[2].Id, att[10].Id, val[9].Id, item.Id),
+            new(cat[2].Id, att[2].Id, val[2].Id, item.Id),
+            new(cat[2].Id, att[3].Id, val[10].Id, item.Id),
+            new(cat[2].Id, att[4].Id, val[11].Id, item.Id),
+            new(cat[2].Id, att[11].Id, val[12].Id, item.Id),
+            new(cat[2].Id, att[12].Id, val[12].Id, item.Id),
+            new(cat[2].Id, att[13].Id, val[12].Id, item.Id),
+
+            new(cat[3].Id, att[10].Id, val[13].Id, item.Id),
+            new(cat[3].Id, att[14].Id, val[14].Id, item.Id),
+            new(cat[3].Id, att[13].Id, val[15].Id, item.Id),
+
+            new(cat[4].Id, att[10].Id, val[16].Id, item.Id),
+            new(cat[4].Id, att[13].Id, val[17].Id, item.Id),
+
+            new(cat[5].Id, att[15].Id, val[18].Id, item.Id),
+            new(cat[5].Id, att[16].Id, val[19].Id, item.Id),
+
+            new(cat[6].Id, att[17].Id, val[20].Id, item.Id),
+            new(cat[6].Id, att[18].Id, val[20].Id, item.Id),
+            new(cat[6].Id, att[19].Id, val[21].Id, item.Id),
+            new(cat[6].Id, att[20].Id, val[22].Id, item.Id),
+            
+            new(cat[7].Id, att[21].Id, val[23].Id, item.Id)
+        };
         
-        var specsRepo = new ProductSpecificationRepositoryFactory().Create(_context);
-        
-        await specsRepo.AddNewRangeOfEntitiesAsync(personalComputerSpecs);
+        await specs.AddNewRangeOfEntitiesAsync(personalComputerSpecs);
         
         var resolver = new ProductShortDescriptionResolver();
 
@@ -133,7 +368,7 @@ public class ProductShortDescriptionResolverTests
     }
     
     [Fact]
-    public async void Resolve_Should_Throw_ArgumentException_If_UnknownProductWasPassed()
+    public void Resolve_Should_Throw_ArgumentException_If_UnknownProductWasPassed()
     {
         var item = new Product()
         {
@@ -145,58 +380,10 @@ public class ProductShortDescriptionResolverTests
         Assert.Throws<ArgumentException>(() => resolver.Resolve(item, null, null, null));
     }
     
-    private static IEnumerable<ProductSpecification> GetPersonalComputerSpecs(IProduct item)
-    {
-        return new List<ProductSpecification> 
-        { 
-            new ("General", "Classification", "For business", item.Id),
-            new ("General", "Operating system", "Mac OS", item.Id),
-
-            new ("Processor", "Manufacturer", "Apple", item.Id),
-            new ("Processor", "Series", "M2 CPU Series", item.Id),
-            new ("Processor", "Model", "M2 Ultra", item.Id),
-            new ("Processor", "Quantity of cores", "24", item.Id),
-            new ("Processor", "Quantity of threads", "24", item.Id),
-            new ("Processor", "Base clock", "2.4 GHz", item.Id),
-            new ("Processor", "Max clock", "3.5 GHz", item.Id),
-            new ("Processor", "Processor technology", "5 nm", item.Id),
-
-            new ("Graphics card","Type","Integrated" ,item.Id),
-            new ("Graphics card","Manufacturer","Apple" ,item.Id),
-            new ("Graphics card", "Series", "M2 GPU Series", item.Id),
-            new ("Graphics card","Model","M2 Ultra GPU" ,item.Id),
-            new ("Graphics card","Memory bus","Dynamic" ,item.Id),
-            new ("Graphics card","Type of memory","Dynamic" ,item.Id),
-            new ("Graphics card","Amount of memory","Dynamic" ,item.Id),
-
-            new ("Storage","Type","SSD" ,item.Id),
-            new ("Storage","Drive's interface","PCI-ex SSD" ,item.Id),
-            new ("Storage","Amount of memory","1 TB" ,item.Id),
-
-            new ("Random access memory","Type","LPDDR5" ,item.Id),
-            new ("Random access memory","Amount of memory","64 GB" ,item.Id),
-    
-            new ("Interfaces and connection","Network adapters","Ethernet (RJ-45), Wi-Fi 6E, Bluetooth 5.3" ,item.Id),
-            new ("Interfaces and connection","Connectors and I/O ports",
-                "Audio Line in, HDMi, USB 3.1, Thunderbolt 4" ,item.Id),
-    
-            new ("Measurements","Width","197 mm" ,item.Id),
-            new ("Measurements","Depth","197 mm" ,item.Id),
-            new ("Measurements","Height","95 mm" ,item.Id),
-            new ("Measurements","Weight","2.7 kg" ,item.Id)
-        };
-    }
-    
-    private static IEnumerable<ProductSpecification> GetExtendedComputerSpecs(IProduct item)
-    {
-        return GetPersonalComputerSpecs(item).Append
-            (new ("Display", "Diagonal", "15.3\"", item.Id));
-    }
-    
     private static Product GetFullyInitializedProduct
         (ProductManufacturer manufacturer, ProductRating rating, ProductType type) => 
         new(
-        @"Test",
+        "Test",
         "Test",
         5810.99m,
         false,

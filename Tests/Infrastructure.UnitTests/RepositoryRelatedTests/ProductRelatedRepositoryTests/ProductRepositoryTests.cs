@@ -73,13 +73,41 @@ public class ProductRepositoryTests
 
         var specsRepo = new ProductSpecificationRepositoryFactory().Create(_context);
 
-        var specs = new List<ProductSpecification>
+        var categories = new ProductSpecificationCategoryRepositoryFactory().Create(_context);
+
+        var cat = new List<ProductSpecificationCategory>
         {
-            new ("Test1", "Test1", "Test1", products[0].Id),
-            new ("Test2", "Test2", "Test2", products[1].Id)
+            new("General")
         };
 
-        await specsRepo.AddNewRangeOfEntitiesAsync(specs);
+        await categories.AddNewRangeOfEntitiesAsync(cat);
+
+        var values = new ProductSpecificationValueRepositoryFactory().Create(_context);
+
+        var val = new List<ProductSpecificationValue>
+        {
+            new("For business"), new("Mac OS")
+        };
+
+        await values.AddNewRangeOfEntitiesAsync(val);
+
+        var attributes =
+            new ProductSpecificationAttributeRepositoryFactory().Create(_context);
+
+        var att = new List<ProductSpecificationAttribute>
+        {
+            new("Classification"), new("Operating system")
+        };
+
+        await attributes.AddNewRangeOfEntitiesAsync(att);
+
+        var personalComputerSpecs = new List<ProductSpecification>
+        {
+            new(cat[0].Id, att[0].Id, val[0].Id, products[0].Id),
+            new(cat[0].Id, att[1].Id, val[1].Id, products[1].Id),
+        };
+
+        await specsRepo.AddNewRangeOfEntitiesAsync(personalComputerSpecs);
         
         await _repository.AddNewRangeOfEntitiesAsync(products);
         

@@ -19,9 +19,9 @@ public class ControllerCreationTests
     }
     
     [Theory]
-    [InlineData(typeof(PersonalComputersController))]
-    [InlineData(typeof(LaptopsController))]
-    [InlineData(typeof(AllInOneComputersController))]
+    [InlineData(typeof(PersonalComputerController))]
+    [InlineData(typeof(LaptopController))]
+    [InlineData(typeof(AllInOneComputerController))]
     [InlineData(typeof(ProductSearchController))]
     public void Controller_Constructor_Should_CreateInstance(Type controllerType)
     {

@@ -23,7 +23,7 @@ public class BasicProductControllerTests
                 It.IsAny<AioComputerQuerySpecification>()))
             .ReturnsAsync(new List<Product>());
 
-        var controller = new AllInOneComputersController(mockProductRepository.Object, mockMapper.Object);
+        var controller = new AllInOneComputerController(mockProductRepository.Object, mockMapper.Object);
 
         var result = await controller.GetAll(filteringModel);
 
@@ -41,7 +41,7 @@ public class BasicProductControllerTests
             It.IsAny<ProductQueryByProductCodeSpecification>()))
             .ReturnsAsync((Product)null);
 
-        var controller = new AllInOneComputersController(mockProductRepository.Object, mockMapper.Object);
+        var controller = new AllInOneComputerController(mockProductRepository.Object, mockMapper.Object);
 
         var result = await controller.Get(productCode);
 

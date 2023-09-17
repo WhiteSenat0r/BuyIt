@@ -1,85 +1,52 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Core.Entities.Product;
-using Core.Entities.Product.ProductSpecification;
+﻿using Core.Entities.Product.ProductSpecification;
 
 namespace Tests.Core.UnitTests.ProductRelatedTests;
 
 public class ProductSpecificationTests
 {
     [Fact]
-    public void New_ProductSpecification_Should_Have_NewGuid_Id()
+    public void NewInstance_ShouldGenerateUniqueId()
     {
-        var productSpec = new ProductSpecification();
+        var specification = new ProductSpecification();
 
-        Assert.NotEqual(Guid.Empty, productSpec.Id);
+        var id = specification.Id;
+
+        Assert.NotEqual(Guid.Empty, id);
     }
 
     [Fact]
-    public void ProductSpecification_Category_Should_Have_MaxLength48Attribute()
+    public void SpecificationCategory_ShouldBeSettableAndGettable()
     {
-        var productSpec = new ProductSpecification();
+        var specification = new ProductSpecification();
+        var category = new ProductSpecificationCategory();
         
-        var maxLengthAttribute = typeof(ProductSpecification)
-            .GetProperty("Category")
-            ?.GetCustomAttributes(typeof(MaxLengthAttribute), false)
-            as MaxLengthAttribute[];
+        specification.SpecificationCategory = category;
+        var retrievedCategory = specification.SpecificationCategory;
 
-        Assert.NotNull(maxLengthAttribute);
-        Assert.Single(maxLengthAttribute);
-        Assert.Equal(48, maxLengthAttribute[0].Length);
+        Assert.Equal(category, retrievedCategory);
     }
 
     [Fact]
-    public void ProductSpecification_Attribute_Should_Have_MaxLength48Attribute()
+    public void SpecificationAttribute_ShouldBeSettableAndGettable()
     {
-        var productSpec = new ProductSpecification();
-
-        var maxLengthAttribute = typeof(ProductSpecification)
-            .GetProperty("Attribute")
-            ?.GetCustomAttributes(typeof(MaxLengthAttribute), false)
-            as MaxLengthAttribute[];
+        var specification = new ProductSpecification();
+        var attribute = new ProductSpecificationAttribute();
         
-        Assert.NotNull(maxLengthAttribute);
-        Assert.Single(maxLengthAttribute);
-        Assert.Equal(48, maxLengthAttribute[0].Length);
+        specification.SpecificationAttribute = attribute;
+        var retrievedAttribute = specification.SpecificationAttribute;
+
+        Assert.Equal(attribute, retrievedAttribute);
     }
 
     [Fact]
-    public void ProductSpecification_Value_Should_Have_MaxLength192Attribute()
+    public void SpecificationValue_ShouldBeSettableAndGettable()
     {
-        var productSpec = new ProductSpecification();
+        var specification = new ProductSpecification();
+        var value = new ProductSpecificationValue();
 
-        var maxLengthAttribute = typeof(ProductSpecification)
-            .GetProperty("Value")
-            ?.GetCustomAttributes(typeof(MaxLengthAttribute), false)
-            as MaxLengthAttribute[];
+        specification.SpecificationValue = value;
+        var retrievedValue = specification.SpecificationValue;
 
-        Assert.NotNull(maxLengthAttribute);
-        Assert.Single(maxLengthAttribute);
-        Assert.Equal(192, maxLengthAttribute[0].Length);
-    }
-
-    [Fact]
-    public void ProductSpecification_Should_Set_Properties_Using_Constructor()
-    {
-        var category = "Test Category";
-        var attribute = "Test Attribute";
-        var value = "Test Value";
-        var productId = Guid.NewGuid();
-
-        var productSpec = new ProductSpecification(category, attribute, value, productId);
-
-        Assert.Equal(category, productSpec.Category);
-        Assert.Equal(attribute, productSpec.Attribute);
-        Assert.Equal(value, productSpec.Value);
-        Assert.Equal(productId, productSpec.ProductId);
-    }
-
-    [Fact]
-    public void ProductSpecification_Product_Should_Be_NullByDefault()
-    {
-        var productSpec = new ProductSpecification();
-
-        Assert.Null(productSpec.Product);
+        Assert.Equal(value, retrievedValue);
     }
 }

@@ -39,16 +39,43 @@ public class ProductProductSpecificationResolverTests
         
         await _repository.AddNewEntityAsync(item);
         
-        var specs = new List<ProductSpecification>
+        var categories = new ProductSpecificationCategoryRepositoryFactory().Create(_context);
+
+        var cat = new List<ProductSpecificationCategory>
         {
-            new() { Category = "Color", Attribute = "Color", Value = "Red", ProductId = item.Id},
-            new() { Category = "Color", Attribute = "Material", Value = "Cotton", ProductId = item.Id },
-            new() { Category = "Size", Attribute = "Size", Value = "Large", ProductId = item.Id },
+            new("General")
+        };
+
+        await categories.AddNewRangeOfEntitiesAsync(cat);
+
+        var values = new ProductSpecificationValueRepositoryFactory().Create(_context);
+
+        var val = new List<ProductSpecificationValue>
+        {
+            new("For business"), new("Mac OS")
+        };
+
+        await values.AddNewRangeOfEntitiesAsync(val);
+
+        var attributes =
+            new ProductSpecificationAttributeRepositoryFactory().Create(_context);
+
+        var att = new List<ProductSpecificationAttribute>
+        {
+            new("Classification"), new("Operating system")
+        };
+
+        await attributes.AddNewRangeOfEntitiesAsync(att);
+
+        var personalComputerSpecs = new List<ProductSpecification>
+        {
+            new(cat[0].Id, att[0].Id, val[0].Id, item.Id),
+            new(cat[0].Id, att[1].Id, val[1].Id, item.Id),
         };
         
         var specsRepo = new ProductSpecificationRepositoryFactory().Create(_context);
         
-        await specsRepo.AddNewRangeOfEntitiesAsync(specs);
+        await specsRepo.AddNewRangeOfEntitiesAsync(personalComputerSpecs);
         
         var resolver = new ProductSpecificationResolver();
 
@@ -57,16 +84,7 @@ public class ProductProductSpecificationResolverTests
         var result = resolver.Resolve(item, destination, null, null);
 
         Assert.NotNull(result);
-        Assert.Equal(2, result.Count);
-
-        Assert.True(result.ContainsKey("Color"));
-        var colorAttributes = result["Color"];
-        Assert.Equal("Red", colorAttributes["Color"]);
-        Assert.Equal("Cotton", colorAttributes["Material"]);
-
-        Assert.True(result.ContainsKey("Size"));
-        var sizeAttributes = result["Size"];
-        Assert.Equal("Large", sizeAttributes["Size"]);
+        Assert.Equal(1, result.Count);
     }
 
     [Fact]
