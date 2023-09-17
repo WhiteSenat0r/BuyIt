@@ -3,7 +3,6 @@ using API.Helpers.DataTransferObjects.ProductRelated;
 using API.Helpers.DataTransferObjects.ProductRelated.Common.Interfaces;
 using API.Helpers.PaginationResultModels;
 using API.Helpers.PaginationResultModels.Common.Interfaces;
-using API.Responses.Common.Classes;
 using AutoMapper;
 using Core.Entities.Product;
 using Infrastructure.Repositories.Common.Interfaces;
