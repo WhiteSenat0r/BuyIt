@@ -18,6 +18,12 @@ public sealed class StoreContext : DbContext
     public DbSet<ProductRating> ProductRatings { get; set; } = null!;
     
     public DbSet<ProductSpecification> ProductSpecifications { get; set; } = null!;
+    
+    public DbSet<ProductSpecificationCategory> ProductSpecificationCategories { get; set; } = null!;
+    
+    public DbSet<ProductSpecificationAttribute> ProductSpecificationAttributes { get; set; } = null!;
+    
+    public DbSet<ProductSpecificationValue> ProductSpecificationValues { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) // Configuration of database's context
     {
@@ -35,7 +41,20 @@ public sealed class StoreContext : DbContext
         
         modelBuilder.Entity<ProductSpecification>()
             .HasKey(p => p.Id);
+        
+        modelBuilder.Entity<ProductSpecificationAttribute>()
+            .HasKey(p => p.Id);
+        
+        modelBuilder.Entity<ProductSpecificationCategory>()
+            .HasKey(p => p.Id);
+        
+        modelBuilder.Entity<ProductSpecificationValue>()
+            .HasKey(p => p.Id);
 
+        modelBuilder.Entity<ProductSpecification>().Navigation(s => s.SpecificationCategory).AutoInclude();
+        modelBuilder.Entity<ProductSpecification>().Navigation(s => s.SpecificationAttribute).AutoInclude();
+        modelBuilder.Entity<ProductSpecification>().Navigation(s => s.SpecificationValue).AutoInclude();
+        
         modelBuilder.Entity<Product>(entity =>
         {
             // Convert IDictionary<string, IEnumerable<string>> to JSON string for storage in the database
