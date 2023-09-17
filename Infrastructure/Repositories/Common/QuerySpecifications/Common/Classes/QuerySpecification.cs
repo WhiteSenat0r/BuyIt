@@ -11,7 +11,7 @@ public abstract class QuerySpecification<TEntity> : IQuerySpecification<TEntity>
     
     protected QuerySpecification(Expression<Func<TEntity, bool>> mainCriteria) => Criteria = mainCriteria;
 
-    public Expression<Func<TEntity, bool>> Criteria { get; protected set; }
+    public Expression<Func<TEntity, bool>> Criteria { get; protected init; }
 
     public List<Expression<Func<TEntity, object>>> IncludedExpressions { get; } = new();
     
