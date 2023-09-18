@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Core.Entities.Product.Common.Interfaces;
 
-namespace Core.Builders.PathBuilders;
+namespace Core.Common.Builders.PathBuilders;
 
 public static class ImagePathBuilder
 {

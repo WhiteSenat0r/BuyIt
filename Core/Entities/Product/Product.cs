@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
-using Core.Builders.PathBuilders;
+using Core.Common.Builders.PathBuilders;
 using Core.Entities.Product.Common.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 
