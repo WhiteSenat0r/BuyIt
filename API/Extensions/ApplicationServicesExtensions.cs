@@ -1,9 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 using API.Responses;
+using Core.Common.Interfaces;
 using Core.Entities.Product;
 using Core.Entities.Product.ProductSpecification;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Interfaces;
+using Infrastructure.Repositories.Factories.Common.Classes;
 using Infrastructure.Repositories.Factories.ProductRelated;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -64,24 +66,24 @@ public static class ApplicationServicesExtensions
 
     private static void AddRequiredRepositories(IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IRepository<Product>>(provider =>
-            new ProductRepositoryFactory().Create(
-                provider.GetService<StoreContext>()!));
+        AddRepository<Product, ProductRepositoryFactory>(serviceCollection);
+        AddRepository<ProductType, ProductTypeRepositoryFactory>(serviceCollection);
+        AddRepository<ProductManufacturer, ProductManufacturerRepositoryFactory>(serviceCollection);
+        AddRepository<ProductRating, ProductRatingRepositoryFactory>(serviceCollection);
+        AddRepository<ProductSpecification, ProductSpecificationRepositoryFactory>(serviceCollection);
+        AddRepository<ProductSpecificationCategory, 
+            ProductSpecificationCategoryRepositoryFactory>(serviceCollection);
+        AddRepository<ProductSpecificationAttribute, 
+            ProductSpecificationAttributeRepositoryFactory>(serviceCollection);
+        AddRepository<ProductSpecificationValue, 
+            ProductSpecificationValueRepositoryFactory>(serviceCollection);
+    }
 
-        serviceCollection.AddScoped<IRepository<ProductType>>(provider =>
-            new ProductTypeRepositoryFactory().Create(
-                provider.GetService<StoreContext>()!));
-
-        serviceCollection.AddScoped<IRepository<ProductManufacturer>>(provider =>
-            new ProductManufacturerRepositoryFactory().Create(
-                provider.GetService<StoreContext>()!));
-
-        serviceCollection.AddScoped<IRepository<ProductRating>>(provider =>
-            new ProductRatingRepositoryFactory().Create(
-                provider.GetService<StoreContext>()!));
-        
-        serviceCollection.AddScoped<IRepository<ProductSpecification>>(provider =>
-            new ProductSpecificationRepositoryFactory().Create(
+    private static void AddRepository<TEntity, TRepository>(IServiceCollection serviceCollection) 
+        where TEntity : class, IEntity<Guid> where TRepository : RepositoryFactory<TEntity>, new()
+    {
+        serviceCollection.AddScoped<IRepository<TEntity>>(provider =>
+            new TRepository().Create(
                 provider.GetService<StoreContext>()!));
     }
 
