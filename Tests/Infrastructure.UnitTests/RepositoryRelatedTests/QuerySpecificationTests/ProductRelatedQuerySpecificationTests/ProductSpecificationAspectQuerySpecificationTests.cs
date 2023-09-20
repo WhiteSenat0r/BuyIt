@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Core.Entities.Product.ProductSpecification;
 using Core.Entities.Product.ProductSpecification.Common.Interfaces;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.RegularSpecifications.ProductSpecificationRelated;
 
@@ -9,9 +10,9 @@ public class ProductSpecificationAspectQuerySpecificationTests
     [Fact]
     public void Constructor_ShouldSetCriteriaAndOrderByExpression()
     {
-        Expression<Func<ISpecificationAspect, bool>> criteria = aspect => aspect.Value == "Test";
+        Expression<Func<ProductSpecificationCategory, bool>> criteria = aspect => aspect.Value == "Test";
         
-        var specification = new ProductSpecificationAspectQuerySpecification(criteria);
+        var specification = new ProductSpecificationAspectQuerySpecification<ProductSpecificationCategory>(criteria);
         
         Assert.Equal(criteria, specification.Criteria);
     }
