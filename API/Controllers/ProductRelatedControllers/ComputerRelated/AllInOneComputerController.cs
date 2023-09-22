@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers.ProductRelatedControllers.ComputerRelated;
 
 [ApiController]
-[Route("api/[controller]s")]
+[Route("api/[controller]")]
 public sealed class AllInOneComputerController : BaseProductController
     <AioComputerFilteringModel, AioComputerQuerySpecification>
 {
