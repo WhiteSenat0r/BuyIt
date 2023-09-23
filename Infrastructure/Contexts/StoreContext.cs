@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Core.Entities.Product;
-using Core.Entities.Product.ProductSpecification;
+using Core.Entities.Product.ProductSpecificationRelated;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Contexts;
@@ -35,7 +35,7 @@ public sealed class StoreContext : DbContext
 
         modelBuilder.Entity<Product>()
             .HasOne(p => p.Manufacturer);
-
+        
         modelBuilder.Entity<Product>()
             .HasMany(p => p.Specifications);
         
