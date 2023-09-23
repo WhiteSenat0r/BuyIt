@@ -1,7 +1,7 @@
 ﻿using API.Helpers.DataTransferObjects.ProductRelated;
 using API.Helpers.Resolvers;
 using Core.Entities.Product;
-using Core.Entities.Product.ProductSpecification;
+using Core.Entities.Product.ProductSpecificationRelated;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Interfaces;
 using Infrastructure.Repositories.Factories.ProductRelated;

@@ -1,4 +1,4 @@
-﻿using Core.Entities.Product.ProductSpecification;
+﻿using Core.Entities.Product.ProductSpecificationRelated;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Classes;
 

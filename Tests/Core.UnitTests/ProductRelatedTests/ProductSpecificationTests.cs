@@ -1,4 +1,4 @@
-﻿using Core.Entities.Product.ProductSpecification;
+﻿using Core.Entities.Product.ProductSpecificationRelated;
 
 namespace Tests.Core.UnitTests.ProductRelatedTests;
 

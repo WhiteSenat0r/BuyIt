@@ -1,6 +1,6 @@
-﻿using Core.Entities.Product.ProductSpecification.Common.Classes;
+﻿using Core.Entities.Product.ProductSpecificationRelated.Common.Classes;
 
-namespace Core.Entities.Product.ProductSpecification;
+namespace Core.Entities.Product.ProductSpecificationRelated;
 
 public sealed class ProductSpecificationValue : BasicSpecificationElement
 {

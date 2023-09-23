@@ -1,6 +1,6 @@
 ﻿using Core.Entities.Product.Common.Interfaces;
 
-namespace Core.Entities.Product.ProductSpecification;
+namespace Core.Entities.Product.ProductSpecificationRelated;
 
 public sealed class ProductSpecification : IProductSpecification
 {

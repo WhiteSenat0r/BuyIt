@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Core.Entities.Product.ProductSpecification.Common.Interfaces;
+using Core.Entities.Product.ProductSpecificationRelated.Common.Interfaces;
 using Infrastructure.Repositories.Common.QuerySpecifications.Common.Classes;
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.RegularSpecifications.ProductSpecificationRelated;

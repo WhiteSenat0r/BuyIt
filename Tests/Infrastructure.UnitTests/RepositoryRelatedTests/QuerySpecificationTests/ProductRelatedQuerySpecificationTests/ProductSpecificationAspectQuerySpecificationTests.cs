@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Core.Entities.Product.ProductSpecification;
-using Core.Entities.Product.ProductSpecification.Common.Interfaces;
+using Core.Entities.Product.ProductSpecificationRelated;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.RegularSpecifications.ProductSpecificationRelated;
 
 namespace Tests.Infrastructure.UnitTests.RepositoryRelatedTests.QuerySpecificationTests.ProductRelatedQuerySpecificationTests;

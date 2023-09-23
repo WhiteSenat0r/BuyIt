@@ -2,7 +2,7 @@
 using API.Responses;
 using Core.Common.Interfaces;
 using Core.Entities.Product;
-using Core.Entities.Product.ProductSpecification;
+using Core.Entities.Product.ProductSpecificationRelated;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories.Common.Interfaces;
 using Infrastructure.Repositories.Factories.Common.Classes;
