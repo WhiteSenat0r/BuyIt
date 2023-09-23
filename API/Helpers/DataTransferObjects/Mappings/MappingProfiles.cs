@@ -1,4 +1,5 @@
-﻿using API.Helpers.DataTransferObjects.ProductRelated;
+﻿using API.Helpers.DataTransferObjects.Manufacturer;
+using API.Helpers.DataTransferObjects.ProductRelated;
 using API.Helpers.Resolvers;
 using AutoMapper;
 using Core.Entities.Product.Common.Interfaces;
@@ -11,8 +12,14 @@ public class MappingProfiles : Profile
     {
         CreateMappingProfileForProductInCatalog();
         CreateMappingProfileForSingleProduct();
+        CreateMappingProfileForProductBrands();
     }
 
+    private void CreateMappingProfileForProductBrands() =>
+        CreateMap<IProductManufacturer, ProductManufacturerDto>()
+            .ForMember(n => n.Brand, manufacturer =>
+                manufacturer.MapFrom(m => m.Name));
+    
     private void CreateMappingProfileForProductInCatalog() =>
         CreateMap<IProduct, GeneralizedProductDto>()
             .ForMember(d => d.Description, p =>
