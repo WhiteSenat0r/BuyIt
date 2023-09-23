@@ -7,4 +7,6 @@ public interface IProductManufacturer : IEntity<Guid>
     string Name { get; }
     
     string RegistrationCountry { get; }
+    
+    ICollection<Product> Products { get; set; }
 }
