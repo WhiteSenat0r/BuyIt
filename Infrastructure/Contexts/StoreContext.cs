@@ -27,6 +27,28 @@ public sealed class StoreContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) // Configuration of database's context
     {
+        SpecifyEntityRelations(modelBuilder);
+        AddAutoIncludes(modelBuilder);
+        MapEntities(modelBuilder);
+    }
+
+    private static void MapEntities(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Product>(entity =>
+        {
+            // Convert IDictionary<string, IEnumerable<string>> to JSON string for storage in the database
+            entity.Property(p => p.MainImagesNames)
+                .HasConversion(
+                    urls =>
+                        JsonSerializer.Serialize(urls, new JsonSerializerOptions()),
+                    str =>
+                        JsonSerializer.Deserialize
+                            <List<string>>(str, new JsonSerializerOptions())!);
+        });
+    }
+
+    private static void SpecifyEntityRelations(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<Product>()
             .HasOne(p => p.ProductType);
 
@@ -35,36 +57,27 @@ public sealed class StoreContext : DbContext
 
         modelBuilder.Entity<Product>()
             .HasOne(p => p.Manufacturer);
-        
+
         modelBuilder.Entity<Product>()
             .HasMany(p => p.Specifications);
-        
+
         modelBuilder.Entity<ProductSpecification>()
             .HasKey(p => p.Id);
-        
+
         modelBuilder.Entity<ProductSpecificationAttribute>()
             .HasKey(p => p.Id);
-        
+
         modelBuilder.Entity<ProductSpecificationCategory>()
             .HasKey(p => p.Id);
-        
+
         modelBuilder.Entity<ProductSpecificationValue>()
             .HasKey(p => p.Id);
+    }
 
+    private static void AddAutoIncludes(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<ProductSpecification>().Navigation(s => s.SpecificationCategory).AutoInclude();
         modelBuilder.Entity<ProductSpecification>().Navigation(s => s.SpecificationAttribute).AutoInclude();
         modelBuilder.Entity<ProductSpecification>().Navigation(s => s.SpecificationValue).AutoInclude();
-        
-        modelBuilder.Entity<Product>(entity =>
-        {
-            // Convert IDictionary<string, IEnumerable<string>> to JSON string for storage in the database
-            entity.Property(p => p.MainImagesNames)
-                .HasConversion(
-                    urls => 
-                        JsonSerializer.Serialize(urls, new JsonSerializerOptions()),
-                    str => 
-                        JsonSerializer.Deserialize
-                            <List<string>>(str, new JsonSerializerOptions())!);
-        });
     }
 }
