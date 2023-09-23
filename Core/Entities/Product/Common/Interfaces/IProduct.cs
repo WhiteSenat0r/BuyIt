@@ -1,4 +1,5 @@
 ﻿using Core.Common.Interfaces;
+using Core.Entities.Product.ProductSpecificationRelated;
 
 namespace Core.Entities.Product.Common.Interfaces;
 
@@ -28,5 +29,5 @@ public interface IProduct : IEntity<Guid>
     
     IEnumerable<string> MainImagesNames { get; }
 
-    IEnumerable<ProductSpecification.ProductSpecification> Specifications { get; }
+    ICollection<ProductSpecification> Specifications { get; }
 }

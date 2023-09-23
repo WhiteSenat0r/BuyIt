@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 using Core.Common.Builders.PathBuilders;
 using Core.Entities.Product.Common.Interfaces;
+using Core.Entities.Product.ProductSpecificationRelated;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Core.Entities.Product;
@@ -101,7 +102,7 @@ public sealed class Product : IProduct
         }
     }
 
-    public IEnumerable<ProductSpecification.ProductSpecification> Specifications { get; set; }
+    public ICollection<ProductSpecification> Specifications { get; set; }
 
     private static void AssignStringValue
         (string text, ref string assignedVariable, bool isName = true)
