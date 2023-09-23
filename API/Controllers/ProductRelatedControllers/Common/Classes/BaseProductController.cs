@@ -17,11 +17,8 @@ public abstract class BaseProductController<TFilteringModel, TQuerySpecification
     where TFilteringModel : IFilteringModel
     where TQuerySpecification : BasicProductFilteringQuerySpecification
 {
-    protected BaseProductController(IRepository<Product> products, IMapper mapper) : base(products, mapper)
-    {
-        Products = products;
-        Mapper = mapper;
-    }
+    protected BaseProductController(IRepository<Product> products, IMapper mapper)
+        : base(products, mapper) { }
 
     [HttpGet("item/{productCode}")]
     [ProducesResponseType(StatusCodes.Status200OK)]

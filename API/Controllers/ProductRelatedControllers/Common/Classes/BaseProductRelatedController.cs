@@ -17,16 +17,16 @@ public abstract class BaseProductRelatedController<TFilteringModel, TQuerySpecif
     where TFilteringModel : IFilteringModel
     where TQuerySpecification : BasicProductFilteringQuerySpecification
 {
+    private protected readonly IRepository<Product> Products;
+    
     protected BaseProductRelatedController(IRepository<Product> products, IMapper mapper)
     {
         Products = products;
         Mapper = mapper;
     }
     
-    protected IMapper Mapper { get; init; }
-
-    protected IRepository<Product> Products { get; init; }
-
+    private protected IMapper Mapper { get; }
+    
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IPaginationResult<IProductDto>>> GetAll([FromQuery] TFilteringModel filteringModel)
