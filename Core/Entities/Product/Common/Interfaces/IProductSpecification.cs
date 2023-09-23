@@ -1,5 +1,5 @@
 ﻿using Core.Common.Interfaces;
-using Core.Entities.Product.ProductSpecification;
+using Core.Entities.Product.ProductSpecificationRelated;
 
 namespace Core.Entities.Product.Common.Interfaces;
 

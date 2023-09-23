@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Core.Entities.Product.ProductSpecification.Common.Interfaces;
+using Core.Entities.Product.ProductSpecificationRelated.Common.Interfaces;
 
-namespace Core.Entities.Product.ProductSpecification.Common.Classes;
+namespace Core.Entities.Product.ProductSpecificationRelated.Common.Classes;
 
 public abstract class BasicSpecificationElement : ISpecificationAspect
 {
@@ -12,6 +12,8 @@ public abstract class BasicSpecificationElement : ISpecificationAspect
     protected BasicSpecificationElement(string value) => Value = value;
     
     public Guid Id { get; } = Guid.NewGuid();
+    
+    public ICollection<ProductSpecification> Specifications { get; set; }
     
     [MaxLength(256)]
     public string Value
