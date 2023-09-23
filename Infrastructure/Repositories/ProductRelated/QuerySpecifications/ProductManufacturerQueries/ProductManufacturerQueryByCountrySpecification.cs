@@ -1,9 +1,8 @@
-﻿using Core.Entities.Product;
-using Infrastructure.Repositories.Common.QuerySpecifications.Common.Classes;
+﻿using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductManufacturerQueries.Common.Classes;
 
 namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductManufacturerQueries;
 
-public sealed class ProductManufacturerQueryByCountrySpecification : QuerySpecification<ProductManufacturer>
+public sealed class ProductManufacturerQueryByCountrySpecification : BaseProductManufacturerQuerySpecification
 {
     public ProductManufacturerQueryByCountrySpecification(string countryName)
         : base(criteria => 
