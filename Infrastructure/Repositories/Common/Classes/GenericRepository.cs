@@ -59,6 +59,8 @@ public abstract class GenericRepository<TEntity> : IRepository<TEntity>
         Context.SaveChanges();
     }
 
+    public int Count() => Context.Set<TEntity>().Count();
+
     private IQueryable<TEntity> ApplySpecification(IQuerySpecification<TEntity> querySpecification) =>
         QuerySpecificationEvaluator.GetQuerySpecifications(Context.Set<TEntity>(), querySpecification);
 }

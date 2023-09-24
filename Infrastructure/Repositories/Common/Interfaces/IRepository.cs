@@ -23,4 +23,6 @@ public interface IRepository<TEntity>
     void RemoveExistingEntity(TEntity removedEntity);
     
     void RemoveRangeOfExistingEntities(IEnumerable<TEntity> removedEntities);
+
+    int Count();
 }
