@@ -17,10 +17,10 @@ public abstract class BasicFilteringModel : IFilteringModel
         get => _itemQuantity;
         set => _itemQuantity = value > MaximumItemQuantity ? MaximumItemQuantity : value;
     }
-    
-    public string Category { get; protected init; }
 
-    public string BrandName { get; set; }
+    public List<string> Category { get; set; } = new();
+
+    public List<string> BrandName { get; } = new();
 
     public decimal? LowerPriceLimit { get; set; }
     

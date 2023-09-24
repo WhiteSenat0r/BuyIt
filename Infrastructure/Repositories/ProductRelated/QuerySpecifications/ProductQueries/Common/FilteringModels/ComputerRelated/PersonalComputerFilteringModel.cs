@@ -6,35 +6,35 @@ namespace Infrastructure.Repositories.ProductRelated.QuerySpecifications.Product
 
 public class PersonalComputerFilteringModel : BasicFilteringModel
 {
-    public PersonalComputerFilteringModel() => Category = "Personal computer";
+    public PersonalComputerFilteringModel() => Category.Add("Personal computer");
+
+    public List<string> Classification { get; set; } = new();
+
+    public List<string> OperatingSystem { get; set; } = new();
+
+    public List<string> ProcessorBrand { get; set; } = new();
+
+    public List<string> ProcessorModel { get; set; } = new();
+
+    public List<string> ProcessorSeries { get; set; } = new();
+
+    public List<string> CoresQuantity { get; set; } = new();
+
+    public List<string> GraphicsCardBrand { get; set; } = new();
+
+    public List<string> GraphicsCardType { get; set; } = new();
     
-    public string Classification { get; set; }
+    public List<string> GraphicsCardModel { get; set; } = new();
 
-    public string OperatingSystem { get; set; }
+    public List<string> GraphicsCardSeries { get; set; } = new();
 
-    public string ProcessorBrand { get; set; }
-    
-    public string ProcessorModel { get; set; }
+    public List<string> GraphicsCardMemoryCapacity { get; set; } = new();
 
-    public string ProcessorSeries { get; set; }
+    public List<string> StorageType { get; set; } = new();
 
-    public string CoresQuantity { get; set; }
+    public List<string> StorageCapacity { get; set; } = new();
 
-    public string GraphicsCardBrand { get; set; }
+    public List<string> RamType { get; set; } = new();
 
-    public string GraphicsCardType { get; set; }
-    
-    public string GraphicsCardModel { get; set; }
-
-    public string GraphicsCardSeries { get; set; }
-
-    public string GraphicsCardMemoryCapacity { get; set; }
-
-    public string StorageType { get; set; }
-
-    public string StorageCapacity { get; set; }
-
-    public string RamType { get; set; }
-
-    public string RamCapacity { get; set; }
+    public List<string> RamCapacity { get; set; } = new();
 }

@@ -2,9 +2,9 @@
 
 public interface IFilteringModel
 {
-    string Category { get; }
+    List<string> Category { get; }
     
-    string BrandName { get; }
+    List<string> BrandName { get; }
 
     decimal? LowerPriceLimit { get; }
     
@@ -14,7 +14,7 @@ public interface IFilteringModel
     
     string SortingType { get; }
     
-    public int PageIndex { get; set; }
+    public int PageIndex { get; }
 
-    public int ItemQuantity { get; set; }
+    public int ItemQuantity { get; }
 }

@@ -3,13 +3,13 @@
 
 public sealed class AioComputerFilteringModel : PersonalComputerFilteringModel
 {
-    public AioComputerFilteringModel() => Category = "All-in-one computer";
+    public AioComputerFilteringModel() => Category.Add("All-in-one computer");
     
-    public string DisplayDiagonal { get; set; }
+    public List<string> DisplayDiagonal { get; set; } = new();
 
-    public string DisplayResolution { get; set; }
+    public List<string> DisplayResolution { get; set; } = new();
 
-    public string DisplayMatrixType { get; set; }
+    public List<string> DisplayMatrixType { get; set; } = new();
 
-    public string DisplayRefreshRate { get; set; }
+    public List<string> DisplayRefreshRate { get; set; } = new();
 }
