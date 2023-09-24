@@ -26,7 +26,7 @@ public class ProductUrlResolverTests
         var resolver = new ProductUrlResolver(configuration);
         var source = new Product
         {
-            Manufacturer = new ProductManufacturer("Test", "Test"),
+            Manufacturer = new ProductManufacturer("Test"),
             ProductType = new ProductType("Test"),
             MainImagesNames = new List<string> { "image1.jpg", "image2.jpg" }
         };
@@ -59,7 +59,7 @@ public class ProductUrlResolverTests
         var resolver = new ProductUrlResolver(configuration);
         var source = new Product
         {
-            Manufacturer = new ProductManufacturer("Test", "Test"),
+            Manufacturer = new ProductManufacturer("Test"),
             ProductType = new ProductType("Test"),
             MainImagesNames = new List<string> { "image1.jpg", "image2.jpg" }
         };

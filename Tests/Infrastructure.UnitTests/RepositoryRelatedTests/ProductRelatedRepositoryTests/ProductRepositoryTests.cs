@@ -22,7 +22,7 @@ public class ProductRepositoryTests
             .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
 
         var manufacturerRepo = new ProductManufacturerRepositoryFactory().Create(_context);
-        var manufacturer = new ProductManufacturer("TestManufacturer", "TestCountry");
+        var manufacturer = new ProductManufacturer("TestManufacturer");
         await manufacturerRepo.AddNewEntityAsync(manufacturer);
         
         var ratingRepo = new ProductRatingRepositoryFactory().Create(_context);
@@ -52,7 +52,7 @@ public class ProductRepositoryTests
             .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
 
         var manufacturerRepo = new ProductManufacturerRepositoryFactory().Create(_context);
-        var manufacturer = new ProductManufacturer("TestManufacturer", "TestCountry");
+        var manufacturer = new ProductManufacturer("TestManufacturer");
         await manufacturerRepo.AddNewEntityAsync(manufacturer);
         
         var ratingRepo = new ProductRatingRepositoryFactory().Create(_context);

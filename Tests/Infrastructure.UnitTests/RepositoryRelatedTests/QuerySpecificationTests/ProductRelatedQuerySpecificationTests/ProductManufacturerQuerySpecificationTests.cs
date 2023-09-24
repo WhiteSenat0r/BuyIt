@@ -1,6 +1,7 @@
 ﻿using Core.Entities.Product;
 using Infrastructure.Repositories.Common.QuerySpecifications.Common.Interfaces;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductManufacturerQueries;
+using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductManufacturerQueries.Common.FilteringModels;
 
 namespace Tests.Infrastructure.UnitTests.RepositoryRelatedTests.QuerySpecificationTests.ProductRelatedQuerySpecificationTests;
 
@@ -36,11 +37,12 @@ public class ProductManufacturerQuerySpecificationTests
     }
     
     [Fact]
-    public void ProductQuerySpecificationByCountryConstructor_Should_CreateNewQuerySpecificationInstance()
+    public void ProductQuerySpecificationByProductTypeConstructor_Should_CreateNewQuerySpecificationInstance()
     {
-        _querySpecification = new ProductManufacturerQueryByCountrySpecification("Country");
+        _querySpecification = new ProductManufacturerByProductTypeQuerySpecification(
+            new ProductManufacturerFilteringModel {ProductCategory = "Test"});
         
-        Assert.IsType<ProductManufacturerQueryByCountrySpecification>(_querySpecification);
+        Assert.IsType<ProductManufacturerByProductTypeQuerySpecification>(_querySpecification);
         Assert.NotNull(_querySpecification);
     }
 }

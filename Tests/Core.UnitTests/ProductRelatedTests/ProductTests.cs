@@ -174,7 +174,7 @@ public class ProductTests
         " play, and create in ways you never thought possible.",
         5810.99m,
         false,
-        new ProductManufacturer("Apple", "The United States of America"),
+        new ProductManufacturer("Apple"),
         new ProductType("Personal computer"),
         new ProductRating(null),
         new List<string>

@@ -25,7 +25,6 @@ public class ProductManufacturerTests
 
         Assert.True(_productManufacturer.GetType() == typeof(ProductManufacturer));
         Assert.True(_productManufacturer.Name is not null);
-        Assert.True(_productManufacturer.RegistrationCountry is not null);
     }
     
     [Theory]
@@ -73,7 +72,7 @@ public class ProductManufacturerTests
     }
 
     private static ProductManufacturer GetFullyInitializedProductManufacturer() =>
-        new ("Manufacturer", "RegistrationCountry");
+        new ("Manufacturer");
     
     private List<PropertyInfo> GetStringPropertiesFromClass() => 
         _productManufacturer.GetType().GetProperties().Where
