@@ -1,4 +1,5 @@
-﻿using API.Controllers.ProductRelatedControllers.Common.Classes;
+﻿using API.Controllers.Common;
+using API.Controllers.ProductRelatedControllers.Common.Classes;
 using API.Controllers.ProductRelatedControllers.ComputerRelated;
 using AutoMapper;
 using Core.Entities.Product;
@@ -9,15 +10,8 @@ namespace Tests.Api.UnitTests.Controllers;
 
 public class ControllerCreationTests
 {
-    private readonly Mock<IMapper> _mapper ;
-    private readonly Mock<IRepository<Product>> _repository;
+    private readonly Mock<IMapper> _mapper = new();
 
-    public ControllerCreationTests()
-    {
-        _mapper = new Mock<IMapper>();
-        _repository = new Mock<IRepository<Product>>();
-    }
-    
     [Theory]
     [InlineData(typeof(PersonalComputerController))]
     [InlineData(typeof(LaptopController))]
@@ -25,7 +19,18 @@ public class ControllerCreationTests
     [InlineData(typeof(ProductSearchController))]
     public void Controller_Constructor_Should_CreateInstance(Type controllerType)
     {
-        var controller = Activator.CreateInstance(controllerType, _repository.Object, _mapper.Object);
+        var repository = new Mock<IRepository<Product>>();
+        var controller = Activator.CreateInstance(controllerType, repository.Object, _mapper.Object);
+
+        Assert.NotNull(controller);
+    }
+    
+    [Fact]
+    public void ProductManufacturerController_Constructor_Should_CreateInstance()
+    {
+        var repository = new Mock<IRepository<ProductManufacturer>>();
+        
+        var controller = new ProductManufacturerController(repository.Object, _mapper.Object);
 
         Assert.NotNull(controller);
     }
