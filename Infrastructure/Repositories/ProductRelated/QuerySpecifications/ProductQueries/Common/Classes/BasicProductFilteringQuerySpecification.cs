@@ -9,12 +9,10 @@ public abstract class BasicProductFilteringQuerySpecification : BasicProductQuer
 {
     protected BasicProductFilteringQuerySpecification(IFilteringModel filteringModel)
         : base(product =>
-            (string.IsNullOrEmpty(filteringModel.BrandName) || product.Manufacturer.Name.ToLower().Equals
-                (filteringModel.BrandName.ToLower())) &&
+            (filteringModel.BrandName.IsNullOrEmpty() || filteringModel.BrandName.Contains(product.Manufacturer.Name.ToLower())) &&
             (!filteringModel.UpperPriceLimit.HasValue || product.Price <= filteringModel.UpperPriceLimit) &&
             (!filteringModel.LowerPriceLimit.HasValue || product.Price >= filteringModel.LowerPriceLimit) &&
-            (filteringModel.Category.IsNullOrEmpty() || product.ProductType.Name.ToLower()
-                .Equals(filteringModel.Category.ToLower())))
+            (filteringModel.Category.IsNullOrEmpty() || filteringModel.Category.Contains(product.ProductType.Name.ToLower())))
     {
         if (!string.IsNullOrEmpty(filteringModel.InStock))
         {
