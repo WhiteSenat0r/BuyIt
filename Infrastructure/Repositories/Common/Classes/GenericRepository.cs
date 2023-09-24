@@ -60,6 +60,9 @@ public abstract class GenericRepository<TEntity> : IRepository<TEntity>
     }
 
     public int Count() => Context.Set<TEntity>().Count();
+    
+    public int Count(Func<TEntity, bool> predicate) => 
+        Context.Set<TEntity>().Where(predicate).Count();
 
     private IQueryable<TEntity> ApplySpecification(IQuerySpecification<TEntity> querySpecification) =>
         QuerySpecificationEvaluator.GetQuerySpecifications(Context.Set<TEntity>(), querySpecification);
