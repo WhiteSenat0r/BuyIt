@@ -5,15 +5,16 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace API.Helpers.Resolvers;
 
-public sealed class ProductSpecificationResolver : IValueResolver<IProduct, FullProductDto, IDictionary<string, IDictionary<string, string>>>
+public sealed class ProductSpecificationResolver : 
+    IValueResolver<IProduct, FullProductDto, IDictionary<string, IDictionary<string, string>>>
 {
-    public IDictionary<string, IDictionary<string, string>> Resolve
-        (IProduct source, FullProductDto destination, 
-            IDictionary<string, IDictionary<string, string>> destMember, ResolutionContext context)
+    public IDictionary<string, IDictionary<string, string>> Resolve(
+        IProduct source, FullProductDto destination,
+        IDictionary<string, IDictionary<string, string>> destMember, ResolutionContext context)
     {
-        if (source.Specifications.IsNullOrEmpty()) 
+        if (source.Specifications.IsNullOrEmpty())
             throw new ArgumentNullException(nameof(source), "Product has no specifications!");
-        
+
         var categories = source.Specifications
             .DistinctBy(s => s.SpecificationCategory.Value).Select(c => c.SpecificationCategory.Value);
 
@@ -21,9 +22,10 @@ public sealed class ProductSpecificationResolver : IValueResolver<IProduct, Full
 
         foreach (var category in categories)
         {
-            var attributesAndValues = 
+            var attributesAndValues =
                 source.Specifications.Where(c => c.SpecificationCategory.Value.Equals(category))
-                    .ToDictionary(specification => specification.SpecificationAttribute.Value, specification => specification.SpecificationValue.Value);
+                    .ToDictionary(specification => specification.SpecificationAttribute.Value,
+                        specification => specification.SpecificationValue.Value);
 
             result.Add(category, attributesAndValues);
         }
