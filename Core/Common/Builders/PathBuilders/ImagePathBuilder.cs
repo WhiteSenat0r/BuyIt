@@ -3,9 +3,9 @@ using Core.Entities.Product.Common.Interfaces;
 
 namespace Core.Common.Builders.PathBuilders;
 
-public static class ImagePathBuilder
+public class ImagePathBuilder
 {
-    public static IEnumerable<string> Build
+    public IEnumerable<string> Build
         (IEnumerable<string> inputPaths, IProductType productType,
             IProductManufacturer productManufacturer, string productCode)
     {
@@ -27,14 +27,14 @@ public static class ImagePathBuilder
         return result;
     }
 
-    private static void AppendProductCode(string productCode, StringBuilder pathBuilder) =>
+    private void AppendProductCode(string productCode, StringBuilder pathBuilder) =>
         pathBuilder.Append(productCode.ToLower() + '/');
 
-    private static void AppendBrandToPath
+    private void AppendBrandToPath
         (IProductManufacturer productManufacturer, StringBuilder pathBuilder) =>
         pathBuilder.Append(productManufacturer.Name.ToLower() + '/');
 
-    private static void AppendCategoryToPath(
+    private void AppendCategoryToPath(
         string categoryNameEnding, StringBuilder pathBuilder, IProductType category)
     {
         var vowels = new[] { 'a', 'e', 'i', 'o', 'u' };
@@ -49,7 +49,7 @@ public static class ImagePathBuilder
         pathBuilder.Append('/');
     }
 
-    private static void DeterminateCategoryEnding
+    private void DeterminateCategoryEnding
         (string categoryNameEnding, StringBuilder pathBuilder, string categoryName, char[] vowels)
     {
         if (categoryNameEnding.Equals("es"))
@@ -68,6 +68,6 @@ public static class ImagePathBuilder
             pathBuilder.Append(categoryName.ToLower() + 's');
     }
 
-    private static string GetCategoryNameEnding(IProductType productType) =>
+    private string GetCategoryNameEnding(IProductType productType) =>
         productType.Name.Substring(productType.Name.Length - 2, 2).ToLower();
 }

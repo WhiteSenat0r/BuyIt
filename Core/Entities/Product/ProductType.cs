@@ -23,7 +23,7 @@ public sealed class ProductType : IProductType
             (value, ref _name);
     }
 
-    private static void AssignStringValue(string text, ref string assignedVariable)
+    private void AssignStringValue(string text, ref string assignedVariable)
     {
         if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text))
             throw new ArgumentNullException

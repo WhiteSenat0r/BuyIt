@@ -87,7 +87,7 @@ public sealed class Product : IProduct
     public Guid ProductTypeId { get; set; }
     
     [MaxLength(8)]
-    public string ProductCode { get; set; } = null!; // Description of the product
+    public string ProductCode { get; set; }
 
     public IEnumerable<string> MainImagesNames                                        
     {
@@ -97,14 +97,14 @@ public sealed class Product : IProduct
             if (value.IsNullOrEmpty())
                 ThrowArgumentNullException("Main images must be present!");
             CheckFileFormatValidity(value);
-            value = ImagePathBuilder.Build(value, ProductType, Manufacturer, ProductCode);
+            value = new ImagePathBuilder().Build(value, ProductType, Manufacturer, ProductCode);
             _mainImagesNames = value;
         }
     }
 
     public ICollection<ProductSpecification> Specifications { get; set; }
 
-    private static void AssignStringValue
+    private void AssignStringValue
         (string text, ref string assignedVariable, bool isName = true)
     {
         CheckStringValidity(text);
@@ -118,7 +118,7 @@ public sealed class Product : IProduct
         assignedVariable = text;
     }
 
-    private static MaxLengthAttribute GetSuitableMaxLengthAttribute(bool isName)
+    private MaxLengthAttribute GetSuitableMaxLengthAttribute(bool isName)
     {
         var propertyInfo = isName ? typeof(Product).GetProperty("Name") 
             : typeof(Product).GetProperty("Description");
@@ -127,17 +127,17 @@ public sealed class Product : IProduct
             (propertyInfo!, typeof(MaxLengthAttribute))!;
     }
 
-    private static void CheckStringValidity(string text)
+    private void CheckStringValidity(string text)
     {
         if (string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text)) 
             ThrowArgumentNullException
                 ("String is null, empty or consists only of white spaces!");
     }
 
-    private static void ThrowArgumentNullException(string message) =>
+    private void ThrowArgumentNullException(string message) =>
         throw new ArgumentNullException(message, new InvalidDataException());
     
-    private static void CheckFileFormatValidity(IEnumerable<string> fileNames)
+    private void CheckFileFormatValidity(IEnumerable<string> fileNames)
     {
         if (fileNames.IsNullOrEmpty())
             return;

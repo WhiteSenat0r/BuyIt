@@ -13,17 +13,17 @@ internal class ComputerShortDescription : IShortDescription
             _ => GetPersonalComputerShortDescription(product)
         };
 
-    private static string GetAllInOneComputerShortDescription(IProduct product) =>
+    private string GetAllInOneComputerShortDescription(IProduct product) =>
         GetLaptopShortDescription(product) 
         + $" | OS: {product.Specifications.Single(s => s.SpecificationCategory.Value.Equals
             ("General") && s.SpecificationAttribute.Value.Equals("Operating system")).SpecificationValue.Value}";
 
-    private static string GetLaptopShortDescription(IProduct product) =>
+    private string GetLaptopShortDescription(IProduct product) =>
         $"Display: {product.Specifications.Single(s => s.SpecificationCategory.Value.Equals
             ("Display") && s.SpecificationAttribute.Value.Equals("Diagonal")).SpecificationValue.Value} | " +
         GetPersonalComputerShortDescription(product);
 
-    private static string GetPersonalComputerShortDescription(IProduct product) =>
+    private string GetPersonalComputerShortDescription(IProduct product) =>
         $"CPU: {product.Specifications.Single(s => s.SpecificationCategory.Value.Equals
             ("Processor") && s.SpecificationAttribute.Value.Equals("Model")).SpecificationValue.Value} | " +
         $"GPU: {product.Specifications.Single(s => s.SpecificationCategory.Value.Equals
