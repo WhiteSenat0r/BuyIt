@@ -15,7 +15,7 @@ public sealed class ProductUrlResolver : IValueResolver<IProduct, IProductDto, I
     public IEnumerable<string> Resolve
         (IProduct source, IProductDto destination, 
             IEnumerable<string> destMember, ResolutionContext context) => 
-        !(destination.GetType() == typeof(GeneralizedProductDto)) ?
+        destination is not GeneralizedProductDto ?
             source.MainImagesNames.Select
                 (path => _configuration["ApiUrl"] + path).ToList() :
             source.MainImagesNames.Select
