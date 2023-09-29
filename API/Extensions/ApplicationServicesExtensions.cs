@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using API.Helpers.Resolvers;
 using API.Responses;
 using Core.Common.Interfaces;
 using Core.Entities.Product;
@@ -29,6 +30,8 @@ public static class ApplicationServicesExtensions
         AddRequiredRepositories(serviceCollection);
 
         serviceCollection.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+        serviceCollection.AddSingleton<ProductSpecificationFilterResolver>();
 
         AddApiBehaviourConfiguration(serviceCollection);
 
