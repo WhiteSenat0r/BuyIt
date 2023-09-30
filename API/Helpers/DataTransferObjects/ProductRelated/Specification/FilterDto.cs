@@ -10,5 +10,7 @@ public class FilterDto
 
     public IDictionary<string, int> CountedBrands { get; set; } = null!;
     
+    public IDictionary<string, int> CountedCategories { get; set; } = null!;
+    
     public IDictionary<string, int> CountedSpecifications { get; set; } = null!;
 }
