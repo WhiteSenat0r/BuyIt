@@ -1,6 +1,5 @@
 ﻿using API.Controllers.Common.Classes;
 using API.Helpers.DataTransferObjects.ProductRelated;
-using API.Helpers.DataTransferObjects.ProductRelated.Common.Interfaces;
 using API.Helpers.PaginationResultModels;
 using API.Helpers.PaginationResultModels.Common.Interfaces;
 using AutoMapper;
@@ -29,13 +28,14 @@ public abstract class BaseProductRelatedController<TFilteringModel, TQuerySpecif
     
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IPaginationResult<IProductDto>>> GetAll([FromQuery] TFilteringModel filteringModel)
+    public async Task<ActionResult<IPaginationResult>> GetAll([FromQuery] TFilteringModel filteringModel)
     {
         var items = Mapper.Map<IEnumerable<GeneralizedProductDto>>(await Products.GetAllEntitiesAsync(
             (TQuerySpecification)Activator.CreateInstance(typeof(TQuerySpecification), filteringModel)));
 
         var generalizedProductDtos = items as GeneralizedProductDto[] ?? items.ToArray();
 
-        return Ok(new ProductPaginationResult(generalizedProductDtos, filteringModel));
+        return Ok(new ProductPaginationResult(generalizedProductDtos, filteringModel, await Products.CountAsync(
+            (TQuerySpecification)Activator.CreateInstance(typeof(TQuerySpecification), filteringModel))));
     }
 }
