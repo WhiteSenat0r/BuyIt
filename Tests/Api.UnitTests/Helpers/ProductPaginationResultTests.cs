@@ -31,10 +31,10 @@ public class ProductPaginationResultTests
         
         var filteringModel = new PersonalComputerFilteringModel() { PageIndex = 1 };
 
-        var paginationResult = new ProductPaginationResult(items, filteringModel);
+        var paginationResult = new ProductPaginationResult(items, filteringModel, items.Count);
 
         Assert.Equal(items, paginationResult.Items);
-        Assert.Equal(items.Count, paginationResult.ItemsQuantity);
+        Assert.Equal(items.Count, paginationResult.CurrentPageItemsQuantity);
         Assert.Equal(filteringModel.PageIndex, paginationResult.PageIndex);
     }
 }

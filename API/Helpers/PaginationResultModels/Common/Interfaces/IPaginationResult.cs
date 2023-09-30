@@ -2,11 +2,13 @@
 
 namespace API.Helpers.PaginationResultModels.Common.Interfaces;
 
-public interface IPaginationResult<TEntity> where TEntity : class
+public interface IPaginationResult
 {
     IEnumerable<IProductDto> Items { get; }
     
-    int ItemsQuantity { get; }
+    public int TotalItemsQuantity { get; }
+    
+    int CurrentPageItemsQuantity { get; }
     
     int PageIndex { get; }
 }
