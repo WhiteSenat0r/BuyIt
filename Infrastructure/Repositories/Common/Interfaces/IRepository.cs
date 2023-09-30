@@ -24,7 +24,5 @@ public interface IRepository<TEntity>
     
     void RemoveRangeOfExistingEntities(IEnumerable<TEntity> removedEntities);
 
-    int Count();
-
-    int Count(Func<TEntity, bool> predicate);
+    Task<int> CountAsync(IQuerySpecification<TEntity> querySpecification);
 }

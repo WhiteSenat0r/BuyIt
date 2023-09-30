@@ -59,10 +59,8 @@ public abstract class GenericRepository<TEntity> : IRepository<TEntity>
         Context.SaveChanges();
     }
 
-    public int Count() => Context.Set<TEntity>().Count();
-    
-    public int Count(Func<TEntity, bool> predicate) => 
-        Context.Set<TEntity>().Where(predicate).Count();
+    public Task<int> CountAsync(IQuerySpecification<TEntity> querySpecification) => 
+        Context.Set<TEntity>().Where(querySpecification.Criteria).CountAsync();
 
     private IQueryable<TEntity> ApplySpecification(IQuerySpecification<TEntity> querySpecification) =>
         QuerySpecificationEvaluator.GetQuerySpecifications(Context.Set<TEntity>(), querySpecification);
