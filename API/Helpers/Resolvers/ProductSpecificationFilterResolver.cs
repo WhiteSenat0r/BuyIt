@@ -29,7 +29,7 @@ public sealed class ProductSpecificationFilterResolver
         "Quantity of threads", "Type of memory", "Memory bus"
     };
 
-    public async Task<FilterDto> Resolve(IRepository<Product> products,
+    public async Task<FilterDto> ResolveAsync(IRepository<Product> products,
         IRepository<ProductManufacturer> manufacturers,
         IRepository<ProductType> categories,
         IFilteringModel filteringModel)
@@ -37,12 +37,12 @@ public sealed class ProductSpecificationFilterResolver
         var filteredProducts = await products.GetAllEntitiesAsync(
             GetQuerySpecification(filteringModel));
         
-        var countedBrands = await GetBrandCounts(
+        var countedBrands = await GetBrandCountsAsync(
             (ProductManufacturerRepository)manufacturers, filteredProducts, filteringModel);
 
         var countedSpecs = GetCountedSpecifications(filteringModel, filteredProducts);
         
-        var countedCategories = await GetCategoriesCounts(
+        var countedCategories = await GetCategoriesCountsAsync(
             (ProductTypeRepository)categories, filteredProducts, filteringModel);
 
         return new FilterDto
@@ -124,7 +124,7 @@ public sealed class ProductSpecificationFilterResolver
             productSpecification.SpecificationAttribute.Value.Equals(spec.Attribute) &&
             productSpecification.SpecificationValue.Value.Equals(spec.Value);
 
-    private async Task<IDictionary<string, int>> GetBrandCounts(
+    private async Task<IDictionary<string, int>> GetBrandCountsAsync(
         ProductManufacturerRepository brandsRepository, IEnumerable<Product> filteredProducts,
         IFilteringModel filteringModel)
     {
@@ -135,28 +135,28 @@ public sealed class ProductSpecificationFilterResolver
         if ((IsSatisfyingProductModelPredicate(filteringModel, filterListsDictionary) ||
             IsSatisfyingSearchModelPredicate(filteringModel, filterListsDictionary))
             && IsWithoutPriceLimits(filteringModel))
-            return await brandsRepository.GetAllCountedCategoryRelatedManufacturers(filteringModel);
+            return await brandsRepository.GetAllCountedCategoryRelatedManufacturersAsync(filteringModel);
 
         return !filteringModel.Category.IsNullOrEmpty() 
-            ? await GetCountedBrandsToDictionary(brandsRepository, filteredProducts,
+            ? await GetCountedBrandsToDictionaryAsync(brandsRepository, filteredProducts,
                 new ProductManufacturerByProductTypeQuerySpecification(filteringModel.Category.First()))
-            : await GetCountedBrandsToDictionary(brandsRepository, filteredProducts,
+            : await GetCountedBrandsToDictionaryAsync(brandsRepository, filteredProducts,
                 new ProductManufacturerQuerySpecification());
     }
     
-    private async Task<IDictionary<string, int>> GetCategoriesCounts(
+    private async Task<IDictionary<string, int>> GetCategoriesCountsAsync(
         ProductTypeRepository categoriesRepository, IEnumerable<Product> filteredProducts,
         IFilteringModel filteringModel)
     {
         if (!filteringModel.GetType().Name.Equals("ProductSearchFilteringModel"))
             return new Dictionary<string, int>();
         
-        return await GetCountedCategoriesToDictionary(categoriesRepository, filteredProducts,
+        return await GetCountedCategoriesToDictionaryAsync(categoriesRepository, filteredProducts,
                 new ProductTypeQueryByManufacturerSpecification(
                     filteredProducts.Select(product => product.Manufacturer.Name)));
     }
 
-    private async Task<IDictionary<string, int>> GetCountedBrandsToDictionary(
+    private async Task<IDictionary<string, int>> GetCountedBrandsToDictionaryAsync(
         ProductManufacturerRepository brandsRepository, 
         IEnumerable<Product> filteredProducts, IQuerySpecification<ProductManufacturer> querySpecification) =>
         (await brandsRepository.GetAllEntitiesAsync(querySpecification))
@@ -168,7 +168,7 @@ public sealed class ProductSpecificationFilterResolver
                     product => product.Manufacturer.Name == brand.Name);
             });
     
-    private async Task<IDictionary<string, int>> GetCountedCategoriesToDictionary(
+    private async Task<IDictionary<string, int>> GetCountedCategoriesToDictionaryAsync(
         ProductTypeRepository categoriesRepository, 
         IEnumerable<Product> filteredProducts, IQuerySpecification<ProductType> querySpecification) =>
         (await categoriesRepository.GetAllEntitiesAsync(querySpecification))
