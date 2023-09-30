@@ -1,4 +1,5 @@
-﻿using API.Helpers.DataTransferObjects.ProductRelated.Specification;
+﻿using System.Reflection;
+using API.Helpers.DataTransferObjects.ProductRelated.Specification;
 using Core.Entities.Product;
 using Core.Entities.Product.ProductSpecificationRelated;
 using Infrastructure.Repositories.Common.Interfaces;
@@ -10,6 +11,7 @@ using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQuer
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels.Common.Interfaces;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels.ComputerRelated;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.ComputerRelatedSpecifications;
+using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductTypeQueries;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Helpers.Resolvers;
@@ -28,22 +30,26 @@ public sealed class ProductSpecificationFilterResolver
     };
 
     public async Task<FilterDto> Resolve(IRepository<Product> products,
-        IRepository<ProductManufacturer> manufacturers, IFilteringModel filteringModel)
+        IRepository<ProductManufacturer> manufacturers,
+        IRepository<ProductType> categories,
+        IFilteringModel filteringModel)
     {
         var filteredProducts = await products.GetAllEntitiesAsync(
             GetQuerySpecification(filteringModel));
         
-        var brandCounts = await GetBrandCounts(
+        var countedBrands = await GetBrandCounts(
             (ProductManufacturerRepository)manufacturers, filteredProducts, filteringModel);
-        
-        var allSpecifications = GetAllSpecifications(filteredProducts);
 
-        var countedSpecs = GetCountedSpecifications(allSpecifications);
+        var countedSpecs = GetCountedSpecifications(filteringModel, filteredProducts);
+        
+        var countedCategories = await GetCategoriesCounts(
+            (ProductTypeRepository)categories, filteredProducts, filteringModel);
 
         return new FilterDto
         {
-            CountedBrands = brandCounts,
+            CountedBrands = countedBrands,
             CountedSpecifications = countedSpecs,
+            CountedCategories = countedCategories,
             TotalCount = filteredProducts.Count,
             MinPrice = (int)filteredProducts.MinBy(
                 product => Math.Round(product.Price)).Price,
@@ -61,9 +67,8 @@ public sealed class ProductSpecificationFilterResolver
             .ToList();
     }
     
-    private IQuerySpecification<Product> GetQuerySpecification(IFilteringModel filteringModel)
-    {
-        return filteringModel.GetType().Name switch
+    private IQuerySpecification<Product> GetQuerySpecification(IFilteringModel filteringModel) =>
+        filteringModel.GetType().Name switch
         {
             "PersonalComputerFilteringModel" => new PersonalComputerQuerySpecification(
                 (PersonalComputerFilteringModel)filteringModel),
@@ -75,13 +80,25 @@ public sealed class ProductSpecificationFilterResolver
                 (ProductSearchFilteringModel)filteringModel),
             _ => throw new ArgumentException("Unknown filtering model was passed!")
         };
-    }
 
-    private IDictionary<string, int> GetCountedSpecifications(IEnumerable
-        <ProductSpecification> allSpecifications)
+    private IDictionary<string, int> GetCountedSpecifications(IFilteringModel filteringModel,
+        IEnumerable<Product> filteredProducts)
     {
         var countedSpecs = new Dictionary<string, int>();
 
+        if (filteringModel.GetType().Name.Equals("ProductSearchFilteringModel"))
+            return countedSpecs;
+
+        var allSpecifications = GetAllSpecifications(filteredProducts);
+        
+        CountSpecifications(allSpecifications, countedSpecs);
+
+        return countedSpecs;
+    }
+
+    private void CountSpecifications(
+        IEnumerable<ProductSpecification> allSpecifications, IDictionary<string, int> countedSpecs)
+    {
         foreach (var specification in allSpecifications)
         {
             var spec = new SpecificationDto
@@ -91,49 +108,99 @@ public sealed class ProductSpecificationFilterResolver
                 Value = specification.SpecificationValue.Value
             };
 
-            var count = allSpecifications.Count(productSpecification =>
-                productSpecification.SpecificationCategory.Value.Equals(spec.Category) &&
-                productSpecification.SpecificationAttribute.Value.Equals(spec.Attribute) &&
-                productSpecification.SpecificationValue.Value.Equals(spec.Value));
+            var count = allSpecifications.Count(GetSpecificationCountPredicate(spec));
 
             if (!countedSpecs.Where(_ => countedSpecs.ContainsKey(spec.ToString()!)).IsNullOrEmpty())
                 continue;
 
             countedSpecs.Add(spec.ToString()!, count);
         }
-
-        return countedSpecs;
     }
+
+    private Func<ProductSpecification, bool> GetSpecificationCountPredicate(
+        SpecificationDto spec) =>
+        productSpecification =>
+            productSpecification.SpecificationCategory.Value.Equals(spec.Category) &&
+            productSpecification.SpecificationAttribute.Value.Equals(spec.Attribute) &&
+            productSpecification.SpecificationValue.Value.Equals(spec.Value);
 
     private async Task<IDictionary<string, int>> GetBrandCounts(
         ProductManufacturerRepository brandsRepository, IEnumerable<Product> filteredProducts,
         IFilteringModel filteringModel)
     {
-        var filterProperties = filteringModel.GetType().GetProperties()
-            .Where(info => info.PropertyType == typeof(List<string>));
+        var filterListsDictionary = GetFilterListsDictionary(filteringModel, 
+            filteringModel.GetType().GetProperties().Where(
+                info => info.PropertyType == typeof(List<string>)));
 
-        var filterListsDictionary = filterProperties.ToDictionary(
+        if ((IsSatisfyingProductModelPredicate(filteringModel, filterListsDictionary) ||
+            IsSatisfyingSearchModelPredicate(filteringModel, filterListsDictionary))
+            && IsWithoutPriceLimits(filteringModel))
+            return await brandsRepository.GetAllCountedCategoryRelatedManufacturers(filteringModel);
+
+        return !filteringModel.Category.IsNullOrEmpty() 
+            ? await GetCountedBrandsToDictionary(brandsRepository, filteredProducts,
+                new ProductManufacturerByProductTypeQuerySpecification(filteringModel.Category.First()))
+            : await GetCountedBrandsToDictionary(brandsRepository, filteredProducts,
+                new ProductManufacturerQuerySpecification());
+    }
+    
+    private async Task<IDictionary<string, int>> GetCategoriesCounts(
+        ProductTypeRepository categoriesRepository, IEnumerable<Product> filteredProducts,
+        IFilteringModel filteringModel)
+    {
+        if (!filteringModel.GetType().Name.Equals("ProductSearchFilteringModel"))
+            return new Dictionary<string, int>();
+        
+        return await GetCountedCategoriesToDictionary(categoriesRepository, filteredProducts,
+                new ProductTypeQueryByManufacturerSpecification(
+                    filteredProducts.Select(product => product.Manufacturer.Name)));
+    }
+
+    private async Task<IDictionary<string, int>> GetCountedBrandsToDictionary(
+        ProductManufacturerRepository brandsRepository, 
+        IEnumerable<Product> filteredProducts, IQuerySpecification<ProductManufacturer> querySpecification) =>
+        (await brandsRepository.GetAllEntitiesAsync(querySpecification))
+        .ToDictionary(
+            brand => brand.Name,
+            brand =>
+            {
+                return filteredProducts.Count(
+                    product => product.Manufacturer.Name == brand.Name);
+            });
+    
+    private async Task<IDictionary<string, int>> GetCountedCategoriesToDictionary(
+        ProductTypeRepository categoriesRepository, 
+        IEnumerable<Product> filteredProducts, IQuerySpecification<ProductType> querySpecification) =>
+        (await categoriesRepository.GetAllEntitiesAsync(querySpecification))
+        .ToDictionary(
+            category => category.Name,
+            category =>
+            {
+                return filteredProducts.Count(
+                    product => product.ProductType.Name == category.Name);
+            });
+
+    private Dictionary<string, List<string>> GetFilterListsDictionary(
+        IFilteringModel filteringModel, IEnumerable<PropertyInfo> filterProperties) =>
+        filterProperties.ToDictionary(
             key => key.Name,
             value => (List<string>)value.GetValue(filteringModel));
 
-        if (!filterListsDictionary["BrandName"].IsNullOrEmpty()
-            && filterListsDictionary.Where(pair => !pair.Key.Equals("BrandName") 
-                                                   && !pair.Key.Equals(
-                                                       "Category")).All(pair => pair.Value.IsNullOrEmpty())
-            && filteringModel.GetType() != typeof(ProductSearchFilteringModel)
-            && filteringModel.UpperPriceLimit is null 
-            && filteringModel.LowerPriceLimit is null)
-            return await brandsRepository.GetAllCountedCategoryRelatedManufacturers(filteringModel);
+    private bool IsSatisfyingSearchModelPredicate(IFilteringModel filteringModel, 
+        IReadOnlyDictionary<string, List<string>> filterListsDictionary) =>
+        filteringModel is ProductSearchFilteringModel 
+        && filterListsDictionary["BrandName"].IsNullOrEmpty()
+        && filterListsDictionary["Category"].IsNullOrEmpty();
 
-        return (await brandsRepository.GetAllEntitiesAsync(
-                new ProductManufacturerByProductTypeQuerySpecification(
-                    filteringModel.Category.First())))
-            .ToDictionary(
-                brand => brand.Name,
-                brand =>
-                {
-                    return filteredProducts.Count(
-                        product => product.Manufacturer.Name == brand.Name);
-                });
-    }
+    private bool IsWithoutPriceLimits(IFilteringModel filteringModel) =>
+        filteringModel.UpperPriceLimit is null
+        && filteringModel.LowerPriceLimit is null;
+
+    private bool IsSatisfyingProductModelPredicate(IFilteringModel filteringModel, 
+        IReadOnlyDictionary<string, List<string>> filterListsDictionary) =>
+        !filterListsDictionary["BrandName"].IsNullOrEmpty()
+        && filterListsDictionary.Where(pair => !pair.Key.Equals("BrandName") 
+                                               && !pair.Key.Equals(
+                                                   "Category")).All(pair => pair.Value.IsNullOrEmpty())
+        && filteringModel is not ProductSearchFilteringModel;
 }
