@@ -39,8 +39,7 @@ public class ProductManufacturerQuerySpecificationTests
     [Fact]
     public void ProductQuerySpecificationByProductTypeConstructor_Should_CreateNewQuerySpecificationInstance()
     {
-        _querySpecification = new ProductManufacturerByProductTypeQuerySpecification(
-            new ProductManufacturerFilteringModel {ProductCategory = "Test"});
+        _querySpecification = new ProductManufacturerByProductTypeQuerySpecification("Test");
         
         Assert.IsType<ProductManufacturerByProductTypeQuerySpecification>(_querySpecification);
         Assert.NotNull(_querySpecification);
