@@ -50,7 +50,6 @@ public sealed class ProductSpecificationFilterResolver
             CountedBrands = countedBrands,
             CountedSpecifications = countedSpecs,
             CountedCategories = countedCategories,
-            TotalCount = filteredProducts.Count,
             MinPrice = (int)filteredProducts.MinBy(
                 product => Math.Round(product.Price)).Price,
             MaxPrice = Convert.ToInt32(filteredProducts.MaxBy(product => Math.Round(product.Price)).Price),
