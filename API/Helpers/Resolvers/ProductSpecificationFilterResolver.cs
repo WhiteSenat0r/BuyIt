@@ -26,7 +26,8 @@ public sealed class ProductSpecificationFilterResolver
     private readonly string[] _removedSpecsAttributes = 
     {
         "Base clock", "Max clock", "Processor technology", 
-        "Quantity of threads", "Type of memory", "Memory bus"
+        "Quantity of threads", "Type of memory", "Memory bus",
+        "Drive's interface"
     };
 
     public async Task<FilterDto> ResolveAsync(IRepository<Product> products,
@@ -37,9 +38,11 @@ public sealed class ProductSpecificationFilterResolver
         var filteredProducts = await products.GetAllEntitiesAsync(
             GetQuerySpecification(filteringModel));
         
+        var stockStatusCounts = GetStockStatusCounts(filteredProducts);
+        
         var countedBrands = await GetBrandCountsAsync(
             (ProductManufacturerRepository)manufacturers, filteredProducts, filteringModel);
-
+        
         var countedSpecs = GetCountedSpecifications(filteringModel, filteredProducts);
         
         var countedCategories = await GetCategoriesCountsAsync(
@@ -50,9 +53,19 @@ public sealed class ProductSpecificationFilterResolver
             CountedBrands = countedBrands,
             CountedSpecifications = countedSpecs,
             CountedCategories = countedCategories,
+            CountedAvailability = stockStatusCounts,
             MinPrice = (int)filteredProducts.MinBy(
                 product => Math.Round(product.Price)).Price,
             MaxPrice = Convert.ToInt32(filteredProducts.MaxBy(product => Math.Round(product.Price)).Price),
+        };
+    }
+
+    private static IDictionary<string, int> GetStockStatusCounts(IReadOnlyCollection<Product> filteredProducts)
+    {
+        return new Dictionary<string, int>
+        {
+            { "In stock", filteredProducts.Count(p => p.InStock) },
+            { "Not available", filteredProducts.Count(p => !p.InStock) }
         };
     }
 
