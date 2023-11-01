@@ -11,6 +11,7 @@ using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQuer
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels.Common.Interfaces;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.Common.FilteringModels.ComputerRelated;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.ComputerRelatedSpecifications;
+using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductQueries.RegularSpecifications;
 using Infrastructure.Repositories.ProductRelated.QuerySpecifications.ProductTypeQueries;
 using Microsoft.IdentityModel.Tokens;
 
@@ -37,39 +38,75 @@ public sealed class ProductSpecificationFilterResolver
     {
         var filteredProducts = await products.GetAllEntitiesAsync(
             GetQuerySpecification(filteringModel));
-        
-        var stockStatusCounts = GetStockStatusCounts(filteredProducts);
+
+        var categoryRelatedProducts = await GetCategoryRelatedProducts(
+            products, filteringModel, filteredProducts);
         
         var countedBrands = await GetBrandCountsAsync(
             (ProductManufacturerRepository)manufacturers, filteredProducts, filteringModel);
         
-        var countedSpecs = GetCountedSpecifications(filteringModel, filteredProducts);
+        var commonSpecifications = GetCommonSpecifications(
+            categoryRelatedProducts, filteredProducts);
+        
+        var countedSpecs = GetCountedSpecifications(
+            filteringModel, filteredProducts, commonSpecifications);
         
         var countedCategories = await GetCategoriesCountsAsync(
             (ProductTypeRepository)categories, filteredProducts, filteringModel);
 
         return new FilterDto
         {
-            CountedBrands = countedBrands,
+            CountedBrands = countedBrands.OrderBy(pair => pair.Key).ToDictionary(
+                pair => pair.Key, pair => pair.Value),
             CountedSpecifications = countedSpecs,
             CountedCategories = countedCategories,
-            CountedAvailability = stockStatusCounts,
-            MinPrice = (int)filteredProducts.MinBy(
-                product => Math.Round(product.Price)).Price,
-            MaxPrice = Convert.ToInt32(filteredProducts.MaxBy(product => Math.Round(product.Price)).Price),
+            MinPrice = filteredProducts.Count > 0 ? (int)filteredProducts.MinBy(
+                product => Math.Round(product.Price)).Price : 0,
+            MaxPrice = filteredProducts.Count > 0 ? Convert.ToInt32(filteredProducts.MaxBy(
+                product => Math.Round(product.Price)).Price) : 0
         };
     }
 
-    private static IDictionary<string, int> GetStockStatusCounts(IReadOnlyCollection<Product> filteredProducts)
+    private static async Task<IEnumerable<Product>> GetCategoryRelatedProducts(
+        IRepository<Product> products, IFilteringModel filteringModel,
+        IReadOnlyCollection<Product> filteredProducts)
     {
-        return new Dictionary<string, int>
-        {
-            { "In stock", filteredProducts.Count(p => p.InStock) },
-            { "Not available", filteredProducts.Count(p => !p.InStock) }
-        };
+        return filteringModel.GetType().Name.Equals(
+            "ProductSearchFilteringModel") || filteredProducts.Count == 0 
+            ? new List<Product>() 
+            : (await products.GetAllEntitiesAsync(new ProductQuerySpecification(
+                product => product.ProductType.Name.Equals(
+                    filteredProducts.First().ProductType.Name)))).Except(filteredProducts);
     }
 
-    private IEnumerable<ProductSpecification> GetAllSpecifications(IEnumerable<Product> filteredProducts)
+    private IEnumerable<ProductSpecification> GetCommonSpecifications(
+        IEnumerable<Product> productsOfType, IEnumerable<Product> filteredProducts)
+    {
+        var commonSpecifications = new List<ProductSpecification>();
+        
+        foreach (var filteredProduct in filteredProducts)
+        {
+            var filteredSpecs = GetAllSpecifications(
+                new[] { filteredProduct });
+    
+            foreach (var product in productsOfType)
+            {
+                var productSpecs = GetAllSpecifications(
+                    new[] { product });
+
+                if (filteredSpecs.Any(filteredSpec =>
+                        productSpecs.All(specification => specification.SpecificationValue
+                            .Value.Equals(filteredSpec.SpecificationValue.Value)) &&
+                        filteredProduct.Manufacturer.Name.Equals(product.Manufacturer.Name)))
+                    commonSpecifications.AddRange(productSpecs);
+            }
+        }
+    
+        return commonSpecifications.Distinct();
+    }
+    
+    private IEnumerable<ProductSpecification> GetAllSpecifications(
+        IEnumerable<Product> filteredProducts)
     {
         return filteredProducts
             .SelectMany(p => p.Specifications)
@@ -94,22 +131,24 @@ public sealed class ProductSpecificationFilterResolver
         };
 
     private IDictionary<string, int> GetCountedSpecifications(IFilteringModel filteringModel,
-        IEnumerable<Product> filteredProducts)
+        IEnumerable<Product> filteredProducts, IEnumerable<ProductSpecification> relatedSpecifications)
     {
         var countedSpecs = new Dictionary<string, int>();
-
+    
         if (filteringModel.GetType().Name.Equals("ProductSearchFilteringModel"))
             return countedSpecs;
-
-        var allSpecifications = GetAllSpecifications(filteredProducts);
+    
+        var allSpecifications = relatedSpecifications.Any() 
+            ? GetAllSpecifications(filteredProducts).Union(relatedSpecifications) 
+            : GetAllSpecifications(filteredProducts);
         
         CountSpecifications(allSpecifications, countedSpecs);
-
+    
         return countedSpecs;
     }
 
-    private void CountSpecifications(
-        IEnumerable<ProductSpecification> allSpecifications, IDictionary<string, int> countedSpecs)
+    private void CountSpecifications(IEnumerable<ProductSpecification> allSpecifications,
+        IDictionary<string, int> countedSpecs)
     {
         foreach (var specification in allSpecifications)
         {
@@ -119,12 +158,12 @@ public sealed class ProductSpecificationFilterResolver
                 Attribute = specification.SpecificationAttribute.Value,
                 Value = specification.SpecificationValue.Value
             };
-
+    
             var count = allSpecifications.Count(GetSpecificationCountPredicate(spec));
-
+    
             if (!countedSpecs.Where(_ => countedSpecs.ContainsKey(spec.ToString()!)).IsNullOrEmpty())
                 continue;
-
+    
             countedSpecs.Add(spec.ToString()!, count);
         }
     }
@@ -147,13 +186,16 @@ public sealed class ProductSpecificationFilterResolver
         if ((IsSatisfyingProductModelPredicate(filteringModel, filterListsDictionary) ||
             IsSatisfyingSearchModelPredicate(filteringModel, filterListsDictionary))
             && IsWithoutPriceLimits(filteringModel))
-            return await brandsRepository.GetAllCountedCategoryRelatedManufacturersAsync(filteringModel);
+            return RemoveZeroCountsFromDictionary(
+                await brandsRepository.GetAllCountedCategoryRelatedManufacturersAsync(filteringModel));
 
         return !filteringModel.Category.IsNullOrEmpty() 
-            ? await GetCountedBrandsToDictionaryAsync(brandsRepository, filteredProducts,
-                new ProductManufacturerByProductTypeQuerySpecification(filteringModel.Category.First()))
-            : await GetCountedBrandsToDictionaryAsync(brandsRepository, filteredProducts,
-                new ProductManufacturerQuerySpecification());
+            ? RemoveZeroCountsFromDictionary(await GetCountedBrandsToDictionaryAsync(
+                brandsRepository, filteredProducts, 
+                new ProductManufacturerByProductTypeQuerySpecification(filteringModel.Category.First())))
+            : RemoveZeroCountsFromDictionary(await GetCountedBrandsToDictionaryAsync(
+                brandsRepository, filteredProducts,
+                new ProductManufacturerQuerySpecification()));
     }
     
     private async Task<IDictionary<string, int>> GetCategoriesCountsAsync(
@@ -170,7 +212,8 @@ public sealed class ProductSpecificationFilterResolver
 
     private async Task<IDictionary<string, int>> GetCountedBrandsToDictionaryAsync(
         ProductManufacturerRepository brandsRepository, 
-        IEnumerable<Product> filteredProducts, IQuerySpecification<ProductManufacturer> querySpecification) =>
+        IEnumerable<Product> filteredProducts, 
+        IQuerySpecification<ProductManufacturer> querySpecification) =>
         (await brandsRepository.GetAllEntitiesAsync(querySpecification))
         .ToDictionary(
             brand => brand.Name,
@@ -182,7 +225,8 @@ public sealed class ProductSpecificationFilterResolver
     
     private async Task<IDictionary<string, int>> GetCountedCategoriesToDictionaryAsync(
         ProductTypeRepository categoriesRepository, 
-        IEnumerable<Product> filteredProducts, IQuerySpecification<ProductType> querySpecification) =>
+        IEnumerable<Product> filteredProducts, 
+        IQuerySpecification<ProductType> querySpecification) =>
         (await categoriesRepository.GetAllEntitiesAsync(querySpecification))
         .ToDictionary(
             category => category.Name,
@@ -197,6 +241,14 @@ public sealed class ProductSpecificationFilterResolver
         filterProperties.ToDictionary(
             key => key.Name,
             value => (List<string>)value.GetValue(filteringModel));
+    
+    private IDictionary<string, int> RemoveZeroCountsFromDictionary(
+        IDictionary<string, int> countedElements) =>
+        countedElements.Where(
+                kv => kv.Value != 0).
+            ToDictionary(
+                kv => kv.Key,
+                kv => kv.Value);
 
     private bool IsSatisfyingSearchModelPredicate(IFilteringModel filteringModel, 
         IReadOnlyDictionary<string, List<string>> filterListsDictionary) =>
