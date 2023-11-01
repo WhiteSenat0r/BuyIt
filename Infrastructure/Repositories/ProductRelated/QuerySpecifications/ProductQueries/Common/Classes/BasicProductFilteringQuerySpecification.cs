@@ -41,11 +41,11 @@ public abstract class BasicProductFilteringQuerySpecification : BasicProductQuer
             case "price-desc":
                 AddOrderByDescending(p => p.Price);
                 break;
-            case "rating-desc":
-                AddOrderByDescending(p => p.Rating.Score);
+            case "name-asc":
+                AddOrderByAscending(p => p.Name);
                 break;
             default:
-                AddOrderByAscending(p => p.Name);
+                AddOrderByDescending(p => p.Rating.Score);
                 break;
         }
     }
