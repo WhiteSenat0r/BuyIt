@@ -17,7 +17,7 @@ public class PersonalComputerQuerySpecification : BasicProductFilteringQuerySpec
                     .Single(s =>
                         s.SpecificationCategory.Value.Equals("General") && s.SpecificationAttribute.Value.Equals(
                             "Classification")).SpecificationValue.Value.ToLower())) &&
-            (filteringModel.OperatingSystem.IsNullOrEmpty() || filteringModel.Classification.Contains(product
+            (filteringModel.OperatingSystem.IsNullOrEmpty() || filteringModel.OperatingSystem.Contains(product
                 .Specifications
                 .Single(s =>
                     s.SpecificationCategory.Value.Equals("General") && s.SpecificationAttribute.Value.Equals(
