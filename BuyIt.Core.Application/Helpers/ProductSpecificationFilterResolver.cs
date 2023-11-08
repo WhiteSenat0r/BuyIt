@@ -70,30 +70,30 @@ public sealed class ProductSpecificationFilterResolver
                 product => product.ProductType.Name.Equals(
                     filteredProducts.First().ProductType.Name)))).Except(filteredProducts);
     }
-
+    
     private IEnumerable<ProductSpecification> GetCommonSpecifications(
         IEnumerable<Product> productsOfType, IEnumerable<Product> filteredProducts)
     {
         var commonSpecifications = new List<ProductSpecification>();
-        
+
         foreach (var filteredProduct in filteredProducts)
         {
-            var filteredSpecs = GetAllSpecifications(
-                new[] { filteredProduct });
-    
+            var filteredSpecs = GetAllSpecifications(new[] { filteredProduct });
+
             foreach (var product in productsOfType)
             {
-                var productSpecs = GetAllSpecifications(
-                    new[] { product });
+                var productSpecs = GetAllSpecifications(new[] { product });
 
                 if (filteredSpecs.Any(filteredSpec =>
-                        productSpecs.All(specification => specification.SpecificationValue
-                            .Value.Equals(filteredSpec.SpecificationValue.Value)) &&
+                        productSpecs.Any(productSpec =>
+                            productSpec.SpecificationValue.Value.Equals(filteredSpec.SpecificationValue.Value)) &&
                         filteredProduct.Manufacturer.Name.Equals(product.Manufacturer.Name)))
+                {
                     commonSpecifications.AddRange(productSpecs);
+                }
             }
         }
-    
+
         return commonSpecifications.Distinct();
     }
     
