@@ -17,9 +17,11 @@ public interface IFilteringModel
     
     string SortingType { get; }
     
-    public int PageIndex { get; }
+    int PageIndex { get; }
 
-    public int ItemQuantity { get; }
+    int ItemQuantity { get; }
+    
+    IDictionary<string, IDictionary<string,string>> MappedFilterNamings { get; }
 
     IQuerySpecification<Product> CreateQuerySpecification();
 }
