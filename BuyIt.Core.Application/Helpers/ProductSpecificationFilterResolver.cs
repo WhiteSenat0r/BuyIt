@@ -88,9 +88,7 @@ public sealed class ProductSpecificationFilterResolver
                         productSpecs.Any(productSpec =>
                             productSpec.SpecificationValue.Value.Equals(filteredSpec.SpecificationValue.Value)) &&
                         filteredProduct.Manufacturer.Name.Equals(product.Manufacturer.Name)))
-                {
                     commonSpecifications.AddRange(productSpecs);
-                }
             }
         }
 
