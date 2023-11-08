@@ -38,7 +38,7 @@ public sealed class ProductSpecificationFilterResolver
             products, manufacturers, filteredProducts, filteringModel);
         
         var commonSpecifications = GetCommonSpecifications(
-            categoryRelatedProducts, filteredProducts);
+            categoryRelatedProducts, filteredProducts, filteringModel);
         
         var countedSpecs = GetCountedSpecifications(
             filteringModel, filteredProducts, commonSpecifications);
@@ -72,29 +72,68 @@ public sealed class ProductSpecificationFilterResolver
     }
     
     private IEnumerable<ProductSpecification> GetCommonSpecifications(
-        IEnumerable<Product> productsOfType, IEnumerable<Product> filteredProducts)
+        IEnumerable<Product> productsOfType, IEnumerable<Product> filteredProducts,
+        IFilteringModel filteringModel)
     {
         var commonSpecifications = new List<ProductSpecification>();
+        var productSpecs = GetAllSpecifications(productsOfType);
+        var filteredSpecs = GetAllSpecifications(filteredProducts);
 
+        ExtractSelectedFilters(filteringModel, productSpecs, commonSpecifications);
+        
+        ExtractSelectionRelatedFilters(
+            productsOfType, filteredProducts, filteredSpecs, productSpecs, commonSpecifications);
+
+        return commonSpecifications.Distinct();
+    }
+
+    private static void ExtractSelectionRelatedFilters(IEnumerable<Product> productsOfType,
+        IEnumerable<Product> filteredProducts,
+        IEnumerable<ProductSpecification> filteredSpecs, 
+        IEnumerable<ProductSpecification> productSpecs, 
+        List<ProductSpecification> commonSpecifications)
+    {
         foreach (var filteredProduct in filteredProducts)
         {
-            var filteredSpecs = GetAllSpecifications(new[] { filteredProduct });
-
             foreach (var product in productsOfType)
             {
-                var productSpecs = GetAllSpecifications(new[] { product });
-
                 if (filteredSpecs.Any(filteredSpec =>
-                        productSpecs.Any(productSpec =>
+                        productSpecs.All(productSpec =>
                             productSpec.SpecificationValue.Value.Equals(filteredSpec.SpecificationValue.Value)) &&
                         filteredProduct.Manufacturer.Name.Equals(product.Manufacturer.Name)))
                     commonSpecifications.AddRange(productSpecs);
             }
         }
-
-        return commonSpecifications.Distinct();
     }
-    
+
+    private static void ExtractSelectedFilters(IFilteringModel filteringModel, IEnumerable<ProductSpecification> productSpecs,
+        List<ProductSpecification> commonSpecifications)
+    {
+        foreach (var propertyName in filteringModel.MappedFilterNamings.Keys)
+        {
+            var propertyList = (List<string>)filteringModel.GetType().GetProperty(propertyName)?.GetValue(filteringModel);
+
+            if (propertyList == null || !propertyList.Any()) continue;
+
+            var specValues = filteringModel.MappedFilterNamings[propertyName];
+
+            foreach (var specCategoryValue in specValues)
+            {
+                var specCategory = specCategoryValue.Key;
+                var specAttribute = specCategoryValue.Value;
+
+                if (productSpecs.Any(spec =>
+                        spec.SpecificationCategory.Value.Equals(specCategory) &&
+                        spec.SpecificationAttribute.Value.Equals(specAttribute)))
+                {
+                    commonSpecifications.AddRange(productSpecs.Where(
+                        specification => specification.SpecificationCategory.Value.Equals(specCategory) &&
+                                         specification.SpecificationAttribute.Value.Equals(specAttribute)));
+                }
+            }
+        }
+    }
+
     private IEnumerable<ProductSpecification> GetAllSpecifications(
         IEnumerable<Product> filteredProducts)
     {
