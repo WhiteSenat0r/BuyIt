@@ -10,6 +10,8 @@ public abstract class BasicFilteringModel : IFilteringModel
 
     public const int MaximumItemQuantity = 24;
 
+    protected BasicFilteringModel() => MappedFilterNamings = GetMappedFilterNamings();
+
     public int PageIndex { get; set; } = 1;
 
     public int ItemQuantity
@@ -17,6 +19,8 @@ public abstract class BasicFilteringModel : IFilteringModel
         get => _itemQuantity;
         set => _itemQuantity = value > MaximumItemQuantity ? MaximumItemQuantity : value;
     }
+
+    public IDictionary<string, IDictionary<string, string>> MappedFilterNamings { get; }
 
     protected IDictionary<Type, Type> QuerySpecificationMapping { get; set; } = new Dictionary<Type, Type>();
     
@@ -38,4 +42,7 @@ public abstract class BasicFilteringModel : IFilteringModel
         var specification = Activator.CreateInstance(specificationType, this);
         return specification as IQuerySpecification<Product>;
     }
+
+    protected virtual IDictionary<string, IDictionary<string, string>> GetMappedFilterNamings() => 
+        new Dictionary<string, IDictionary<string, string>>();
 }
