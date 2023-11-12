@@ -84,7 +84,7 @@ public sealed class ProductSpecificationFilterResolver
         ExtractSelectionRelatedFilters(
             productsOfType, filteredProducts, filteredSpecs, productSpecs, commonSpecifications);
 
-        return commonSpecifications.Distinct();
+        return commonSpecifications.DistinctBy(specification => specification.SpecificationValue.Value);
     }
 
     private static void ExtractSelectionRelatedFilters(IEnumerable<Product> productsOfType,
