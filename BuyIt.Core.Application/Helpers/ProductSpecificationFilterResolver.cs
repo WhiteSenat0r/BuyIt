@@ -106,7 +106,8 @@ public sealed class ProductSpecificationFilterResolver
         }
     }
 
-    private static void ExtractSelectedFilters(IFilteringModel filteringModel, IEnumerable<ProductSpecification> productSpecs,
+    private static void ExtractSelectedFilters(IFilteringModel filteringModel, 
+        IEnumerable<ProductSpecification> productSpecs,
         List<ProductSpecification> commonSpecifications)
     {
         foreach (var propertyName in filteringModel.MappedFilterNamings.Keys)
@@ -117,21 +118,57 @@ public sealed class ProductSpecificationFilterResolver
 
             var specValues = filteringModel.MappedFilterNamings[propertyName];
 
-            foreach (var specCategoryValue in specValues)
-            {
-                var specCategory = specCategoryValue.Key;
-                var specAttribute = specCategoryValue.Value;
+            CheckSpecificationValidity(productSpecs, commonSpecifications, specValues);
+        }
 
-                if (productSpecs.Any(spec =>
-                        spec.SpecificationCategory.Value.Equals(specCategory) &&
-                        spec.SpecificationAttribute.Value.Equals(specAttribute)))
-                {
-                    commonSpecifications.AddRange(productSpecs.Where(
-                        specification => specification.SpecificationCategory.Value.Equals(specCategory) &&
-                                         specification.SpecificationAttribute.Value.Equals(specAttribute)));
-                }
+        ClearBrandsUnrelatedFilters(filteringModel, commonSpecifications);
+    }
+
+    private static void CheckSpecificationValidity(IEnumerable<ProductSpecification> productSpecs,
+        List<ProductSpecification> commonSpecifications,
+        IDictionary<string, string> specValues)
+    {
+        foreach (var specCategoryValue in specValues)
+        {
+            var specCategory = specCategoryValue.Key;
+            var specAttribute = specCategoryValue.Value;
+
+            if (productSpecs.Any(spec =>
+                    spec.SpecificationCategory.Value.Equals(specCategory) &&
+                    spec.SpecificationAttribute.Value.Equals(specAttribute)))
+            {
+                commonSpecifications.AddRange(productSpecs.Where(
+                    specification => specification.SpecificationCategory.Value.Equals(specCategory) &&
+                                     specification.SpecificationAttribute.Value.Equals(specAttribute)));
             }
         }
+    }
+
+    private static void ClearBrandsUnrelatedFilters(IFilteringModel filteringModel,
+        List<ProductSpecification> commonSpecifications)
+    {
+        var brands = (List<string>)filteringModel.GetType().GetProperty(
+            "BrandName")?.GetValue(filteringModel);
+
+        var relativeSpecs = new List<ProductSpecification>();
+
+        if (!brands!.Any()) return;
+
+        foreach (var specification in commonSpecifications)
+        {
+            if (brands.Any(brand => brand.ToLower().Equals(
+                    specification.Product.Manufacturer.Name.ToLower())))
+                relativeSpecs.Add(specification);
+            else if (!brands.Any(brand => brand.ToLower().Equals(
+                         specification.Product.Manufacturer.Name))
+                     && specification.SpecificationValue.Specifications.Any(
+                         productSpecification => brands.Any(
+                             brand => brand.Equals(productSpecification.Product.Manufacturer.Name))))
+                relativeSpecs.Add(specification);
+        }
+
+        commonSpecifications.Clear();
+        commonSpecifications.AddRange(relativeSpecs);
     }
 
     private IEnumerable<ProductSpecification> GetAllSpecifications(
