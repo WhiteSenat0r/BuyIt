@@ -66,7 +66,7 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("RatingId")
                         .IsUnique();
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Product.ProductManufacturer", b =>
@@ -81,7 +81,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductManufacturers");
+                    b.ToTable("ProductManufacturers", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Product.ProductRating", b =>
@@ -95,7 +95,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductRatings");
+                    b.ToTable("ProductRatings", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Product.ProductSpecificationRelated.ProductSpecification", b =>
@@ -126,7 +126,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("SpecificationValueId");
 
-                    b.ToTable("ProductSpecifications");
+                    b.ToTable("ProductSpecifications", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Product.ProductSpecificationRelated.ProductSpecificationAttribute", b =>
@@ -141,7 +141,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductSpecificationAttributes");
+                    b.ToTable("ProductSpecificationAttributes", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Product.ProductSpecificationRelated.ProductSpecificationCategory", b =>
@@ -156,7 +156,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductSpecificationCategories");
+                    b.ToTable("ProductSpecificationCategories", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Product.ProductSpecificationRelated.ProductSpecificationValue", b =>
@@ -171,7 +171,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductSpecificationValues");
+                    b.ToTable("ProductSpecificationValues", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Product.ProductType", b =>
@@ -186,7 +186,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductTypes");
+                    b.ToTable("ProductTypes", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Product.Product", b =>
