@@ -34,11 +34,11 @@ public sealed class ProductSpecificationFilterResolver
         var categoryRelatedProducts = await GetCategoryRelatedProducts(
             products, filteringModel, filteredProducts);
         
-        var countedBrands = await GetBrandCountsAsync(
-            products, manufacturers, filteredProducts, filteringModel);
-        
         var commonSpecifications = GetCommonSpecifications(
             categoryRelatedProducts, filteredProducts, filteringModel);
+        
+        var countedBrands = await GetBrandCountsAsync(
+            products, manufacturers, filteringModel);
         
         var countedSpecs = GetCountedSpecifications(
             filteringModel, filteredProducts, commonSpecifications);
@@ -230,8 +230,9 @@ public sealed class ProductSpecificationFilterResolver
             productSpecification.SpecificationAttribute.Value.Equals(spec.Attribute) &&
             productSpecification.SpecificationValue.Value.Equals(spec.Value);
 
-    private async Task<IDictionary<string, int>> GetBrandCountsAsync(IRepository<Product> productRepository,
-        IRepository<ProductManufacturer> brandsRepository, IEnumerable<Product> filteredProducts,
+    private async Task<IDictionary<string, int>> GetBrandCountsAsync(
+        IRepository<Product> productRepository,
+        IRepository<ProductManufacturer> brandsRepository,
         IFilteringModel filteringModel)
     {
         var filterListsDictionary = GetFilterListsDictionary(filteringModel, 
@@ -245,13 +246,8 @@ public sealed class ProductSpecificationFilterResolver
                 await GetAllCountedCategoryRelatedManufacturersAsync(
                     brandsRepository, productRepository, filteringModel));
 
-        return !filteringModel.Category.IsNullOrEmpty() 
-            ? RemoveZeroCountsFromDictionary(await GetCountedBrandsToDictionaryAsync(
-                brandsRepository, filteredProducts, 
-                new ProductManufacturerByProductTypeQuerySpecification(filteringModel.Category.First())))
-            : RemoveZeroCountsFromDictionary(await GetCountedBrandsToDictionaryAsync(
-                brandsRepository, filteredProducts,
-                new ProductManufacturerQuerySpecification()));
+        return RemoveZeroCountsFromDictionary(await GetCountedBrandsToDictionaryAsync(productRepository,
+            filteringModel));
     }
 
     private async Task<IDictionary<string, int>> GetAllCountedCategoryRelatedManufacturersAsync(
@@ -295,18 +291,24 @@ public sealed class ProductSpecificationFilterResolver
     }
 
     private async Task<IDictionary<string, int>> GetCountedBrandsToDictionaryAsync(
-        IRepository<ProductManufacturer> brandsRepository, 
-        IEnumerable<Product> filteredProducts, 
-        IQuerySpecification<ProductManufacturer> querySpecification) =>
-        (await brandsRepository.GetAllEntitiesAsync(querySpecification))
-        .ToDictionary(
-            brand => brand.Name,
-            brand =>
-            {
-                return filteredProducts.Count(
-                    product => product.Manufacturer.Name == brand.Name);
-            });
-    
+        IRepository<Product> productRepository,
+        IFilteringModel filteringModel)
+    {
+        filteringModel.BrandName = new List<string>();
+
+        var selectedFilterProducts = await productRepository.GetAllEntitiesAsync(
+            GetQuerySpecification(filteringModel));
+
+        var result = new Dictionary<string, int>();
+
+        foreach (var product in selectedFilterProducts.Where(
+                     product => !result.ContainsKey(product.Manufacturer.Name)))
+            result.Add(product.Manufacturer.Name, selectedFilterProducts.Count(selectedProduct =>
+                selectedProduct.Manufacturer.Name == product.Manufacturer.Name));
+
+        return result;
+    }
+
     private async Task<IDictionary<string, int>> GetCountedCategoriesToDictionaryAsync(
         IRepository<ProductType> categoriesRepository, 
         IEnumerable<Product> filteredProducts, 
