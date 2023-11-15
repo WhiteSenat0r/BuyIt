@@ -20,13 +20,13 @@ public abstract class BasicFilteringModel : IFilteringModel
         set => _itemQuantity = value > MaximumItemQuantity ? MaximumItemQuantity : value;
     }
 
-    public IDictionary<string, IDictionary<string, string>> MappedFilterNamings { get; }
+    public IDictionary<string, IDictionary<string, string>> MappedFilterNamings { get; set; }
 
     protected IDictionary<Type, Type> QuerySpecificationMapping { get; set; } = new Dictionary<Type, Type>();
     
     public List<string> Category { get; set; } = new();
 
-    public List<string> BrandName { get; } = new();
+    public List<string> BrandName { get; set; } = new();
 
     public decimal? LowerPriceLimit { get; set; }
     

@@ -5,23 +5,23 @@ namespace Application.Contracts;
 
 public interface IFilteringModel
 {
-    List<string> Category { get; }
+    List<string> Category { get; set; }
     
-    List<string> BrandName { get; }
+    List<string> BrandName { get; set; }
 
-    decimal? LowerPriceLimit { get; }
+    decimal? LowerPriceLimit { get; set; }
     
-    decimal? UpperPriceLimit { get; }
+    decimal? UpperPriceLimit { get; set; }
     
-    string InStock { get; } // true - in stock, false - not in stock
+    string InStock { get; set; } // true - in stock, false - not in stock
     
-    string SortingType { get; }
+    string SortingType { get; set; }
     
-    int PageIndex { get; }
+    int PageIndex { get; set; }
 
-    int ItemQuantity { get; }
+    int ItemQuantity { get; set; }
     
-    IDictionary<string, IDictionary<string,string>> MappedFilterNamings { get; }
+    IDictionary<string, IDictionary<string,string>> MappedFilterNamings { get; set; }
 
     IQuerySpecification<Product> CreateQuerySpecification();
 }
