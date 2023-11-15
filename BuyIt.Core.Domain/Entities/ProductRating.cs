@@ -28,7 +28,7 @@ public sealed class ProductRating : IProductRating
                 return;
             }
 
-            if (value!.GetType() == typeof(double)! && (value is < 1 or > 5))
+            if (value!.GetType() == typeof(double)! && value is < 1 or > 5)
                 throw new ArgumentException
                     ("Provided value can not be lesser than 1 and greater than 5!");
 
