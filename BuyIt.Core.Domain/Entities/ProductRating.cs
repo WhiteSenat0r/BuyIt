@@ -14,7 +14,7 @@ public sealed class ProductRating : IProductRating
 
     public Guid Id { get; set; } = Guid.NewGuid();
     
-    public Product Product { get; set; }
+    public ICollection<Product> Product { get; set; }
     
     [Column(TypeName = "decimal(2, 1)")]
     public double? Score // Product's score: calculates every time after the value is updated

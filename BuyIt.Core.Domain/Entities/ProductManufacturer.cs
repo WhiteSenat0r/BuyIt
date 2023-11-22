@@ -13,7 +13,7 @@ public sealed class ProductManufacturer : IProductManufacturer
 
     public Guid Id { get; set; } = Guid.NewGuid();
     
-    public ICollection<Product> Products { get; set; } = null!;
+    public ICollection<Product> Products { get; set; } = new List<Product>();
 
     [MaxLength(32)]
     public string Name

@@ -28,7 +28,6 @@ public sealed class StoreContext : DbContext, IDatabaseContext
     protected override void OnModelCreating(ModelBuilder modelBuilder) // Configuration of database's context
     {
         SpecifyEntityRelations(modelBuilder);
-        AddAutoIncludes(modelBuilder);
         MapEntities(modelBuilder);
     }
 
@@ -59,10 +58,21 @@ public sealed class StoreContext : DbContext, IDatabaseContext
             .HasOne(p => p.Manufacturer);
 
         modelBuilder.Entity<Product>()
-            .HasMany(p => p.Specifications);
+            .HasMany(p => p.Specifications)
+            .WithMany(s => s.Products)
+            .UsingEntity(e => e.ToTable("SpecificationPairs"));
 
         modelBuilder.Entity<ProductSpecification>()
             .HasKey(p => p.Id);
+        
+        modelBuilder.Entity<ProductSpecification>()
+            .HasOne(c => c.SpecificationCategory);
+        
+        modelBuilder.Entity<ProductSpecification>()
+            .HasOne(a => a.SpecificationAttribute);
+        
+        modelBuilder.Entity<ProductSpecification>()
+            .HasOne(v => v.SpecificationValue);
 
         modelBuilder.Entity<ProductSpecificationAttribute>()
             .HasKey(p => p.Id);
@@ -72,12 +82,5 @@ public sealed class StoreContext : DbContext, IDatabaseContext
 
         modelBuilder.Entity<ProductSpecificationValue>()
             .HasKey(p => p.Id);
-    }
-
-    private void AddAutoIncludes(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<ProductSpecification>().Navigation(s => s.SpecificationCategory).AutoInclude();
-        modelBuilder.Entity<ProductSpecification>().Navigation(s => s.SpecificationAttribute).AutoInclude();
-        modelBuilder.Entity<ProductSpecification>().Navigation(s => s.SpecificationValue).AutoInclude();
     }
 }

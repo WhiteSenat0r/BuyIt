@@ -12,8 +12,8 @@ public sealed class ProductType : IProductType
     public ProductType(string name) => Name = name; // Typically used in non-database initialization
 
     public Guid Id { get; set; } = Guid.NewGuid();
-    
-    public ICollection<Product> Products { get; set; }
+
+    public ICollection<Product> Products { get; set; } = new List<Product>();
     
     [MaxLength(32)]
     public string Name

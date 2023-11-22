@@ -13,8 +13,8 @@ public abstract class BasicSpecificationElement : ISpecificationAspect
     protected BasicSpecificationElement(string value) => Value = value;
     
     public Guid Id { get; } = Guid.NewGuid();
-    
-    public ICollection<ProductSpecification> Specifications { get; set; }
+
+    public ICollection<ProductSpecification> Specifications { get; set; } = new List<ProductSpecification>();
     
     [MaxLength(256)]
     public string Value

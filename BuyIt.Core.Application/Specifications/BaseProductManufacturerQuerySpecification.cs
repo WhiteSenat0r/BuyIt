@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Application.Specifications.Common;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Application.Specifications;
@@ -8,9 +9,9 @@ namespace Application.Specifications;
 public abstract class BaseProductManufacturerQuerySpecification : QuerySpecification<ProductManufacturer>
 {
     protected BaseProductManufacturerQuerySpecification() => 
-        AddInclude(manufacturer => manufacturer.Products);
+        Includes.Add(manufacturer => manufacturer.Include(p => p.Products));
 
     protected BaseProductManufacturerQuerySpecification(
         Expression<Func<ProductManufacturer, bool>> criteria) : base(criteria) =>
-        AddInclude(manufacturer => manufacturer.Products);
+        Includes.Add(manufacturer => manufacturer.Include(p => p.Products));
 }

@@ -25,4 +25,13 @@
       <ProjectReference Include="..\BuyIt.Infrastructure.Persistence\BuyIt.Infrastructure.Persistence.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\content\products\images\personal-computers\artline\e47607f3\1.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\content\products\images\personal-computers\artline\e47607f3\2.jpg" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\content\products\images\personal-computers\" />
+    </ItemGroup>
+
 </Project>

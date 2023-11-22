@@ -3,8 +3,6 @@
 public interface IProductDto
 {
     string Name { get; }
-
-    string Description { get; }
     
     public string Category { get; }
     

@@ -24,10 +24,21 @@ public sealed class ProductSpecificationFilterResolver
     };
 
     public async Task<FilterDto> ResolveAsync(IRepository<Product> products,
+        IRepository<ProductSpecification> productSpecs,
         IRepository<ProductManufacturer> manufacturers,
         IRepository<ProductType> categories,
         IFilteringModel filteringModel)
     {
+        var productManufacturers = await manufacturers.GetAllEntitiesAsync(
+            new ProductManufacturerQuerySpecification());
+
+        var specifications = filteringModel.GetType() != typeof(ProductSearchFilteringModel) 
+            ? await productSpecs.GetAllEntitiesAsync(
+            new ProductSpecificationQuerySpecification(
+                s => s.Products.Any(
+                    p => p.ProductType.Name.Equals(filteringModel.Category.First())))) 
+            : new List<ProductSpecification>();
+        
         var filteredProducts = await products.GetAllEntitiesAsync(
             GetQuerySpecification(filteringModel));
 
@@ -35,13 +46,14 @@ public sealed class ProductSpecificationFilterResolver
             products, filteringModel, filteredProducts);
         
         var commonSpecifications = GetCommonSpecifications(
-            categoryRelatedProducts, filteredProducts, filteringModel);
+            categoryRelatedProducts, filteredProducts, specifications, productManufacturers, filteringModel);
         
         var countedBrands = await GetBrandCountsAsync(
             products, manufacturers, filteringModel);
         
         var countedSpecs = GetCountedSpecifications(
-            filteringModel, filteredProducts, commonSpecifications);
+            filteringModel, filteredProducts, categoryRelatedProducts,
+            specifications, commonSpecifications);
         
         var countedCategories = await GetCategoriesCountsAsync(
             categories, filteredProducts, filteringModel);
@@ -63,8 +75,8 @@ public sealed class ProductSpecificationFilterResolver
         IRepository<Product> products, IFilteringModel filteringModel,
         IReadOnlyCollection<Product> filteredProducts)
     {
-        return filteringModel.GetType().Name.Equals(
-            "ProductSearchFilteringModel") || filteredProducts.Count == 0 
+        return filteringModel is ProductSearchFilteringModel 
+               || filteredProducts.Count == 0 
             ? new List<Product>() 
             : (await products.GetAllEntitiesAsync(new ProductQuerySpecification(
                 product => product.ProductType.Name.Equals(
@@ -72,14 +84,17 @@ public sealed class ProductSpecificationFilterResolver
     }
     
     private IEnumerable<ProductSpecification> GetCommonSpecifications(
-        IEnumerable<Product> productsOfType, IEnumerable<Product> filteredProducts,
+        IEnumerable<Product> productsOfType, 
+        IEnumerable<Product> filteredProducts,
+        IEnumerable<ProductSpecification> specifications,
+        IEnumerable<ProductManufacturer> manufacturers,
         IFilteringModel filteringModel)
     {
         var commonSpecifications = new List<ProductSpecification>();
-        var productSpecs = GetAllSpecifications(productsOfType);
-        var filteredSpecs = GetAllSpecifications(filteredProducts);
+        var productSpecs = GetAllSpecifications(specifications, productsOfType);
+        var filteredSpecs = GetAllSpecifications(specifications, filteredProducts);
 
-        ExtractSelectedFilters(filteringModel, productSpecs, commonSpecifications);
+        ExtractSelectedFilters(filteringModel, productSpecs, manufacturers, commonSpecifications);
         
         ExtractSelectionRelatedFilters(
             productsOfType, filteredProducts, filteredSpecs, productSpecs, commonSpecifications);
@@ -106,8 +121,9 @@ public sealed class ProductSpecificationFilterResolver
         }
     }
 
-    private static void ExtractSelectedFilters(IFilteringModel filteringModel, 
+    private void ExtractSelectedFilters(IFilteringModel filteringModel, 
         IEnumerable<ProductSpecification> productSpecs,
+        IEnumerable<ProductManufacturer> manufacturers,
         List<ProductSpecification> commonSpecifications)
     {
         foreach (var propertyName in filteringModel.MappedFilterNamings.Keys)
@@ -121,7 +137,7 @@ public sealed class ProductSpecificationFilterResolver
             CheckSpecificationValidity(productSpecs, commonSpecifications, specValues);
         }
 
-        ClearBrandsUnrelatedFilters(filteringModel, commonSpecifications);
+        ClearBrandsUnrelatedFilters(filteringModel, manufacturers, commonSpecifications);
     }
 
     private static void CheckSpecificationValidity(IEnumerable<ProductSpecification> productSpecs,
@@ -144,66 +160,71 @@ public sealed class ProductSpecificationFilterResolver
         }
     }
 
-    private static void ClearBrandsUnrelatedFilters(IFilteringModel filteringModel,
+    private void ClearBrandsUnrelatedFilters(IFilteringModel filteringModel,
+        IEnumerable<ProductManufacturer> manufacturers,
         List<ProductSpecification> commonSpecifications)
     {
         var brands = (List<string>)filteringModel.GetType().GetProperty(
             "BrandName")?.GetValue(filteringModel);
 
-        var relativeSpecs = new List<ProductSpecification>();
-
         if (!brands!.Any()) return;
 
-        foreach (var specification in commonSpecifications)
-        {
-            if (brands.Any(brand => brand.ToLower().Equals(
-                    specification.Product.Manufacturer.Name.ToLower())))
-                relativeSpecs.Add(specification);
-            else if (!brands.Any(brand => brand.ToLower().Equals(
-                         specification.Product.Manufacturer.Name))
-                     && specification.SpecificationValue.Specifications.Any(
-                         productSpecification => brands.Any(
-                             brand => brand.Equals(productSpecification.Product.Manufacturer.Name))))
-                relativeSpecs.Add(specification);
-        }
+        var relativeSpecs = (from specification in commonSpecifications 
+            let productsBrands = specification.Products.Select(
+                product => manufacturers.Single(m =>
+                    m.Id == product.ManufacturerId).Name).ToList() 
+            where brands.Any(brand => productsBrands.Any(brand.Equals))
+            select specification).ToList();
 
         commonSpecifications.Clear();
         commonSpecifications.AddRange(relativeSpecs);
     }
 
     private IEnumerable<ProductSpecification> GetAllSpecifications(
-        IEnumerable<Product> filteredProducts)
+        IEnumerable<ProductSpecification> productSpecifications,
+        IEnumerable<Product> products)
     {
-        return filteredProducts
-            .SelectMany(p => p.Specifications)
+        return productSpecifications
             .Where(spec =>
                 !_removedSpecsCategories.Contains(spec.SpecificationCategory.Value) &&
-                !_removedSpecsAttributes.Contains(spec.SpecificationAttribute.Value))
+                !_removedSpecsAttributes.Contains(spec.SpecificationAttribute.Value) &&
+                products.Any(product => spec.Products.Contains(product)))
             .ToList();
     }
 
-    private IQuerySpecification<Product> GetQuerySpecification(IFilteringModel filteringModel) =>
-        filteringModel.CreateQuerySpecification();
+    private IQuerySpecification<Product> GetQuerySpecification(IFilteringModel filteringModel)
+    {
+        var result = filteringModel.CreateQuerySpecification();
+        
+        result.IsPagingEnabled = false;
+
+        return result;
+    }
 
     private IDictionary<string, int> GetCountedSpecifications(IFilteringModel filteringModel,
-        IEnumerable<Product> filteredProducts, IEnumerable<ProductSpecification> relatedSpecifications)
+        IEnumerable<Product> filteredProducts,
+        IEnumerable<Product> productsOfType,
+        IEnumerable<ProductSpecification> allSpecs,
+        IEnumerable<ProductSpecification> relatedSpecifications)
     {
         var countedSpecs = new Dictionary<string, int>();
     
-        if (filteringModel.GetType().Name.Equals("ProductSearchFilteringModel"))
+        if (filteringModel is ProductSearchFilteringModel)
             return countedSpecs;
     
         var allSpecifications = relatedSpecifications.Any() 
-            ? GetAllSpecifications(filteredProducts).Union(relatedSpecifications) 
-            : GetAllSpecifications(filteredProducts);
+            ? GetAllSpecifications(allSpecs, filteredProducts).Union(relatedSpecifications) 
+            : GetAllSpecifications(allSpecs, filteredProducts);
         
-        CountSpecifications(allSpecifications, countedSpecs);
+        CountSpecifications(allSpecifications, countedSpecs, filteredProducts, productsOfType);
     
         return countedSpecs;
     }
 
     private void CountSpecifications(IEnumerable<ProductSpecification> allSpecifications,
-        IDictionary<string, int> countedSpecs)
+        IDictionary<string, int> countedSpecs, 
+        IEnumerable<Product> filteredProducts,
+        IEnumerable<Product> productsOfType)
     {
         foreach (var specification in allSpecifications)
         {
@@ -213,22 +234,17 @@ public sealed class ProductSpecificationFilterResolver
                 Attribute = specification.SpecificationAttribute.Value,
                 Value = specification.SpecificationValue.Value
             };
-    
-            var count = allSpecifications.Count(GetSpecificationCountPredicate(spec));
-    
+
+            var count = filteredProducts.Any(product => specification.Products.Contains(product)) 
+                ? filteredProducts.Count(product => specification.Products.Contains(product))
+                : productsOfType.Count(product => specification.Products.Contains(product));
+
             if (!countedSpecs.Where(_ => countedSpecs.ContainsKey(spec.ToString()!)).IsNullOrEmpty())
                 continue;
     
             countedSpecs.Add(spec.ToString()!, count);
         }
     }
-
-    private Func<ProductSpecification, bool> GetSpecificationCountPredicate(
-        SpecificationDto spec) =>
-        productSpecification =>
-            productSpecification.SpecificationCategory.Value.Equals(spec.Category) &&
-            productSpecification.SpecificationAttribute.Value.Equals(spec.Attribute) &&
-            productSpecification.SpecificationValue.Value.Equals(spec.Value);
 
     private async Task<IDictionary<string, int>> GetBrandCountsAsync(
         IRepository<Product> productRepository,
@@ -257,7 +273,7 @@ public sealed class ProductSpecificationFilterResolver
         var productManufacturers = await brandsRepository.GetAllEntitiesAsync(
             new ProductManufacturerQuerySpecification());
 
-        if (!filteringModel.GetType().Name.Equals("ProductSearchFilteringModel"))
+        if (filteringModel.GetType() != typeof(ProductSearchFilteringModel))
         {
             var categoryRelatedProducts = await productRepository.GetAllEntitiesAsync(
                 new ProductQuerySpecification(product => product.ProductType.Name.Equals(
@@ -282,7 +298,7 @@ public sealed class ProductSpecificationFilterResolver
         IRepository<ProductType> categoriesRepository, IEnumerable<Product> filteredProducts,
         IFilteringModel filteringModel)
     {
-        if (!filteringModel.GetType().Name.Equals("ProductSearchFilteringModel"))
+        if (filteringModel.GetType() != typeof(ProductSearchFilteringModel))
             return new Dictionary<string, int>();
         
         return await GetCountedCategoriesToDictionaryAsync(categoriesRepository, filteredProducts,

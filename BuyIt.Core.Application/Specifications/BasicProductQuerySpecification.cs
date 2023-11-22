@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Application.Specifications.Common;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Specifications;
 
@@ -8,24 +9,18 @@ public abstract class BasicProductQuerySpecification : QuerySpecification<Produc
 {
     protected BasicProductQuerySpecification()
     {
-        AddIncludeRange(new List<Expression<Func<Product, object>>>
-        {
-            p => p.Manufacturer,
-            p => p.ProductType,
-            p => p.Rating,
-            p => p.Specifications
-        });
+        Includes.Add(p =>
+            p.Include(m => m.Manufacturer)
+                .Include(t => t.ProductType)
+                .Include(r => r.Rating));
     }
     
     protected BasicProductQuerySpecification(Expression<Func<Product, bool>> criteria) 
         : base(criteria)
     {
-        AddIncludeRange(new List<Expression<Func<Product, object>>>
-        {
-            p => p.Manufacturer,
-            p => p.ProductType,
-            p => p.Rating,
-            p => p.Specifications
-        });
+        Includes.Add(p =>
+            p.Include(m => m.Manufacturer)
+                .Include(t => t.ProductType)
+                .Include(r => r.Rating));
     }
 }

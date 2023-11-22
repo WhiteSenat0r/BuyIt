@@ -93,7 +93,8 @@ public static class ApplicationServicesExtensions
     {
         serviceCollection.AddDbContext<StoreContext>(option =>
         {
-            option.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            option.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
         });
     }
 

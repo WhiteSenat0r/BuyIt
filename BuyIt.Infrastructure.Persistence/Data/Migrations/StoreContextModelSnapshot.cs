@@ -8,7 +8,7 @@ using Persistence.Contexts;
 
 #nullable disable
 
-namespace Infrastructure.Data.Migrations
+namespace Persistence.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
     partial class StoreContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace Infrastructure.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Core.Entities.Product.Product", b =>
+            modelBuilder.Entity("Domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,13 +63,12 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("ProductTypeId");
 
-                    b.HasIndex("RatingId")
-                        .IsUnique();
+                    b.HasIndex("RatingId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductManufacturer", b =>
+            modelBuilder.Entity("Domain.Entities.ProductManufacturer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,10 +80,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductManufacturers", (string)null);
+                    b.ToTable("ProductManufacturers");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductRating", b =>
+            modelBuilder.Entity("Domain.Entities.ProductRating", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,16 +94,13 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductRatings", (string)null);
+                    b.ToTable("ProductRatings");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductSpecificationRelated.ProductSpecification", b =>
+            modelBuilder.Entity("Domain.Entities.ProductSpecification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SpecificationAttributeId")
@@ -118,18 +114,16 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
-
                     b.HasIndex("SpecificationAttributeId");
 
                     b.HasIndex("SpecificationCategoryId");
 
                     b.HasIndex("SpecificationValueId");
 
-                    b.ToTable("ProductSpecifications", (string)null);
+                    b.ToTable("ProductSpecifications");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductSpecificationRelated.ProductSpecificationAttribute", b =>
+            modelBuilder.Entity("Domain.Entities.ProductSpecificationAttribute", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -141,10 +135,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductSpecificationAttributes", (string)null);
+                    b.ToTable("ProductSpecificationAttributes");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductSpecificationRelated.ProductSpecificationCategory", b =>
+            modelBuilder.Entity("Domain.Entities.ProductSpecificationCategory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -156,10 +150,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductSpecificationCategories", (string)null);
+                    b.ToTable("ProductSpecificationCategories");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductSpecificationRelated.ProductSpecificationValue", b =>
+            modelBuilder.Entity("Domain.Entities.ProductSpecificationValue", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -171,10 +165,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductSpecificationValues", (string)null);
+                    b.ToTable("ProductSpecificationValues");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductType", b =>
+            modelBuilder.Entity("Domain.Entities.ProductType", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -186,26 +180,41 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductTypes", (string)null);
+                    b.ToTable("ProductTypes");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.Product", b =>
+            modelBuilder.Entity("ProductProductSpecification", b =>
                 {
-                    b.HasOne("Core.Entities.Product.ProductManufacturer", "Manufacturer")
+                    b.Property<Guid>("ProductsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SpecificationsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ProductsId", "SpecificationsId");
+
+                    b.HasIndex("SpecificationsId");
+
+                    b.ToTable("SpecificationPairs", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Product", b =>
+                {
+                    b.HasOne("Domain.Entities.ProductManufacturer", "Manufacturer")
                         .WithMany("Products")
                         .HasForeignKey("ManufacturerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Product.ProductType", "ProductType")
+                    b.HasOne("Domain.Entities.ProductType", "ProductType")
                         .WithMany("Products")
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Product.ProductRating", "Rating")
-                        .WithOne("Product")
-                        .HasForeignKey("Core.Entities.Product.Product", "RatingId")
+                    b.HasOne("Domain.Entities.ProductRating", "Rating")
+                        .WithMany("Product")
+                        .HasForeignKey("RatingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -216,33 +225,25 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Rating");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductSpecificationRelated.ProductSpecification", b =>
+            modelBuilder.Entity("Domain.Entities.ProductSpecification", b =>
                 {
-                    b.HasOne("Core.Entities.Product.Product", "Product")
-                        .WithMany("Specifications")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Core.Entities.Product.ProductSpecificationRelated.ProductSpecificationAttribute", "SpecificationAttribute")
+                    b.HasOne("Domain.Entities.ProductSpecificationAttribute", "SpecificationAttribute")
                         .WithMany("Specifications")
                         .HasForeignKey("SpecificationAttributeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Product.ProductSpecificationRelated.ProductSpecificationCategory", "SpecificationCategory")
+                    b.HasOne("Domain.Entities.ProductSpecificationCategory", "SpecificationCategory")
                         .WithMany("Specifications")
                         .HasForeignKey("SpecificationCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Product.ProductSpecificationRelated.ProductSpecificationValue", "SpecificationValue")
+                    b.HasOne("Domain.Entities.ProductSpecificationValue", "SpecificationValue")
                         .WithMany("Specifications")
                         .HasForeignKey("SpecificationValueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
 
                     b.Navigation("SpecificationAttribute");
 
@@ -251,37 +252,47 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("SpecificationValue");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.Product", b =>
+            modelBuilder.Entity("ProductProductSpecification", b =>
                 {
-                    b.Navigation("Specifications");
+                    b.HasOne("Domain.Entities.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.ProductSpecification", null)
+                        .WithMany()
+                        .HasForeignKey("SpecificationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductManufacturer", b =>
+            modelBuilder.Entity("Domain.Entities.ProductManufacturer", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductRating", b =>
+            modelBuilder.Entity("Domain.Entities.ProductRating", b =>
                 {
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductSpecificationRelated.ProductSpecificationAttribute", b =>
+            modelBuilder.Entity("Domain.Entities.ProductSpecificationAttribute", b =>
                 {
                     b.Navigation("Specifications");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductSpecificationRelated.ProductSpecificationCategory", b =>
+            modelBuilder.Entity("Domain.Entities.ProductSpecificationCategory", b =>
                 {
                     b.Navigation("Specifications");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductSpecificationRelated.ProductSpecificationValue", b =>
+            modelBuilder.Entity("Domain.Entities.ProductSpecificationValue", b =>
                 {
                     b.Navigation("Specifications");
                 });
 
-            modelBuilder.Entity("Core.Entities.Product.ProductType", b =>
+            modelBuilder.Entity("Domain.Entities.ProductType", b =>
                 {
                     b.Navigation("Products");
                 });
