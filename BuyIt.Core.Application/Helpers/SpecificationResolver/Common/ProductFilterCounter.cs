@@ -63,7 +63,7 @@ public sealed class ProductFilterCounter
              IsSatisfyingSearchModelPredicate(_filteringModel, filterListsDictionary))
             && IsWithoutPriceLimits(_filteringModel))
             return RemoveZeroCountsFromDictionary(
-                GetAllCountedCategoryRelatedManufacturersAsync());
+                GetAllCountedCategoryRelatedManufacturers());
 
         return RemoveZeroCountsFromDictionary(GetCountedBrandsToDictionary());
     }
@@ -83,13 +83,13 @@ public sealed class ProductFilterCounter
                     product => product.ProductType.Name == category.Name);
             });
     
-    private IDictionary<string, int> GetAllCountedCategoryRelatedManufacturersAsync()
+    private IDictionary<string, int> GetAllCountedCategoryRelatedManufacturers()
     {
         if (_filteringModel.GetType() != typeof(ProductSearchFilteringModel))
         {
             return _manufacturers.ToDictionary(
                 brand => brand.Name,
-                brand => _categoryRelatedProducts
+                brand => _categoryRelatedProducts.Union(_filteredProducts)
                     .Count(product => product.Manufacturer.Name.Equals(brand.Name)));
         }
         
