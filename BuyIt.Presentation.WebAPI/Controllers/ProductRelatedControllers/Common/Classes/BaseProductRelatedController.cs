@@ -28,12 +28,12 @@ public abstract class BaseProductRelatedController<TFilteringModel, TQuerySpecif
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IPaginationResult>> GetAll([FromQuery] TFilteringModel filteringModel)
     {
-        var items = Mapper.Map<IEnumerable<GeneralizedProductDto>>(await Products.GetAllEntitiesAsync(
-            (TQuerySpecification)Activator.CreateInstance(typeof(TQuerySpecification), filteringModel)));
+        var receivedData = await Products.GetAllEntitiesAsync(
+            (TQuerySpecification)Activator.CreateInstance(typeof(TQuerySpecification), filteringModel));
+        
+        var items = Mapper.Map<List<GeneralizedProductDto>>(receivedData);
 
-        var generalizedProductDtos = items as GeneralizedProductDto[] ?? items.ToArray();
-
-        return Ok(new ProductPaginationResult(generalizedProductDtos, filteringModel, await Products.CountAsync(
+        return Ok(new ProductPaginationResult(items, filteringModel, await Products.CountAsync(
             (TQuerySpecification)Activator.CreateInstance(typeof(TQuerySpecification), filteringModel))));
     }
 }
