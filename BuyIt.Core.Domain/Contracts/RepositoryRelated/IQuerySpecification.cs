@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.Contracts.RepositoryRelated;
 
@@ -7,7 +8,7 @@ public interface IQuerySpecification<TEntity>
 {
     Expression<Func<TEntity, bool>> Criteria { get; }
 
-    List<Expression<Func<TEntity, object>>> IncludedExpressions { get; } 
+    List<Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>> Includes { get; }
     
     Expression<Func<TEntity, object>> OrderByAscendingExpression { get; }
     
@@ -17,5 +18,5 @@ public interface IQuerySpecification<TEntity>
     
     int TakenItemsQuantity { get; }
     
-    bool IsPagingEnabled { get; }
+    bool IsPagingEnabled { get; set; }
 }

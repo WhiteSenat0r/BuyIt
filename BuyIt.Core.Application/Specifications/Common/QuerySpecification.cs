@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Domain.Contracts.Common;
 using Domain.Contracts.RepositoryRelated;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.Specifications.Common;
 
@@ -13,7 +14,7 @@ public abstract class QuerySpecification<TEntity> : IQuerySpecification<TEntity>
 
     public Expression<Func<TEntity, bool>> Criteria { get; protected init; }
 
-    public List<Expression<Func<TEntity, object>>> IncludedExpressions { get; } = new();
+    public List<Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>> Includes { get; set; } = new();
     
     public Expression<Func<TEntity, object>> OrderByAscendingExpression { get; private set; }
     
@@ -23,15 +24,8 @@ public abstract class QuerySpecification<TEntity> : IQuerySpecification<TEntity>
     
     public int TakenItemsQuantity { get; private set; }
     
-    public bool IsPagingEnabled { get; private set; }
-
-    protected void AddInclude(Expression<Func<TEntity, object>> includedExpression)
-        => IncludedExpressions.Add(includedExpression);
+    public bool IsPagingEnabled { get; set; }
     
-    protected void AddIncludeRange
-        (IEnumerable<Expression<Func<TEntity, object>>> includedExpressions) =>
-        IncludedExpressions.AddRange(includedExpressions);
-
     protected void AddPaging(int takenItemsQuantity, int skippedItemsQuantity)
     {
         TakenItemsQuantity = takenItemsQuantity;
