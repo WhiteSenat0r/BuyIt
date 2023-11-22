@@ -3,7 +3,7 @@ using Application.Specifications.Common;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Specifications;
+namespace Application.Specifications.ProductSpecifications;
 
 public abstract class BasicProductQuerySpecification : QuerySpecification<Product>
 {

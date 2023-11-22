@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Application.FilteringModels;
 
-namespace Application.Specifications;
+namespace Application.Specifications.ProductSpecifications;
 
 public sealed class ProductSearchQuerySpecification : BasicProductFilteringQuerySpecification
 {

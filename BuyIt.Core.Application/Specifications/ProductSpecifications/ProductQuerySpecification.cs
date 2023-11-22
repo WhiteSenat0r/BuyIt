@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Domain.Entities;
 
-namespace Application.Specifications;
+namespace Application.Specifications.ProductSpecifications;
 
 public sealed class ProductQuerySpecification : BasicProductQuerySpecification
 {

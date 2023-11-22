@@ -2,7 +2,7 @@
 using Application.FilteringModels;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Application.Specifications;
+namespace Application.Specifications.ProductSpecifications.ComputerRelatedSpecifications;
 
 public class PersonalComputerQuerySpecification : BasicProductFilteringQuerySpecification
 {

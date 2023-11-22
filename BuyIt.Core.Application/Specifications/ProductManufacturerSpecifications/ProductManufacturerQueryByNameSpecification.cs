@@ -1,4 +1,4 @@
-﻿namespace Application.Specifications;
+﻿namespace Application.Specifications.ProductManufacturerSpecifications;
 
 public sealed class ProductManufacturerQueryByNameSpecification : BaseProductManufacturerQuerySpecification
 {

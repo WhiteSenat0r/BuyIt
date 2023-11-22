@@ -3,8 +3,7 @@ using Application.Specifications.Common;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-
-namespace Application.Specifications;
+namespace Application.Specifications.ProductManufacturerSpecifications;
 
 public abstract class BaseProductManufacturerQuerySpecification : QuerySpecification<ProductManufacturer>
 {

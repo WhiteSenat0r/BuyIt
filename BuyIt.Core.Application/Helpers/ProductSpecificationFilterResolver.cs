@@ -2,7 +2,9 @@
 using Application.Contracts;
 using Application.DataTransferObjects.ProductRelated.Specification;
 using Application.FilteringModels;
-using Application.Specifications;
+using Application.Specifications.ProductManufacturerSpecifications;
+using Application.Specifications.ProductSpecifications;
+using Application.Specifications.ProductTypeSpecifications;
 using Domain.Contracts.RepositoryRelated;
 using Domain.Entities;
 using Microsoft.IdentityModel.Tokens;

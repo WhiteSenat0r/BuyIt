@@ -2,7 +2,7 @@
 using Application.DataTransferObjects.ProductRelated;
 using Application.FilteringModels;
 using Application.Responses.Common.Classes;
-using Application.Specifications;
+using Application.Specifications.ProductSpecifications;
 using AutoMapper;
 using Domain.Contracts.RepositoryRelated;
 using Domain.Entities;

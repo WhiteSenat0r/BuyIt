@@ -2,7 +2,7 @@
 using Application.Specifications.Common;
 using Domain.Contracts.ProductRelated;
 
-namespace Application.Specifications;
+namespace Application.Specifications.ProductSpecifications;
 
 public sealed class ProductSpecificationAspectQuerySpecification<TEntity> : QuerySpecification<TEntity>
     where TEntity : class, ISpecificationAspect

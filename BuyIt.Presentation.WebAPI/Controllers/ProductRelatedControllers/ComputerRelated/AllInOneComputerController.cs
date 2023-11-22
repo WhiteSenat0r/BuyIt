@@ -1,5 +1,5 @@
 ﻿using Application.FilteringModels;
-using Application.Specifications;
+using Application.Specifications.ProductSpecifications.ComputerRelatedSpecifications;
 using AutoMapper;
 using BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.Common.Classes;
 using Domain.Contracts.RepositoryRelated;

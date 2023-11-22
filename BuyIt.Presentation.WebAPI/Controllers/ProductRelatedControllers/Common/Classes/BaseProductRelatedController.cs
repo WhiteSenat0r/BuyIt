@@ -1,7 +1,7 @@
 ﻿using Application.Contracts;
 using Application.DataTransferObjects.ProductRelated;
 using Application.Helpers;
-using Application.Specifications;
+using Application.Specifications.ProductSpecifications;
 using AutoMapper;
 using BuyIt.Presentation.WebAPI.Controllers.Common.Classes;
 using Domain.Contracts.RepositoryRelated;

@@ -1,4 +1,4 @@
-﻿using Application.Specifications;
+﻿using Application.Specifications.ProductSpecifications.ComputerRelatedSpecifications;
 
 namespace Application.FilteringModels;
 
