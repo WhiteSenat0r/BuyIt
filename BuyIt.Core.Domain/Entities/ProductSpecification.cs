@@ -7,12 +7,11 @@ public sealed class ProductSpecification : IProductSpecification
     public ProductSpecification() { }
 
     public ProductSpecification
-        (Guid categoryId, Guid attributeId, Guid valueId, Guid productId)
+        (Guid categoryId, Guid attributeId, Guid valueId)
     {
         SpecificationCategoryId = categoryId;
         SpecificationAttributeId = attributeId;
         SpecificationValueId = valueId;
-        ProductId = productId;
     }
 
     public Guid Id { get; } = Guid.NewGuid();
@@ -29,7 +28,5 @@ public sealed class ProductSpecification : IProductSpecification
 
     public ProductSpecificationValue SpecificationValue { get; set; } = null!;
 
-    public Guid ProductId { get; set; }
-    
-    public Product Product { get; set; } = null!;
+    public ICollection<Product> Products { get; set; } = new List<Product>();
 }

@@ -101,7 +101,7 @@ public sealed class Product : IProduct
         }
     }
 
-    public ICollection<ProductSpecification> Specifications { get; set; } = null!;
+    public ICollection<ProductSpecification> Specifications { get; set; } = new List<ProductSpecification>();
 
     private void AssignStringValue
         (string text, ref string assignedVariable, bool isName = true)
