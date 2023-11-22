@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using Application.Specifications.Common;
-using Domain.Contracts.ProductRelated;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
