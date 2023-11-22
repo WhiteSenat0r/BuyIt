@@ -1,6 +1,6 @@
 ﻿using Application.DataTransferObjects.ProductRelated.Specification;
 using Application.FilteringModels;
-using Application.Helpers;
+using Application.Helpers.SpecificationResolver;
 using BuyIt.Presentation.WebAPI.Controllers.Common.Classes;
 using Domain.Contracts.RepositoryRelated;
 using Domain.Entities;

@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using Application.Helpers;
+using Application.Helpers.SpecificationResolver;
 using Application.Responses;
 using Domain.Contracts.Common;
 using Domain.Contracts.RepositoryRelated;
