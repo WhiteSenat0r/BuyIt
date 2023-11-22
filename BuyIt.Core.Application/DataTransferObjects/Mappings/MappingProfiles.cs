@@ -22,8 +22,6 @@ public class MappingProfiles : Profile
     
     private void CreateMappingProfileForProductInCatalog() =>
         CreateMap<IProduct, GeneralizedProductDto>()
-            .ForMember(d => d.Description, p =>
-                p.MapFrom<ProductShortDescriptionResolver>())
             .ForMember(r => r.ProductCode, p =>
                 p.MapFrom(b => b.ProductCode))
             .ForMember(r => r.Rating, p =>
@@ -37,8 +35,8 @@ public class MappingProfiles : Profile
         CreateMap<IProduct, FullProductDto>()
             .ForMember(b => b.Brand, p =>
                 p.MapFrom(m => m.Manufacturer.Name))
-            .ForMember(d => d.ShortDescription, p =>
-                p.MapFrom<ProductShortDescriptionResolver>())
+            .ForMember(d => d.Description, p =>
+                p.MapFrom(d => d.Description))
             .ForMember(r => r.ProductCode, p =>
                 p.MapFrom(b => b.ProductCode))
             .ForMember(r => r.Rating, p =>
