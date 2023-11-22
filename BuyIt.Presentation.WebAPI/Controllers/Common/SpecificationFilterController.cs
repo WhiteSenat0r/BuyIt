@@ -11,16 +11,19 @@ namespace BuyIt.Presentation.WebAPI.Controllers.Common;
 public class SpecificationFilterController : BaseApiController
 {
     private readonly IRepository<ProductManufacturer> _manufacturers;
+    private readonly IRepository<ProductSpecification> _productSpecifications;
     private readonly IRepository<ProductType> _categories;
     private readonly IRepository<Product> _products;
     private readonly ProductSpecificationFilterResolver _filterResolver;
 
     public SpecificationFilterController(IRepository<ProductManufacturer> manufacturers,
         IRepository<Product> products, IRepository<ProductType> categories, 
-        ProductSpecificationFilterResolver filterResolver)
+        ProductSpecificationFilterResolver filterResolver, 
+        IRepository<ProductSpecification> productSpecifications)
     {
         _products = products;
         _filterResolver = filterResolver;
+        _productSpecifications = productSpecifications;
         _categories = categories;
         _manufacturers = manufacturers;
     }
@@ -29,11 +32,11 @@ public class SpecificationFilterController : BaseApiController
     public async Task<ActionResult<FilterDto>> GetAll(
         [FromQuery] PersonalComputerFilteringModel filteringModel) =>
         Ok(await _filterResolver.ResolveAsync(
-            _products, _manufacturers, _categories, filteringModel));
+            _products, _productSpecifications, _manufacturers, _categories, filteringModel));
 
     [HttpGet("search")]
     public async Task<ActionResult<FilterDto>> GetAll(
         [FromQuery] ProductSearchFilteringModel filteringModel) =>
         Ok(await _filterResolver.ResolveAsync(
-            _products, _manufacturers, _categories, filteringModel));
+            _products, _productSpecifications, _manufacturers, _categories, filteringModel));
 }
