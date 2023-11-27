@@ -34,7 +34,7 @@ public class SpecificationFilterController : BaseApiController
         Ok(await _filterResolver.ResolveAsync(
             _products, _productSpecifications, _manufacturers, _categories, filteringModel));
 
-    [HttpGet("search")]
+    [HttpGet("productsearch")]
     public async Task<ActionResult<FilterDto>> GetAll(
         [FromQuery] ProductSearchFilteringModel filteringModel) =>
         Ok(await _filterResolver.ResolveAsync(
