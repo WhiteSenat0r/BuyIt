@@ -1,6 +1,6 @@
 ﻿using Application.Contracts;
 using Application.FilteringModels;
-using Application.Specifications;
+using Application.Specifications.ProductSpecifications.ComputerRelatedSpecifications;
 using Domain.Contracts.RepositoryRelated;
 using Domain.Entities;
 using Xunit;
@@ -17,11 +17,11 @@ public class ComputerRelatedQuerySpecificationTests
     public void ComputerRelatedQuerySpecificationConstructor_Should_CreateNewQuerySpecificationInstance
         (Type querySpecificationType, Type filteringModelType)
     {
-        _filteringModel = Activator.CreateInstance(filteringModelType)
-            as IFilteringModel;
+        _filteringModel = (Activator.CreateInstance(filteringModelType)
+            as IFilteringModel)!;
         
-        _querySpecification = Activator.CreateInstance(querySpecificationType, _filteringModel)
-            as IQuerySpecification<Product>;
+        _querySpecification = (Activator.CreateInstance(querySpecificationType, _filteringModel)
+            as IQuerySpecification<Product>)!;
 
         Assert.Equal(querySpecificationType, _querySpecification!.GetType());
         Assert.NotNull(_querySpecification);
