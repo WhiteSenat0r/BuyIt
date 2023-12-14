@@ -12,7 +12,7 @@ public abstract class BasicSpecificationElement : ISpecificationAspect
     
     protected BasicSpecificationElement(string value) => Value = value;
     
-    public Guid Id { get; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public ICollection<ProductSpecification> Specifications { get; set; } = new List<ProductSpecification>();
     

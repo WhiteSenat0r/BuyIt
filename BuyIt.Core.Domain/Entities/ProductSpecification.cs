@@ -14,7 +14,7 @@ public sealed class ProductSpecification : IProductSpecification
         SpecificationValueId = valueId;
     }
 
-    public Guid Id { get; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public Guid SpecificationCategoryId { get; set; }
     
