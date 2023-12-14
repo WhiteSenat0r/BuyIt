@@ -1,4 +1,4 @@
-﻿using Application.Specifications;
+﻿using Application.Specifications.ProductManufacturerSpecifications;
 using Domain.Contracts.RepositoryRelated;
 using Domain.Entities;
 using Xunit;
