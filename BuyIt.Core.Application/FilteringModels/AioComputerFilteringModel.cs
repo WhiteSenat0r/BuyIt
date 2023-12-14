@@ -6,7 +6,8 @@ public sealed class AioComputerFilteringModel : PersonalComputerFilteringModel
 {
     public AioComputerFilteringModel()
     {
-        Category.Add("All-in-one computer");
+        Category = new List<string> { "All-in-one computer" };
+        
         QuerySpecificationMapping
             [typeof(AioComputerFilteringModel)] = typeof(AioComputerQuerySpecification);
     }
@@ -28,14 +29,6 @@ public sealed class AioComputerFilteringModel : PersonalComputerFilteringModel
                 {
                     {
                         "Display", "Diagonal"
-                    }
-                }
-            },
-            {
-                nameof(DisplayResolution), new Dictionary<string, string>
-                {
-                    {
-                        "Display", "Resolution"
                     }
                 }
             },

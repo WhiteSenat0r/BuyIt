@@ -6,7 +6,8 @@ public sealed class LaptopFilteringModel : PersonalComputerFilteringModel
 {
     public LaptopFilteringModel()
     {
-        Category.Add("Laptop");
+        Category = new List<string> { "Laptop" };
+        
         QuerySpecificationMapping
             [typeof(LaptopFilteringModel)] = typeof(LaptopQuerySpecification);
     }
@@ -38,14 +39,6 @@ public sealed class LaptopFilteringModel : PersonalComputerFilteringModel
                 {
                     {
                         "Display", "Diagonal"
-                    }
-                }
-            },
-            {
-                nameof(DisplayResolution), new Dictionary<string, string>
-                {
-                    {
-                        "Display", "Resolution"
                     }
                 }
             },

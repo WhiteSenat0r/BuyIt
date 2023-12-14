@@ -6,7 +6,8 @@ public class PersonalComputerFilteringModel : BasicFilteringModel
 {
     public PersonalComputerFilteringModel()
     {
-        Category.Add("Personal computer");
+        Category = new List<string> { "Personal computer" };
+        
         QuerySpecificationMapping
             [typeof(PersonalComputerFilteringModel)] = typeof(PersonalComputerQuerySpecification);
     }
