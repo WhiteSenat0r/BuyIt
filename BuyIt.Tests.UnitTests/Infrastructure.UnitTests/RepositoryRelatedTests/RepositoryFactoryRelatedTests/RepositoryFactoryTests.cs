@@ -64,4 +64,37 @@ public class RepositoryFactoryTests
         Assert.NotNull(repository);
         Assert.IsType<ProductSpecificationRepository>(repository);
     }
+    
+    [Fact]
+    public void ProductSpecificationAttributeRepositoryFactoryClass_Should_CreateNewInstanceAfterCreateMethodWasInvoked()
+    {
+        _dbContext = new StoreContext(new DbContextOptions<StoreContext>());
+        
+        var repository = new ProductSpecificationAttributeRepositoryFactory().Create(_dbContext);
+        
+        Assert.NotNull(repository);
+        Assert.IsType<ProductSpecificationAttributeRepository>(repository);
+    }
+    
+    [Fact]
+    public void ProductSpecificationCategoryRepositoryFactoryClass_Should_CreateNewInstanceAfterCreateMethodWasInvoked()
+    {
+        _dbContext = new StoreContext(new DbContextOptions<StoreContext>());
+        
+        var repository = new ProductSpecificationCategoryRepositoryFactory().Create(_dbContext);
+        
+        Assert.NotNull(repository);
+        Assert.IsType<ProductSpecificationCategoryRepository>(repository);
+    }
+    
+    [Fact]
+    public void ProductSpecificationValueRepositoryFactoryClass_Should_CreateNewInstanceAfterCreateMethodWasInvoked()
+    {
+        _dbContext = new StoreContext(new DbContextOptions<StoreContext>());
+        
+        var repository = new ProductSpecificationValueRepositoryFactory().Create(_dbContext);
+        
+        Assert.NotNull(repository);
+        Assert.IsType<ProductSpecificationValueRepository>(repository);
+    }
 }
