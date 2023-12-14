@@ -1,4 +1,4 @@
-﻿using Application.Specifications;
+﻿using Application.Specifications.ProductTypeSpecifications;
 using Domain.Contracts.RepositoryRelated;
 using Domain.Entities;
 using Xunit;
@@ -33,6 +33,15 @@ public class ProductTypeQuerySpecificationTests
         _querySpecification = new ProductTypeQueryByNameSpecification("Name");
         
         Assert.IsType<ProductTypeQueryByNameSpecification>(_querySpecification);
+        Assert.NotNull(_querySpecification);
+    }
+    
+    [Fact]
+    public void ProductTypeQueryByManufacturerSpecificationConstructor_Should_CreateNewQuerySpecificationInstance()
+    {
+        _querySpecification = new ProductTypeQueryByManufacturerSpecification(new List<string>());
+        
+        Assert.IsType<ProductTypeQueryByManufacturerSpecification>(_querySpecification);
         Assert.NotNull(_querySpecification);
     }
 }
