@@ -12,7 +12,7 @@ public class FullProductDtoTests
         
         Assert.Null(productDto.Name);
         Assert.Null(productDto.Description);
-        Assert.Null(productDto.ShortDescription);
+        Assert.Null(productDto.Category);
         Assert.Equal(0, productDto.Price);
         Assert.Null(productDto.InStock);
         Assert.Null(productDto.Brand);
@@ -29,7 +29,6 @@ public class FullProductDtoTests
 
         productDto.Name = "Test Product";
         productDto.Description = "This is a test product.";
-        productDto.ShortDescription = "Test Product";
         productDto.Price = 29.99m;
         productDto.InStock = "Yes";
         productDto.Brand = "Test Brand";
@@ -37,10 +36,11 @@ public class FullProductDtoTests
         productDto.ProductCode = "TP123";
         productDto.Images = new List<string> { "image1.jpg", "image2.jpg" };
         productDto.Specifications = new Dictionary<string, IDictionary<string, string>>();
+        productDto.Category = "Test";
         
         Assert.Equal("Test Product", productDto.Name);
         Assert.Equal("This is a test product.", productDto.Description);
-        Assert.Equal("Test Product", productDto.ShortDescription);
+        Assert.Equal("Test", productDto.Category);
         Assert.Equal(29.99m, productDto.Price);
         Assert.Equal("Yes", productDto.InStock);
         Assert.Equal("Test Brand", productDto.Brand);
