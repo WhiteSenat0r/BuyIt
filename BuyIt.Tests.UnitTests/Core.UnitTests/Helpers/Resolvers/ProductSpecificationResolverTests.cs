@@ -69,13 +69,15 @@ public class ProductProductSpecificationResolverTests
 
         var personalComputerSpecs = new List<ProductSpecification>
         {
-            new(cat[0].Id, att[0].Id, val[0].Id, item.Id),
-            new(cat[0].Id, att[1].Id, val[1].Id, item.Id),
+            new(cat[0].Id, att[0].Id, val[0].Id),
+            new(cat[0].Id, att[1].Id, val[1].Id),
         };
         
         var specsRepo = new ProductSpecificationRepositoryFactory().Create(_context);
         
         await specsRepo.AddNewRangeOfEntitiesAsync(personalComputerSpecs);
+
+        item.Specifications = personalComputerSpecs;
         
         var resolver = new ProductSpecificationResolver();
 
