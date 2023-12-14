@@ -1,4 +1,4 @@
-﻿using Application.Specifications;
+﻿using Application.Specifications.ProductTypeSpecifications;
 using Domain.Contracts.RepositoryRelated;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -109,5 +109,24 @@ public class GenericRepositoryTests // Tests of default repository implementatio
         _repository.RemoveRangeOfExistingEntities(types);
         
         Assert.Empty(await _repository.GetAllEntitiesAsync(new ProductTypeQuerySpecification()));
+    }
+    
+    [Fact]
+    public async void CountAsyncMethod_Should_ReturnElementsCount()
+    {
+        _context = new StoreContext(new DbContextOptionsBuilder<StoreContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+
+        _repository = new ProductTypeRepositoryFactory().Create(_context);
+
+        var names = new List<string> { "Name1", "Name2" };
+        
+        var types = new List<ProductType> { new(names[0]), new(names[1]) };
+
+        await _repository.AddNewRangeOfEntitiesAsync(types);
+        
+        Assert.NotEmpty(await _repository.GetAllEntitiesAsync(new ProductTypeQuerySpecification()));
+        
+        Assert.Equal(1, await _repository.CountAsync(new ProductTypeQueryByNameSpecification("Name1")));
     }
 }
