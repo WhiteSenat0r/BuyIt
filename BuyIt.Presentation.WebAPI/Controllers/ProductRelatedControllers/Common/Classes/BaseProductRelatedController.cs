@@ -1,6 +1,7 @@
 ﻿using Application.Contracts;
 using Application.DataTransferObjects.ProductRelated;
 using Application.Helpers;
+using Application.Responses.Common.Classes;
 using Application.Specifications.ProductSpecifications;
 using AutoMapper;
 using BuyIt.Presentation.WebAPI.Controllers.Common.Classes;
@@ -26,14 +27,18 @@ public abstract class BaseProductRelatedController<TFilteringModel, TQuerySpecif
     
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IPaginationResult>> GetAll([FromQuery] TFilteringModel filteringModel)
     {
         var receivedData = await Products.GetAllEntitiesAsync(
             (TQuerySpecification)Activator.CreateInstance(typeof(TQuerySpecification), filteringModel));
         
-        var items = Mapper.Map<List<GeneralizedProductDto>>(receivedData);
-
-        return Ok(new ProductPaginationResult(items, filteringModel, await Products.CountAsync(
-            (TQuerySpecification)Activator.CreateInstance(typeof(TQuerySpecification), filteringModel))));
+        return receivedData.Count == 0 
+            ? NotFound(new ApiResponse(404, "No items were found!"))
+            : Ok(new ProductPaginationResult(
+                Mapper.Map<List<GeneralizedProductDto>>(receivedData),
+                filteringModel, 
+                await Products.CountAsync((TQuerySpecification)Activator.CreateInstance(
+                    typeof(TQuerySpecification), filteringModel))));
     }
 }
