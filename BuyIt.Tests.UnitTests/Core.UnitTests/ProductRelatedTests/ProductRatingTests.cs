@@ -71,6 +71,30 @@ public class ProductRatingTests
 
         Assert.NotEqual(Guid.Empty, _productRating.Id);
     }
+    
+    [Fact]
+    public void IdProperty_Should_BeAbleToSetNewValue()
+    {
+        _productRating = new ProductRating();
+
+        var guid = Guid.NewGuid();
+
+        _productRating.Id = guid;
+
+        Assert.NotEqual(Guid.Empty, _productRating.Id);
+    }
+
+    [Fact]
+    public void ValueProperty_Should_BeAbleToSetNewValue()
+    {
+        _productRating = new ProductRating();
+
+        var products = new Product[] { new(), new() };
+
+        _productRating.Products = products;
+
+        Assert.NotEmpty(_productRating.Products);
+    }
 
     private static ProductRating GetFullyInitializedProductRating() => new(5);
 }

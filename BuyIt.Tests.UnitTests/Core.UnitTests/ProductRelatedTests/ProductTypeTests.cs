@@ -13,7 +13,7 @@ public class ProductTypeTests
     {
         _productType = new ProductType();
         
-        Assert.True(_productType.GetType() == typeof(ProductType));
+        Assert.True(_productType is ProductType);
     }
     
     [Fact]
@@ -21,7 +21,7 @@ public class ProductTypeTests
     {
         _productType = GetFullyInitializedProductType();
 
-        Assert.True(_productType.GetType() == typeof(ProductType));
+        Assert.True(_productType is ProductType);
         Assert.True(_productType.Name is not null);
     }
     
@@ -41,7 +41,31 @@ public class ProductTypeTests
 
         Assert.NotEqual(Guid.Empty, _productType.Id);
     }
+    
+    [Fact]
+    public void IdProperty_Should_BeAbleToSetNewValue()
+    {
+        _productType = new ProductType();
 
+        var guid = Guid.NewGuid();
+
+        _productType.Id = guid;
+
+        Assert.NotEqual(Guid.Empty, _productType.Id);
+    }
+
+    [Fact]
+    public void ValueProperty_Should_BeAbleToSetNewValue()
+    {
+        _productType = new ProductType();
+
+        var products = new Product[] { new(), new() };
+
+        _productType.Products = products;
+
+        Assert.NotEmpty(_productType.Products);
+    }
+    
     private static ProductType GetFullyInitializedProductType() =>
         new ("Type");
 }

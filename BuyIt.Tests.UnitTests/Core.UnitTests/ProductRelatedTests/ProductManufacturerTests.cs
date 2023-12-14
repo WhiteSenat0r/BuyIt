@@ -71,6 +71,30 @@ public class ProductManufacturerTests
 
         Assert.NotEqual(Guid.Empty, _productManufacturer.Id);
     }
+    
+    [Fact]
+    public void IdProperty_Should_BeAbleToSetNewValue()
+    {
+        _productManufacturer = new ProductManufacturer();
+
+        var guid = Guid.NewGuid();
+
+        _productManufacturer.Id = guid;
+
+        Assert.NotEqual(Guid.Empty, _productManufacturer.Id);
+    }
+
+    [Fact]
+    public void ValueProperty_Should_BeAbleToSetNewValue()
+    {
+        _productManufacturer = new ProductManufacturer();
+
+        var products = new Product[] { new(), new() };
+
+        _productManufacturer.Products = products;
+
+        Assert.NotEmpty(_productManufacturer.Products);
+    }
 
     private static ProductManufacturer GetFullyInitializedProductManufacturer() =>
         new ("Manufacturer");
