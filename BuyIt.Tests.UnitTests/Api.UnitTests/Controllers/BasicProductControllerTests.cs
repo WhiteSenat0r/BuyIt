@@ -1,5 +1,6 @@
 ﻿using Application.FilteringModels;
-using Application.Specifications;
+using Application.Specifications.ProductSpecifications;
+using Application.Specifications.ProductSpecifications.ComputerRelatedSpecifications;
 using AutoMapper;
 using BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.ComputerRelated;
 using Domain.Contracts.RepositoryRelated;
@@ -15,7 +16,7 @@ public class BasicProductControllerTests
     [Fact]
     public async Task GetAll_Should_Return_NotFound_IfNoProductsArePresent()
     {
-        var filteringModel = new AioComputerFilteringModel { PageIndex = 1 };
+        var filteringModel = new AioComputerFilteringModel();
         var mockMapper = new Mock<IMapper>();
         var mockProductRepository = new Mock<IRepository<Product>>();
 
