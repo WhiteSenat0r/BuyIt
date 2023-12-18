@@ -32,7 +32,7 @@ public sealed class ProductSpecificationRepository : GenericRepository<ProductSp
         await AddNewSpecificationToDatabaseAsync(newSpecification);
     }
 
-    private static Dictionary<string, string> GetMappedIncomeParameters(
+    private Dictionary<string, string> GetMappedIncomeParameters(
         string specCategoryName, string specAttributeName, string specValueName) =>
         new()
         {
