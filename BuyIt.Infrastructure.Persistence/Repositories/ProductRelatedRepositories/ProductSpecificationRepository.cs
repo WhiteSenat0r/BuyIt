@@ -18,8 +18,11 @@ public sealed class ProductSpecificationRepository : GenericRepository<ProductSp
             specCategoryName, specAttributeName, specValueName);
 
         if (statuses["Specification"]) return;
+        
+        var mappedValues = GetMappedIncomeParameters(
+            specCategoryName, specAttributeName, specValueName);
 
-        var aspects = InstantiateMissingAspects(specCategoryName, statuses);
+        var aspects = InstantiateMissingAspects(mappedValues, statuses);
 
         await AddCreatedAspectsToDatabaseAsync(aspects);
 
@@ -28,6 +31,14 @@ public sealed class ProductSpecificationRepository : GenericRepository<ProductSp
 
         await AddNewSpecificationToDatabaseAsync(newSpecification);
     }
+
+    private static Dictionary<string, string> GetMappedIncomeParameters(string specCategoryName, string specAttributeName, string specValueName) =>
+        new()
+        {
+            { "Category", specCategoryName },
+            { "Attribute", specAttributeName },
+            { "Value", specValueName },
+        };
 
     private async Task AddNewSpecificationToDatabaseAsync(ProductSpecification newSpecification)
     {
@@ -88,12 +99,13 @@ public sealed class ProductSpecificationRepository : GenericRepository<ProductSp
         await entities.AddAsync((TEntityType)aspect);
 
     private Dictionary<string, ISpecificationAspect> InstantiateMissingAspects(
-        string specCategoryName, IReadOnlyDictionary<string, bool> statuses) =>
+        IReadOnlyDictionary<string, string> mappedValues,
+        IReadOnlyDictionary<string, bool> statuses) =>
         statuses.Take(3).Where(
             status => !statuses[status.Key]).ToDictionary(
             status => status.Key,
             status => GetSuitableAspect(
-                status.Key, specCategoryName));
+                status.Key, mappedValues[status.Key]));
 
     private ISpecificationAspect GetSuitableAspect(
         string aspectDeterminant, string aspectValue) =>
