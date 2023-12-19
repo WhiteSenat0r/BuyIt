@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 using System.Text.RegularExpressions;
+using Domain.Common;
 using Domain.Contracts.ProductRelated;
 using Microsoft.IdentityModel.Tokens;
 
@@ -96,7 +96,9 @@ public sealed class Product : IProduct
             if (value.IsNullOrEmpty())
                 ThrowArgumentNullException("Main images must be present!");
             CheckFileFormatValidity(value);
-            value = BuildImagePaths(value, ProductType, Manufacturer, ProductCode);
+            var imageManager = new ImageManager();
+            value = imageManager.BuildImagePaths(value, ProductType, Manufacturer, ProductCode);
+            imageManager.CreateProductImageDirectory(value.First());
             _mainImagesNames = value;
         }
     }
@@ -147,75 +149,9 @@ public sealed class Product : IProduct
         if (fileNames.Distinct().Count() != fileNames.Count())
             throw new ArgumentException("Some files have an identical name!");
 
-        var pattern = new Regex(@"\.(jpe?g|png|webp|bmp)$");
+        var pattern = new Regex(@"\.(jpg)$");
         
         if (fileNames.Any(url => !pattern.IsMatch(url)))
             throw new InvalidDataException("Name of the image has incorrect format!");
     }
-
-    private IEnumerable<string> BuildImagePaths
-        (IEnumerable<string> inputPaths, IProductType productType,
-            IProductManufacturer productManufacturer, string productCode)
-    {
-        var result = new List<string>();
-        
-        var pathBuilder = new StringBuilder();
-
-        var categoryNameEnding = GetCategoryNameEnding(productType);
-
-        foreach (var path in inputPaths)
-        {
-            AppendCategoryToPath(categoryNameEnding, pathBuilder, productType);
-            AppendBrandToPath(productManufacturer, pathBuilder);
-            AppendProductCode(productCode, pathBuilder);
-            result.Add(pathBuilder.Append(path).ToString());
-            pathBuilder.Clear();
-        }
-        
-        return result;
-    }
-
-    private void AppendProductCode(string productCode, StringBuilder pathBuilder) =>
-        pathBuilder.Append(productCode.ToLower() + '/');
-
-    private void AppendBrandToPath
-        (IProductManufacturer productManufacturer, StringBuilder pathBuilder) =>
-        pathBuilder.Append(productManufacturer.Name.ToLower() + '/');
-
-    private void AppendCategoryToPath(
-        string categoryNameEnding, StringBuilder pathBuilder, IProductType category)
-    {
-        var vowels = new[] { 'a', 'e', 'i', 'o', 'u' };
-
-        var categoryName = category.Name;
-
-        if (categoryName.Contains(' '))
-            categoryName = categoryName.Replace(' ', '-');
-        
-        DeterminateCategoryEnding(categoryNameEnding, pathBuilder, categoryName, vowels);
-        
-        pathBuilder.Append('/');
-    }
-
-    private void DeterminateCategoryEnding
-        (string categoryNameEnding, StringBuilder pathBuilder, string categoryName, char[] vowels)
-    {
-        if (categoryNameEnding.Equals("es"))
-            pathBuilder.Append(categoryName.ToLower());
-        else if (categoryNameEnding[^1].Equals('s')
-                 || categoryNameEnding[^1].Equals('x') || categoryNameEnding[^1].Equals('z')
-                 || categoryNameEnding.Equals("ch") || categoryNameEnding.Equals("sh")
-                 || vowels.Any(c => c.Equals
-                     (categoryNameEnding[0]) && categoryNameEnding[^1].Equals('o')))
-            pathBuilder.Append(categoryName.ToLower() + 'e' + 's');
-        else if (vowels.Any(c => c.Equals(categoryNameEnding[^1])) &&
-                 categoryNameEnding[categoryNameEnding[0]].Equals('f'))
-            pathBuilder.Append(categoryName.ToLower().Replace
-                ($"f{categoryNameEnding[^1]}", $"v{categoryNameEnding[^1]}"));
-        else
-            pathBuilder.Append(categoryName.ToLower() + 's');
-    }
-
-    private string GetCategoryNameEnding(IProductType productType) =>
-        productType.Name.Substring(productType.Name.Length - 2, 2).ToLower();
 }
