@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BuyIt.Core.Application\BuyIt.Core.Application.csproj" />
+      <ProjectReference Include="..\BuyIt.Infrastructure.Persistence\BuyIt.Infrastructure.Persistence.csproj" />
+    </ItemGroup>
+
+</Project>
