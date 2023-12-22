@@ -1,4 +1,5 @@
-﻿using Application.Contracts;
+﻿using System.Collections;
+using Application.Contracts;
 using Application.DataTransferObjects.ProductRelated;
 using Application.Helpers;
 using Application.Responses.Common.Classes;
@@ -27,18 +28,27 @@ public abstract class BaseProductRelatedController<TFilteringModel, TQuerySpecif
     
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IPaginationResult>> GetAll([FromQuery] TFilteringModel filteringModel)
+    public async Task<ActionResult<IPaginationResult>> GetAll(
+        [FromQuery] TFilteringModel filteringModel)
     {
         var receivedData = await Products.GetAllEntitiesAsync(
-            (TQuerySpecification)Activator.CreateInstance(typeof(TQuerySpecification), filteringModel));
+            (TQuerySpecification)Activator.CreateInstance(
+                typeof(TQuerySpecification), filteringModel));
         
         return receivedData.Count == 0 
-            ? NotFound(new ApiResponse(404, "No items were found!"))
-            : Ok(new ProductPaginationResult(
-                Mapper.Map<List<GeneralizedProductDto>>(receivedData),
-                filteringModel, 
-                await Products.CountAsync((TQuerySpecification)Activator.CreateInstance(
-                    typeof(TQuerySpecification), filteringModel))));
+            ? Ok(await GetResponseResult(filteringModel, new List<Product>()))
+            : Ok(await GetResponseResult(filteringModel, receivedData));
+    }
+
+    private async Task<ProductPaginationResult> GetResponseResult(
+        TFilteringModel filteringModel, ICollection receivedData)
+    {
+        var items = receivedData.Count != 0
+            ? Mapper.Map<List<GeneralizedProductDto>>(receivedData)
+            : new List<GeneralizedProductDto>();
+        
+        return new ProductPaginationResult(items, filteringModel, 
+            await Products.CountAsync((TQuerySpecification)Activator.CreateInstance(
+                typeof(TQuerySpecification), filteringModel)));
     }
 }
