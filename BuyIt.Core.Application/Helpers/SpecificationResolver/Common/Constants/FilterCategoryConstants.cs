@@ -4,6 +4,7 @@ public sealed class FilterCategoryConstants
 {
     public IEnumerable<string> RemovedCategories { get; } = new []
     {
-        "Measurements", "Interfaces and connection"
+        "Measurements", "Interfaces and connection", "Battery",
+        "Additional"
     };
 }
