@@ -1,0 +1,170 @@
+﻿Structure of product specifications for seeding:
+
+PCs:
+
+private static Dictionary<string, Dictionary<string, string>> GetProductSpecifications()
+{
+    return new Dictionary<string, Dictionary<string, string>>
+    {
+        {
+            "General", new Dictionary<string, string>
+            {
+                { "Operating system", "Without OS" },
+                { "Classification", "For gaming" },
+            }
+        },
+        {
+            "Processor", new Dictionary<string, string>
+            {
+                { "Quantity of cores", "8" },
+                { "Model", "i7-11700F" },
+                { "Quantity of threads", "16" },
+                { "Base clock", "2.5 GHz" },
+                { "Processor technology", "14 nm" },
+                { "Manufacturer", "Intel" },
+                { "Max clock", "4.9 GHz" },
+                { "Series", "Core i7" },
+            }
+        },
+        {
+            "Graphics card", new Dictionary<string, string>
+            {
+                { "Type of memory", "GDDR6" },
+                { "Model", "GeForce RTX 3060" },
+                { "Amount of memory", "12 GB" },
+                { "Memory bus", "192 bit" },
+                { "Manufacturer", "Nvidia" },
+                { "Series", "GeForce RTX 30-Series" },
+                { "Type", "Discrete" },
+            }
+        },
+        {
+            "Random access memory", new Dictionary<string, string>
+            {
+                { "Type", "DDR4" },
+                { "Amount of memory", "16 GB" },
+            }
+        },
+        {
+            "Storage", new Dictionary<string, string>
+            {
+                { "Type", "SSD" },
+                { "Drive's interface", "SATA 3 SSD" },
+                { "Amount of memory", "1 TB" },
+            }
+        },
+        {
+            "Interfaces and connection", new Dictionary<string, string>
+            {
+                { "Network adapters", "Ethernet (RJ-45)" },
+                { "Connectors and I/O ports", "Audio Line in, Audio Line out, DisplayPort, HDMi, PS/2, USB 2.0, USB 3.0" }
+            }
+        },
+        {
+            "Measurements", new Dictionary<string, string>
+            {
+                { "Weight", "10 kg" },
+                { "Depth", "420 mm" },
+                { "Height", "450 mm" },
+                { "Width", "192 mm" },
+            }
+        },
+    };
+}
+
+Laptops:
+
+private static Dictionary<string, Dictionary<string, string>> GetProductSpecifications()
+{
+    return new Dictionary<string, Dictionary<string, string>>
+    {
+        {
+            "General", new Dictionary<string, string>
+            {
+                { "Operating system", "Without OS" },
+                { "Classification", "For business" },
+                { "Model family", "Vivobook" },
+            }
+        },
+        {
+            "Display", new Dictionary<string, string>
+            {
+                { "Diagonal", "15.6\"" },
+                { "Resolution", "1920x1080" },
+                { "Matrix type", "OLED" },
+                { "Refresh rate", "60 Hz" }
+            }
+        },
+        {
+            "Processor", new Dictionary<string, string>
+            {
+                { "Quantity of cores", "6" },
+                { "Model", "R5 5600H" },
+                { "Quantity of threads", "12" },
+                { "Base clock", "3.3 GHz" },
+                { "Processor technology", "7 nm" },
+                { "Manufacturer", "AMD" },
+                { "Max clock", "4.2 GHz" },
+                { "Series", "Ryzen 5" },
+            }
+        },
+        {
+            "Graphics card", new Dictionary<string, string>
+            {
+                { "Type of memory", "GDDR6" },
+                { "Model", "GeForce RTX 3050" },
+                { "Amount of memory", "4 GB" },
+                { "Memory bus", "128 bit" },
+                { "Manufacturer", "Nvidia" },
+                { "Series", "GeForce RTX 30-Series" },
+                { "Type", "Discrete" },
+            }
+        },
+        {
+            "Random access memory", new Dictionary<string, string>
+            {
+                { "Type", "DDR4" },
+                { "Amount of memory", "16 GB" },
+            }
+        },
+        {
+            "Storage", new Dictionary<string, string>
+            {
+                { "Type", "SSD" },
+                { "Drive's interface", "PCI-ex SSD" },
+                { "Amount of memory", "512 GB" },
+            }
+        },
+        {
+            "Interfaces and connection", new Dictionary<string, string>
+            {
+                { "Network adapters", "Wi-Fi 6E, Bluetooth 5.3" },
+                { "Connectors and I/O ports", "Audio Line out, HDMi, USB 2.0, USB 3.2, USB Type-C" }
+            }
+        },
+        {
+            "Additional", new Dictionary<string, string>
+            {
+                { "Web-camera", "Yes" },
+                { "Built-in microphone", "Yes" },
+                { "Built-in card reader", "Yes" }
+            }
+        },
+        {
+            "Battery", new Dictionary<string, string>
+            {
+                { "Type", "Built-in" },
+                { "Capacity", "70 Wh" }
+            }
+        },
+        {
+            "Measurements", new Dictionary<string, string>
+            {
+                { "Weight", "1.8 kg" },
+                { "Depth", "234 mm" },
+                { "Height", "20 mm" },
+                { "Width", "360 mm" },
+            }
+        },
+    };
+}
