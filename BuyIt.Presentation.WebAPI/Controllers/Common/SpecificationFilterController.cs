@@ -39,6 +39,12 @@ public class SpecificationFilterController : BaseApiController
         [FromQuery] LaptopFilteringModel filteringModel) =>
         Ok(await _filterResolver.ResolveAsync(
             _products, _productSpecifications, _manufacturers, _categories, filteringModel));
+    
+    [HttpGet("allinonecomputer")]
+    public async Task<ActionResult<FilterDto>> GetAll(
+        [FromQuery] AioComputerFilteringModel filteringModel) =>
+        Ok(await _filterResolver.ResolveAsync(
+            _products, _productSpecifications, _manufacturers, _categories, filteringModel));
 
     [HttpGet("productsearch")]
     public async Task<ActionResult<FilterDto>> GetAll(
