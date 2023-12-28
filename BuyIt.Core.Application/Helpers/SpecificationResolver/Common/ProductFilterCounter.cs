@@ -73,16 +73,22 @@ public sealed class ProductFilterCounter
             ? new Dictionary<string, int>() 
             : GetCountedCategoriesToDictionary();
 
-    private IDictionary<string, int> GetCountedCategoriesToDictionary() =>
-        _categories
-        .ToDictionary(
-            category => category.Name,
-            category =>
-            {
-                return _filteredProducts.Count(
-                    product => product.ProductType.Name == category.Name);
-            });
-    
+    private IDictionary<string, int> GetCountedCategoriesToDictionary()
+    {
+        var extractedProductBrands = _filteringModel.BrandName;
+        
+        return !_filteringModel.BrandName.IsNullOrEmpty() 
+            ? _categories
+            .ToDictionary(
+                category => category.Name,
+                category => category.Products.Count(
+                    product => extractedProductBrands.Contains(product.Manufacturer.Name)))
+            : _categories
+                .ToDictionary(
+                    category => category.Name,
+                    category => category.Products.Count);
+    }
+
     private IDictionary<string, int> GetAllCountedCategoryRelatedManufacturers()
     {
         if (_filteringModel.GetType() != typeof(ProductSearchFilteringModel))
