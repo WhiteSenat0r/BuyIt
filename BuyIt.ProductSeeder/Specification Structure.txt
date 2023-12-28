@@ -168,3 +168,93 @@ private static Dictionary<string, Dictionary<string, string>> GetProductSpecific
         },
     };
 }
+
+All-in-one computers:
+
+private static Dictionary<string, Dictionary<string, string>> GetProductSpecifications()
+{
+    return new Dictionary<string, Dictionary<string, string>>
+    {
+        {
+            "General", new Dictionary<string, string>
+            {
+                { "Operating system", "Without OS" },
+                { "Classification", "For business" }
+            }
+        },
+        {
+            "Display", new Dictionary<string, string>
+            {
+                { "Diagonal", "31.5\"" },
+                { "Resolution", "2560x1440" },
+                { "Matrix type", "IPS" },
+                { "Refresh rate", "60 Hz" }
+            }
+        },
+        {
+            "Processor", new Dictionary<string, string>
+            {
+                { "Quantity of cores", "12" },
+                { "Model", "i7-12700T" },
+                { "Quantity of threads", "20" },
+                { "Base clock", "1.4 GHz" },
+                { "Processor technology", "10 nm" },
+                { "Manufacturer", "Intel" },
+                { "Max clock", "4.7 GHz" },
+                { "Series", "Core i7" },
+            }
+        },
+        {
+            "Graphics card", new Dictionary<string, string>
+            {
+                { "Type of memory", "GDDR6" },
+                { "Model", "GeForce RTX 3050 Ti" },
+                { "Amount of memory", "4 GB" },
+                { "Memory bus", "128 bit" },
+                { "Manufacturer", "Nvidia" },
+                { "Series", "GeForce RTX 30-Series" },
+                { "Type", "Discrete" },
+            }
+        },
+        {
+            "Random access memory", new Dictionary<string, string>
+            {
+                { "Type", "DDR4" },
+                { "Amount of memory", "16 GB" },
+            }
+        },
+        {
+            "Storage", new Dictionary<string, string>
+            {
+                { "Type", "SSD" },
+                { "Drive's interface", "PCI-ex SSD" },
+                { "Amount of memory", "512 GB" },
+            }
+        },
+        {
+            "Interfaces and connection", new Dictionary<string, string>
+            {
+                { "Network adapters", "Ethernet (RJ-45), Wi-Fi 6E, Bluetooth 5.3" },
+                { "Connectors and I/O ports", "Audio Line out, DVI, HDMi, USB 3.1, USB 3.2, USB Type-C" }
+            }
+        },
+        {
+            "Additional", new Dictionary<string, string>
+            {
+                { "Web-camera", "Yes" },
+                { "Built-in microphone", "Yes" },
+                { "Built-in speakers", "Yes" },
+                { "Mouse and keyboard included", "Yes" }
+            }
+        },
+        {
+            "Measurements", new Dictionary<string, string>
+            {
+                { "Weight", "14 kg" },
+                { "Depth", "204 mm" },
+                { "Height", "557 mm" },
+                { "Width", "717 mm" },
+            }
+        },
+    };
+}
