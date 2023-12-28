@@ -8,6 +8,7 @@ using Application.Specifications.ProductSpecifications;
 using Application.Specifications.ProductTypeSpecifications;
 using Domain.Contracts.RepositoryRelated;
 using Domain.Entities;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Helpers.SpecificationResolver;
 
@@ -47,7 +48,8 @@ public sealed class ProductSpecificationFilterResolver
 
         var commonSpecifications = specificationExtractor.ExtractCommonSpecifications();
 
-        var productCategories = await GetAllProductCategoriesAsync(categories, filteredProducts);
+        var productCategories = await GetAllProductCategoriesAsync(
+            filteringModel, categories, filteredProducts);
         
         var filterCounter = InitializeFilterCounter(
             filteringModel, categoryRelatedProducts, filteredProducts,
@@ -74,10 +76,25 @@ public sealed class ProductSpecificationFilterResolver
     }
 
     private static async Task<List<ProductType>> GetAllProductCategoriesAsync(
-        IRepository<ProductType> categories, IEnumerable<Product> filteredProducts) =>
-        await categories.GetAllEntitiesAsync(
-            new ProductTypeQueryByManufacturerSpecification(
-                filteredProducts.Select(product => product.Manufacturer.Name)));
+        IFilteringModel filteringModel, 
+        IRepository<ProductType> categories,
+        IEnumerable<Product> filteredProducts)
+    {
+        var filterCategories = filteringModel.Category;
+
+        filteringModel.Category = new List<string>();
+        
+        var extractedCategories = filteringModel.BrandName.IsNullOrEmpty()
+            ? await categories.GetAllEntitiesAsync(
+                new ProductTypeQuerySpecification(c => c.Products.Count > 0))
+            : await categories.GetAllEntitiesAsync(
+                new ProductTypeQueryByManufacturerSpecification(
+                    filteredProducts.Select(product => product.Manufacturer.Name)));
+
+        filteringModel.Category = filterCategories;
+        
+        return extractedCategories;
+    }
 
     private ProductFilterCounter InitializeFilterCounter(
         IFilteringModel filteringModel, IEnumerable<Product> categoryRelatedProducts,
