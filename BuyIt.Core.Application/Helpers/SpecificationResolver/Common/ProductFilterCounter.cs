@@ -71,23 +71,50 @@ public sealed class ProductFilterCounter
     public IDictionary<string, int> GetCountedCategories() =>
         _filteringModel.GetType() != typeof(ProductSearchFilteringModel) 
             ? new Dictionary<string, int>() 
-            : GetCountedCategoriesToDictionary();
+            : RemoveZeroCountsFromDictionary(GetCountedCategoriesToDictionary());
 
     private IDictionary<string, int> GetCountedCategoriesToDictionary()
     {
-        var extractedProductBrands = _filteringModel.BrandName;
+        var extractedFilteredProductBrands = _filteringModel.BrandName;
+        var extractedProductBrands = _filteredProducts.Select(product => product.Manufacturer);
+
+        if (IsPresentSearchText())
+            return !extractedFilteredProductBrands.IsNullOrEmpty()
+                ? GetCategoryByBrandsDictionary(extractedFilteredProductBrands)
+                : GetCategoryByExtractedBrandsDictionary(extractedProductBrands);
         
-        return !_filteringModel.BrandName.IsNullOrEmpty() 
-            ? _categories
+        return !AreBrandFiltersSelected()
+            ? GetCategoryByBrandsDictionary(extractedFilteredProductBrands)
+            : GetCountedCategoriesDictionary();
+    }
+
+    private Dictionary<string, int> GetCountedCategoriesDictionary() =>
+        _categories
+            .ToDictionary(
+                category => category.Name,
+                category => category.Products.Count);
+
+    private bool AreBrandFiltersSelected() => _filteringModel.BrandName.IsNullOrEmpty();
+
+    private bool IsPresentSearchText() => 
+        !((ProductSearchFilteringModel)_filteringModel).Text.IsNullOrEmpty();
+
+    private Dictionary<string, int> GetCategoryByExtractedBrandsDictionary(
+        IEnumerable<ProductManufacturer> extractedProductBrands) =>
+        _categories
             .ToDictionary(
                 category => category.Name,
                 category => category.Products.Count(
-                    product => extractedProductBrands.Contains(product.Manufacturer.Name)))
-            : _categories
-                .ToDictionary(
-                    category => category.Name,
-                    category => category.Products.Count);
-    }
+                    product => extractedProductBrands.Contains(product.Manufacturer)));
+
+    private Dictionary<string, int> GetCategoryByBrandsDictionary(
+        ICollection<string> extractedFilteredProductBrands) =>
+        _categories
+            .ToDictionary(
+                category => category.Name,
+                category => category.Products.Count(
+                    product => extractedFilteredProductBrands.Contains(
+                        product.Manufacturer.Name)));
 
     private IDictionary<string, int> GetAllCountedCategoryRelatedManufacturers()
     {
