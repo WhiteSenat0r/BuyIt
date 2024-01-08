@@ -2,7 +2,7 @@
 using Application.FilteringModels;
 using Application.Helpers.SpecificationResolver;
 using BuyIt.Presentation.WebAPI.Controllers.Common.Classes;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 

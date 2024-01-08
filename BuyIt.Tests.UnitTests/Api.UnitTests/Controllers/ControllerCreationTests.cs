@@ -2,7 +2,7 @@
 using BuyIt.Presentation.WebAPI.Controllers.Common;
 using BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.Common.Classes;
 using BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.ComputerRelated;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
 using Moq;
 using Xunit;

@@ -5,7 +5,7 @@ using Application.Helpers;
 using Application.Specifications.ProductSpecifications;
 using AutoMapper;
 using BuyIt.Presentation.WebAPI.Controllers.Common.Classes;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 

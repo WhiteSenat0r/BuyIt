@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

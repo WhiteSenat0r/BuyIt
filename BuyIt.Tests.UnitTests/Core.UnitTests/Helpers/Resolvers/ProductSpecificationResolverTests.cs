@@ -1,6 +1,6 @@
 ﻿using Application.DataTransferObjects.ProductRelated;
 using Application.Helpers;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;

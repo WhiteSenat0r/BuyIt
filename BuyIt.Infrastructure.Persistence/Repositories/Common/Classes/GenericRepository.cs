@@ -1,6 +1,6 @@
 ﻿using Application.Specifications.Common;
 using Domain.Contracts.Common;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 

@@ -1,5 +1,5 @@
 ﻿using Application.Contracts;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
 
 namespace Application.FilteringModels;

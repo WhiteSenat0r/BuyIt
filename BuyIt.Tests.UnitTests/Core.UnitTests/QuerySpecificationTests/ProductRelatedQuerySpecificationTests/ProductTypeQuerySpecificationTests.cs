@@ -1,5 +1,5 @@
 ﻿using Application.Specifications.ProductTypeSpecifications;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
 using Xunit;
 

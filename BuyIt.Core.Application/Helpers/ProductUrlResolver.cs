@@ -18,7 +18,7 @@ public sealed class ProductUrlResolver : IValueResolver<IProduct, IProductDto, I
             IEnumerable<string> destMember, ResolutionContext context) => 
         destination is not GeneralizedProductDto ?
             source.MainImagesNames.Select
-                (path => _configuration["ApiUrl"] + path).ToList() :
+                (path => _configuration["ApiImagesUrl"] + path).ToList() :
             source.MainImagesNames.Select
-                (path => _configuration["ApiUrl"] + path).Take(1).ToList();
+                (path => _configuration["ApiImagesUrl"] + path).Take(1).ToList();
 }

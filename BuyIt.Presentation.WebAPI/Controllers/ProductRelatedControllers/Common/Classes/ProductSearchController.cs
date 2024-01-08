@@ -1,7 +1,7 @@
 ﻿using Application.FilteringModels;
 using Application.Specifications.ProductSpecifications;
 using AutoMapper;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 

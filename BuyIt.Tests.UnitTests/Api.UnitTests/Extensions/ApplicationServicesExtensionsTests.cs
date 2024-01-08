@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BuyIt.Presentation.WebAPI.Extensions;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;

@@ -1,6 +1,6 @@
 ﻿using Application.DataTransferObjects.ProductRelated;
 using Application.Helpers;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Persistence.Contexts;
@@ -20,7 +20,7 @@ public class ProductUrlResolverTests
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>
             {
-                { "ApiUrl", "http://example.com/" }
+                { "ApiImagesUrl", "http://example.com/" }
             })
             .Build();
 
@@ -53,7 +53,7 @@ public class ProductUrlResolverTests
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>
             {
-                { "ApiUrl", "http://example.com/" }
+                { "ApiImagesUrl", "http://example.com/" }
             })
             .Build();
 

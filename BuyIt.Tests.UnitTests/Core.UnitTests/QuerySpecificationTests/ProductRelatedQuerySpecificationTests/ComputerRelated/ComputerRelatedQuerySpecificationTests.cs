@@ -1,7 +1,7 @@
 ﻿using Application.Contracts;
 using Application.FilteringModels;
 using Application.Specifications.ProductSpecifications.ComputerRelatedSpecifications;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
 using Xunit;
 
