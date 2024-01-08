@@ -2,13 +2,14 @@
 using Application.Helpers.SpecificationResolver;
 using Application.Responses;
 using Domain.Contracts.Common;
-using Domain.Contracts.RepositoryRelated;
+using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 using Persistence.Repositories.Factories.Common.Classes;
 using Persistence.Repositories.Factories.ProductRelated;
+using StackExchange.Redis;
 
 namespace BuyIt.Presentation.WebAPI.Extensions;
 
@@ -89,13 +90,17 @@ public static class ApplicationServicesExtensions
                 provider.GetService<StoreContext>()!));
     }
 
-    private static void AddRequiredDbContexts(IServiceCollection serviceCollection, IConfiguration configuration)
+    private static void AddRequiredDbContexts(
+        IServiceCollection serviceCollection, IConfiguration configuration)
     {
         serviceCollection.AddDbContext<StoreContext>(option =>
         {
-            option.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+            option.UseSqlServer(configuration.GetConnectionString("SqlServerConnection"),
                 o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
         });
+
+        serviceCollection.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(
+            ConfigurationOptions.Parse(configuration.GetConnectionString("RedisConnection")!)));
     }
 
     private static void AddSwaggerItems(IServiceCollection serviceCollection)
