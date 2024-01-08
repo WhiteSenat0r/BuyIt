@@ -12,6 +12,7 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.9" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.9" />
       <PackageReference Include="PredicateBuilder" Version="1.0.0" />
+      <PackageReference Include="StackExchange.Redis" Version="2.7.10" />
     </ItemGroup>
 
     <ItemGroup>
