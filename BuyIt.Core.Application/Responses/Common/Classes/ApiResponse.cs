@@ -4,7 +4,7 @@ namespace Application.Responses.Common.Classes;
 
 public class ApiResponse : IApiResponse
 {
-    public ApiResponse(int responseCode, string responseMessage)
+    public ApiResponse(int responseCode, string responseMessage = null)
     {
         ResponseCode = responseCode;
         ResponseMessage = responseMessage ?? GetDefaultResponseMessage();
