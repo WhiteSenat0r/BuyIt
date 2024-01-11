@@ -1,11 +1,11 @@
 ﻿using System.Text.Json;
-using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Contexts;
 
-public sealed class StoreContext : DbContext, IDatabaseContext
+public sealed class StoreContext : IdentityDbContext<User, UserRole, Guid>
 {
     public StoreContext(DbContextOptions<StoreContext> options) : base(options) { }
 
@@ -27,6 +27,7 @@ public sealed class StoreContext : DbContext, IDatabaseContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) // Configuration of database's context
     {
+        base.OnModelCreating(modelBuilder);
         SpecifyEntityRelations(modelBuilder);
         MapEntities(modelBuilder);
     }
