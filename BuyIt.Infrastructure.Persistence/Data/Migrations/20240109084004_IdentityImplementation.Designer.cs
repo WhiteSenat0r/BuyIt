@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Contexts;
 
@@ -11,9 +12,11 @@ using Persistence.Contexts;
 namespace Persistence.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240109084004_IdentityImplementation")]
+    partial class IdentityImplementation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,7 +68,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("RatingId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductManufacturer", b =>
@@ -80,7 +83,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductManufacturers", (string)null);
+                    b.ToTable("ProductManufacturers");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductRating", b =>
@@ -94,7 +97,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductRatings", (string)null);
+                    b.ToTable("ProductRatings");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductSpecification", b =>
@@ -120,7 +123,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasIndex("SpecificationValueId");
 
-                    b.ToTable("ProductSpecifications", (string)null);
+                    b.ToTable("ProductSpecifications");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductSpecificationAttribute", b =>
@@ -135,7 +138,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductSpecificationAttributes", (string)null);
+                    b.ToTable("ProductSpecificationAttributes");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductSpecificationCategory", b =>
@@ -150,7 +153,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductSpecificationCategories", (string)null);
+                    b.ToTable("ProductSpecificationCategories");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductSpecificationValue", b =>
@@ -165,7 +168,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductSpecificationValues", (string)null);
+                    b.ToTable("ProductSpecificationValues");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductType", b =>
@@ -180,7 +183,7 @@ namespace Persistence.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductTypes", (string)null);
+                    b.ToTable("ProductTypes");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
