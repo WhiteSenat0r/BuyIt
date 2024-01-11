@@ -1,8 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 using Application.Helpers.SpecificationResolver;
 using Application.Responses;
+using BuyIt.Infrastructure.Services.TokenGeneration;
 using Domain.Contracts.Common;
 using Domain.Contracts.RepositoryRelated.Relational;
+using Domain.Contracts.TokenRelated;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,11 +33,17 @@ public static class ApplicationServicesExtensions
 
         serviceCollection.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-        serviceCollection.AddSingleton<ProductSpecificationFilterResolver>();
+        AddRequiredServices(serviceCollection);
 
         AddApiBehaviourConfiguration(serviceCollection);
 
         return serviceCollection;
+    }
+
+    private static void AddRequiredServices(IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<ProductSpecificationFilterResolver>();
+        serviceCollection.AddScoped<ITokenService, TokenService>();
     }
 
     private static void AddApiBehaviourConfiguration(IServiceCollection serviceCollection)
