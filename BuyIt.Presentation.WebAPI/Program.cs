@@ -6,6 +6,7 @@ using Persistence.Contexts;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRequiredApplicationServiceCollection(builder.Configuration);
+builder.Services.AddRequiredIdentityServiceCollection(builder.Configuration);
 
 var app = builder.Build();
 
@@ -23,6 +24,7 @@ app.UseStaticFiles();
 
 app.UseCors("ApplicationCorsPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
