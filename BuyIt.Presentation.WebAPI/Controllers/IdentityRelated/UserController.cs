@@ -99,7 +99,7 @@ public class UserController : BaseApiController
         });
     }
 
-    [HttpPost("verifyemail")]
+    [HttpPut("verifyemail")]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<UserDto>> VerifyEmail([FromQuery]string verificationToken, string email)
