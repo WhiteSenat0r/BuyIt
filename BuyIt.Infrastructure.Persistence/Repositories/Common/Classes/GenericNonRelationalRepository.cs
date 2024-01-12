@@ -5,12 +5,13 @@ using StackExchange.Redis;
 
 namespace Persistence.Repositories.Common.Classes;
 
-public class GenericNonRelationalRepository<TEntity> : INonRelationalRepository<TEntity>
-    where TEntity : class, IProductList<IProductListItem>, new()
+public abstract class GenericNonRelationalRepository<TItem, TEntity> : INonRelationalRepository<TEntity>
+    where TItem : class, IProductListItem
+    where TEntity : class, IProductList<TItem>, new()
 {
     private readonly IDatabase _database;
 
-    internal GenericNonRelationalRepository(
+    public GenericNonRelationalRepository(
         IConnectionMultiplexer multiplexer) => _database = multiplexer.GetDatabase();
 
     public async Task<TEntity> GetSingleEntityByIdAsync(Guid entityId)
@@ -18,7 +19,7 @@ public class GenericNonRelationalRepository<TEntity> : INonRelationalRepository<
         var data = await _database.StringGetAsync(entityId.ToString());
         
         return data.IsNullOrEmpty 
-            ? new TEntity { Id = entityId} 
+            ? new TEntity { Id = entityId } 
             : JsonSerializer.Deserialize<TEntity>(data);
     }
 
