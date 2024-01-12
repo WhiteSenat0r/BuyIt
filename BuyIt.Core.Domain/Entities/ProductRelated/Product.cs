@@ -5,7 +5,7 @@ using Domain.Common;
 using Domain.Contracts.ProductRelated;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Domain.Entities;
+namespace Domain.Entities.ProductRelated;
 
 public sealed class Product : IProduct
 {

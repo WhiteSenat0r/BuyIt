@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Domain.Contracts.ProductRelated;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 
 namespace Domain.Common;
 

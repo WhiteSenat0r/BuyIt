@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.ProductRelated;
 using Persistence.Contexts;
 using Persistence.Repositories.Common.Classes;
 

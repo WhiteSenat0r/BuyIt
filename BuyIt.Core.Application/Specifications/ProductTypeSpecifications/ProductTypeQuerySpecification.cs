@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Application.Specifications.Common;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Specifications.ProductTypeSpecifications;

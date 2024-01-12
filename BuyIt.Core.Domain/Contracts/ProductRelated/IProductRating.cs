@@ -1,5 +1,5 @@
 ﻿using Domain.Contracts.Common;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 
 namespace Domain.Contracts.ProductRelated;
 

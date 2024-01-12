@@ -1,5 +1,5 @@
 ﻿using Domain.Contracts.RepositoryRelated.Relational;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 
 namespace Application.Contracts;
 

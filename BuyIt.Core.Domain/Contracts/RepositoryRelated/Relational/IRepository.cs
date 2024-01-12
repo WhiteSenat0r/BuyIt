@@ -1,6 +1,6 @@
 ﻿using Domain.Contracts.Common;
 
-namespace Domain.Contracts.RepositoryRelated;
+namespace Domain.Contracts.RepositoryRelated.Relational;
 
 public interface IRepository<TEntity> 
     where TEntity : class, IEntity<Guid>

@@ -5,7 +5,7 @@ using BuyIt.Infrastructure.Services.TokenGeneration;
 using Domain.Contracts.Common;
 using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Contracts.TokenRelated;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;

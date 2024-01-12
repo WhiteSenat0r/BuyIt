@@ -1,6 +1,6 @@
 ﻿using Domain.Contracts.ProductRelated;
 
-namespace Domain.Entities;
+namespace Domain.Entities.ProductRelated;
 
 public sealed class ProductSpecification : IProductSpecification
 {

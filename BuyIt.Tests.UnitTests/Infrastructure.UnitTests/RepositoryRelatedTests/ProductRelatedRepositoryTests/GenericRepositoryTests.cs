@@ -1,6 +1,6 @@
 ﻿using Application.Specifications.ProductTypeSpecifications;
 using Domain.Contracts.RepositoryRelated.Relational;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 using Persistence.Repositories.Factories.ProductRelated;

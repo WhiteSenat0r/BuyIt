@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.IdentityRelated;
 
 namespace Domain.Contracts.TokenRelated;
 

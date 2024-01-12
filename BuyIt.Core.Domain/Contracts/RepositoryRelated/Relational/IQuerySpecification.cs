@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace Domain.Contracts.RepositoryRelated;
+namespace Domain.Contracts.RepositoryRelated.Relational;
 
 public interface IQuerySpecification<TEntity> 
     where TEntity : class

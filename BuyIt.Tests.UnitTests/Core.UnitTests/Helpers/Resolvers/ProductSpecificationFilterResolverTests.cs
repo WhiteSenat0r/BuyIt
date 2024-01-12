@@ -5,7 +5,7 @@ using Application.Specifications.ProductSpecifications;
 using Application.Specifications.ProductSpecifications.ComputerRelatedSpecifications;
 using Application.Specifications.ProductTypeSpecifications;
 using Domain.Contracts.RepositoryRelated.Relational;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Moq;
 using Xunit;
 

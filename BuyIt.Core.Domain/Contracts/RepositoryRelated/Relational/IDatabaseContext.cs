@@ -1,7 +1,7 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.ProductRelated;
 using Microsoft.EntityFrameworkCore;
 
-namespace Domain.Contracts.RepositoryRelated;
+namespace Domain.Contracts.RepositoryRelated.Relational;
 
 public interface IDatabaseContext
 {

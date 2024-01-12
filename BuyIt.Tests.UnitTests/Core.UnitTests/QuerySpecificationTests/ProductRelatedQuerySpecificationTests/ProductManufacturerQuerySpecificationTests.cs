@@ -1,6 +1,6 @@
 ﻿using Application.Specifications.ProductManufacturerSpecifications;
 using Domain.Contracts.RepositoryRelated.Relational;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Xunit;
 
 namespace BuyIt.Tests.UnitTests.Core.UnitTests.QuerySpecificationTests.ProductRelatedQuerySpecificationTests;

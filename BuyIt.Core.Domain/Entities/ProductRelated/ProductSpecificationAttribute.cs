@@ -1,6 +1,6 @@
 ﻿using Domain.Common;
 
-namespace Domain.Entities;
+namespace Domain.Entities.ProductRelated;
 
 public sealed class ProductSpecificationAttribute : BasicSpecificationElement
 {

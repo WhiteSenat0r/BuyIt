@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
-using Domain.Entities;
+using Domain.Entities.IdentityRelated;
+using Domain.Entities.ProductRelated;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

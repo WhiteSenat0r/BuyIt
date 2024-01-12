@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Application.Specifications.ProductSpecifications;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Xunit;
 
 namespace BuyIt.Tests.UnitTests.Core.UnitTests.QuerySpecificationTests.ProductRelatedQuerySpecificationTests;

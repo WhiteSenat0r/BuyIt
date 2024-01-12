@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BuyIt.Presentation.WebAPI.Controllers.Common.Classes;
 using Domain.Contracts.RepositoryRelated.Relational;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 
 namespace BuyIt.Presentation.WebAPI.Controllers.Common;
 

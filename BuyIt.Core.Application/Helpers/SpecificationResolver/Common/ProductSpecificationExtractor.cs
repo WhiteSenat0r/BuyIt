@@ -1,6 +1,6 @@
 ﻿using Application.Contracts;
 using Application.Helpers.SpecificationResolver.Common.Constants;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 
 namespace Application.Helpers.SpecificationResolver.Common;
 

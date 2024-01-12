@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using Domain.Contracts.TokenRelated;
-using Domain.Entities;
+using Domain.Entities.IdentityRelated;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 

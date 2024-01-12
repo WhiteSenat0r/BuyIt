@@ -3,7 +3,7 @@ using Application.FilteringModels;
 using Application.Helpers.SpecificationResolver;
 using BuyIt.Presentation.WebAPI.Controllers.Common.Classes;
 using Domain.Contracts.RepositoryRelated.Relational;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BuyIt.Presentation.WebAPI.Controllers.Common;

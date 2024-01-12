@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Domain.Entities;
+namespace Domain.Entities.IdentityRelated;
 
 public sealed class User : IdentityUser<Guid>
 {

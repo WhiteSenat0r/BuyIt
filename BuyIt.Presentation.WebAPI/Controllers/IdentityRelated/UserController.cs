@@ -4,7 +4,7 @@ using BuyIt.Infrastructure.Services.Mailing;
 using BuyIt.Infrastructure.Services.Mailing.Common.Classes.Options;
 using BuyIt.Presentation.WebAPI.Controllers.Common.Classes;
 using Domain.Contracts.TokenRelated;
-using Domain.Entities;
+using Domain.Entities.IdentityRelated;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

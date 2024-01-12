@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BuyIt.Presentation.WebAPI.Extensions;
 using Domain.Contracts.RepositoryRelated.Relational;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

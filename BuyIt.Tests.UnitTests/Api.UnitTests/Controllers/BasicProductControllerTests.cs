@@ -4,7 +4,7 @@ using Application.Specifications.ProductSpecifications.ComputerRelatedSpecificat
 using AutoMapper;
 using BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.ComputerRelated;
 using Domain.Contracts.RepositoryRelated.Relational;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;

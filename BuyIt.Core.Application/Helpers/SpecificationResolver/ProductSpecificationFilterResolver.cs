@@ -7,7 +7,7 @@ using Application.Specifications.ProductManufacturerSpecifications;
 using Application.Specifications.ProductSpecifications;
 using Application.Specifications.ProductTypeSpecifications;
 using Domain.Contracts.RepositoryRelated.Relational;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Helpers.SpecificationResolver;

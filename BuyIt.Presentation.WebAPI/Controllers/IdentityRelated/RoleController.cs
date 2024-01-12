@@ -1,6 +1,6 @@
 ﻿using Application.Responses.Common.Classes;
 using BuyIt.Presentation.WebAPI.Controllers.Common.Classes;
-using Domain.Entities;
+using Domain.Entities.IdentityRelated;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;

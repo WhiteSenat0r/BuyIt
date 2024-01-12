@@ -2,7 +2,7 @@
 using Application.FilteringModels;
 using Application.Specifications.ProductSpecifications.ComputerRelatedSpecifications;
 using Domain.Contracts.RepositoryRelated.Relational;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Xunit;
 
 namespace BuyIt.Tests.UnitTests.Core.UnitTests.QuerySpecificationTests.ProductRelatedQuerySpecificationTests.ComputerRelated;

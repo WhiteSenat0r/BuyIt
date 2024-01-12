@@ -2,7 +2,7 @@
 using Application.FilteringModels;
 using Application.Helpers.SpecificationResolver.Common;
 using Application.Helpers.SpecificationResolver.Common.Constants;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Xunit;
 
 namespace BuyIt.Tests.UnitTests.Core.UnitTests.Helpers.Resolvers;

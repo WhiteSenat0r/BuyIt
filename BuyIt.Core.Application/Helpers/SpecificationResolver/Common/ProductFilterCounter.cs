@@ -2,7 +2,7 @@
 using Application.Contracts;
 using Application.DataTransferObjects.ProductRelated.Specification;
 using Application.FilteringModels;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Helpers.SpecificationResolver.Common;

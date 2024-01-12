@@ -1,5 +1,5 @@
 ﻿using Domain.Contracts.ProductRelated;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 using Persistence.Repositories.Common.Classes;

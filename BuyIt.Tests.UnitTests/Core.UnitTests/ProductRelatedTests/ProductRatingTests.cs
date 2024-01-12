@@ -1,5 +1,5 @@
 ﻿using Domain.Contracts.ProductRelated;
-using Domain.Entities;
+using Domain.Entities.ProductRelated;
 using Xunit;
 
 namespace BuyIt.Tests.UnitTests.Core.UnitTests.ProductRelatedTests;

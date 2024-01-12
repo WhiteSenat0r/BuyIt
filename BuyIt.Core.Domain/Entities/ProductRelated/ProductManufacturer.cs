@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Domain.Contracts.ProductRelated;
 
-namespace Domain.Entities;
+namespace Domain.Entities.ProductRelated;
 
 public sealed class ProductManufacturer : IProductManufacturer
 {
