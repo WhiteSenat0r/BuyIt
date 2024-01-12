@@ -2,8 +2,7 @@
 
 namespace Domain.Entities.ProductListRelated;
 
-public class ProductList<TProductItem> : IProductList<IProductListItem>
-    where TProductItem : IProductListItem
+public class ProductList<TProductItem> : IProductList<TProductItem> where TProductItem : IProductListItem, new()
 {
     public ProductList() { }
 
@@ -11,5 +10,5 @@ public class ProductList<TProductItem> : IProductList<IProductListItem>
     
     public Guid Id { get; set; }
 
-    public IEnumerable<IProductListItem> Items { get; set; }
+    public IEnumerable<TProductItem> Items { get; set; } = new List<TProductItem>();
 }
