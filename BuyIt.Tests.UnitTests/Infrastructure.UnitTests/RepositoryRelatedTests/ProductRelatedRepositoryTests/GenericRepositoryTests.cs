@@ -3,7 +3,7 @@ using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Entities.ProductRelated;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
-using Persistence.Repositories.Factories.ProductRelated;
+using Persistence.Repositories.Factories.RelationalRepositoryFactories.ProductRelated;
 using Xunit;
 
 namespace BuyIt.Tests.UnitTests.Infrastructure.UnitTests.RepositoryRelatedTests.ProductRelatedRepositoryTests;

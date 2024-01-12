@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <Folder Include="Data\Migrations\" />
+      <Folder Include="Repositories\Factories\RelationalRepositoryFactories\" />
     </ItemGroup>
 
 </Project>

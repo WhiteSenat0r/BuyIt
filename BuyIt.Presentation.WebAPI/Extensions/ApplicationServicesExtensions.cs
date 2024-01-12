@@ -9,8 +9,8 @@ using Domain.Entities.ProductRelated;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
-using Persistence.Repositories.Factories.Common.Classes;
-using Persistence.Repositories.Factories.ProductRelated;
+using Persistence.Repositories.Factories.RelationalRepositoryFactories.Common.Classes;
+using Persistence.Repositories.Factories.RelationalRepositoryFactories.ProductRelated;
 using StackExchange.Redis;
 
 namespace BuyIt.Presentation.WebAPI.Extensions;

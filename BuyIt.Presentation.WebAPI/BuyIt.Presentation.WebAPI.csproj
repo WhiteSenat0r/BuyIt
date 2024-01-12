@@ -33,6 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Controllers\ProductRelatedControllers\FeaturesRelated\Common\" />
       <Folder Include="wwwroot\content\products\images\personal-computers\" />
     </ItemGroup>
 

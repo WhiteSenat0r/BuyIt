@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
-using Persistence.Repositories.Factories.ProductRelated;
-using Persistence.Repositories.ProductRelatedRepositories;
+using Persistence.Repositories.Factories.RelationalRepositoryFactories.ProductRelated;
+using Persistence.Repositories.Factories.RelationalRepositoryFactories.ProductRelatedRepositories;
 using Xunit;
 
 namespace BuyIt.Tests.UnitTests.Infrastructure.UnitTests.RepositoryRelatedTests.RepositoryFactoryRelatedTests;
