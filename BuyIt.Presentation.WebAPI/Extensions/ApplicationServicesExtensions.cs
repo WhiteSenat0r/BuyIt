@@ -3,12 +3,17 @@ using Application.Helpers.SpecificationResolver;
 using Application.Responses;
 using BuyIt.Infrastructure.Services.TokenGeneration;
 using Domain.Contracts.Common;
+using Domain.Contracts.ProductListRelated;
+using Domain.Contracts.RepositoryRelated.NonRelational;
 using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Contracts.TokenRelated;
+using Domain.Entities.ProductListRelated;
 using Domain.Entities.ProductRelated;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
+using Persistence.Repositories.Factories.NonRelationalRepositoryFactories.Common.Classes;
+using Persistence.Repositories.Factories.NonRelationalRepositoryFactories.RepositoryFactories;
 using Persistence.Repositories.Factories.RelationalRepositoryFactories.Common.Classes;
 using Persistence.Repositories.Factories.RelationalRepositoryFactories.ProductRelated;
 using StackExchange.Redis;
@@ -88,14 +93,30 @@ public static class ApplicationServicesExtensions
             ProductSpecificationAttributeRepositoryFactory>(serviceCollection);
         AddRepository<ProductSpecificationValue, 
             ProductSpecificationValueRepositoryFactory>(serviceCollection);
+        
+        AddNonRelationalRepository
+            <BasketItem, ProductList<BasketItem>, BasketRepositoryFactory>(serviceCollection);
+        AddNonRelationalRepository
+            <WishedItem, ProductList<WishedItem>, WishlistRepositoryFactory>(serviceCollection);
+        AddNonRelationalRepository
+            <ComparedItem, ProductList<ComparedItem>, ComparisonRepositoryFactory>(serviceCollection);
     }
 
     private static void AddRepository<TEntity, TRepository>(IServiceCollection serviceCollection) 
-        where TEntity : class, IEntity<Guid> where TRepository : RepositoryFactory<TEntity>, new()
-    {
+        where TEntity : class, IEntity<Guid> where TRepository : RepositoryFactory<TEntity>, new() =>
         serviceCollection.AddScoped<IRepository<TEntity>>(provider =>
             new TRepository().Create(
                 provider.GetService<StoreContext>()!));
+
+    private static void AddNonRelationalRepository<TItem, TList, TRepositoryFactory>(
+        IServiceCollection serviceCollection)
+        where TItem : class, IProductListItem, new()
+        where TList : class, IProductList<TItem>, new()
+        where TRepositoryFactory : NonRelationalRepositoryFactory<TList>, new()
+    {
+        serviceCollection.AddScoped<INonRelationalRepository<TList>>(provider =>
+            new TRepositoryFactory().Create(
+                provider.GetService<IConnectionMultiplexer>()!));
     }
 
     private static void AddRequiredDbContexts(
