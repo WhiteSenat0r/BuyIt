@@ -44,5 +44,7 @@ public class MappingProfiles : Profile
             .ForMember(r => r.Images, p =>
                 p.MapFrom<ProductUrlResolver>())
             .ForMember(r => r.Specifications, p =>
-                p.MapFrom<ProductSpecificationResolver>());
+                p.MapFrom<ProductSpecificationResolver>())
+            .ForMember(r => r.Category, p =>
+                p.MapFrom(с => с.ProductType.Name));
 }
