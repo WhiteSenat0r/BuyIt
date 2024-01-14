@@ -5,7 +5,7 @@ public interface INonRelationalRepository<TEntity>
 {
     Task<TEntity> GetSingleEntityByIdAsync(Guid entityId);
 
-    Task<TEntity> UpdateExistingEntityAsync(TEntity updatedEntity, int? daysToStoreData = null);
+    Task<TEntity> CreateOrUpdateEntityAsync(TEntity updatedEntity, int? daysToStoreData = null);
     
     Task<bool> RemoveExistingEntityAsync(Guid removedEntityId);
 }

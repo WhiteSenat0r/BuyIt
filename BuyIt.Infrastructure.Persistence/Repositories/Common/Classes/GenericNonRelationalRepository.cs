@@ -23,7 +23,7 @@ public abstract class GenericNonRelationalRepository<TItem, TEntity> : INonRelat
             : JsonSerializer.Deserialize<TEntity>(data);
     }
 
-    public async Task<TEntity> UpdateExistingEntityAsync(
+    public async Task<TEntity> CreateOrUpdateEntityAsync(
         TEntity updatedEntity, int? daysToStoreData = null)
     {
         var createdEntityResult = IsValidDataStoreValue(daysToStoreData)
