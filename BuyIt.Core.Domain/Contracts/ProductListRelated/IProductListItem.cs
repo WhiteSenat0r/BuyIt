@@ -2,7 +2,7 @@
 
 namespace Domain.Contracts.ProductListRelated;
 
-public interface IProductListItem : IEntity<Guid>
+public interface IProductListItem
 {
     string Name { get; set; }
     
