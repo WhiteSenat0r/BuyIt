@@ -7,6 +7,6 @@ public class BasketItem : PricedProductListItem
     public int Quantity
     {
         get => _quantity;
-        private set => _quantity = (int)SetValue(value, 0, "Quantity");
+        set => _quantity = (int)SetValue(value, 0, "Quantity");
     }
 }
