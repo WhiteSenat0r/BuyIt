@@ -1,4 +1,5 @@
 ﻿using Application.DataTransferObjects.IdentityRelated;
+using Application.Responses;
 using Application.Responses.Common.Classes;
 using BuyIt.Infrastructure.Services.Mailing;
 using BuyIt.Infrastructure.Services.Mailing.Common.Classes.Options;
@@ -28,17 +29,26 @@ public class UserController : BaseApiController
     
     [HttpPost("login")]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<UserDto>> Login([FromBody]LoginDto loginData)
     {
+        if (IsInvalidModel(out var badRequest,
+                "Error occured during login of a user!",
+                new [] { "Email or password contains invalid value!" }))
+            return badRequest;
+        
+        if (!await IsRegisteredEmail(loginData.Email)) 
+            return BadRequest(new ApiResponse(
+                400, "User with such email does not exist!"));
+
         var user = await _userManager.FindByEmailAsync(loginData.Email);
-
-        if (user is null) return Unauthorized(new ApiResponse(401));
-
+        
         var passwordIsValid = await _signInManager.CheckPasswordSignInAsync(
             user, loginData.Password, false);
         
-        if (!passwordIsValid.Succeeded) return Unauthorized(new ApiResponse(401));
+        if (!passwordIsValid.Succeeded) return Unauthorized(
+            new ApiResponse(401, "Incorrect password!"));
         
         return Ok(new UserDto
         {
@@ -54,6 +64,21 @@ public class UserController : BaseApiController
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<UserDto>> Register([FromBody]RegistrationDto registrationData)
     {
+        if (IsInvalidModel(out var badRequest,
+                "Error occured during registration of a new user!",
+                ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList()))
+            return badRequest;
+
+        if (await IsRegisteredEmail(registrationData.Email))
+            return BadRequest(new ApiValidationErrorResponse(
+                "Error occured during registration of a new user!")
+            {
+                Errors = new [] { "User with entered email is already registered!" }
+            });
+        
         var createdUser = new User
         {
             FirstName = registrationData.FirstName,
@@ -66,7 +91,8 @@ public class UserController : BaseApiController
         
         var userResult = await _userManager.CreateAsync(createdUser, registrationData.Password);
 
-        if (!userResult.Succeeded) return BadRequest(new ApiResponse(400));
+        if (!userResult.Succeeded) return BadRequest(new ApiResponse(
+            400, "Error occured during registration of a new user!"));
 
         var user = await _userManager.FindByIdAsync(createdUser.Id.ToString());
 
@@ -102,7 +128,8 @@ public class UserController : BaseApiController
     [HttpPut("verifyemail")]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<UserDto>> VerifyEmail([FromQuery]string verificationToken, string email)
+    public async Task<ActionResult<UserDto>> VerifyEmail(
+        [FromQuery]string verificationToken, string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
         
@@ -131,7 +158,27 @@ public class UserController : BaseApiController
             Roles = await _userManager.GetRolesAsync(user)
         });
     }
+
+    private async Task<bool> IsRegisteredEmail(string email) => 
+        await _userManager.FindByEmailAsync(email) is not null;
     
+    private bool IsInvalidModel(
+        out ActionResult badRequest, string errorMessage, IEnumerable<string> errors)
+    {
+        if (!ModelState.IsValid)
+        {
+            badRequest = BadRequest(new ApiValidationErrorResponse(errorMessage)
+            {
+                Errors = errors
+            });
+            
+            return true;
+        }
+
+        badRequest = null;
+        return false;
+    }
+
     private async Task SendNotificationLetterAsync(User user, string senderEmail,
         string subject, string message, string buttonName, string buttonUrl)
     {
