@@ -1,6 +1,4 @@
-﻿using Domain.Contracts.Common;
-
-namespace Domain.Contracts.ProductListRelated;
+﻿namespace Domain.Contracts.ProductListRelated;
 
 public interface IProductListItem
 {
