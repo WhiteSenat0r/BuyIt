@@ -1,24 +1,17 @@
-﻿using Application.DataTransferObjects.Manufacturer;
-using Application.DataTransferObjects.ProductRelated;
+﻿using Application.DataTransferObjects.ProductRelated;
 using Application.Helpers;
 using AutoMapper;
 using Domain.Contracts.ProductRelated;
 
-namespace Application.DataTransferObjects.Mappings;
+namespace Application.DataTransferObjects.Mappings.ProductRelated;
 
-public class MappingProfiles : Profile
+public class ProductMappingProfiles : Profile
 {
-    public MappingProfiles()
+    public ProductMappingProfiles()
     {
         CreateMappingProfileForProductInCatalog();
         CreateMappingProfileForSingleProduct();
-        CreateMappingProfileForProductBrands();
     }
-
-    private void CreateMappingProfileForProductBrands() =>
-        CreateMap<IProductManufacturer, ProductManufacturerDto>()
-            .ForMember(n => n.Brand, manufacturer =>
-                manufacturer.MapFrom(m => m.Name));
     
     private void CreateMappingProfileForProductInCatalog() =>
         CreateMap<IProduct, GeneralizedProductDto>()
