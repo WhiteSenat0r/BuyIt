@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRequiredApplicationServiceCollection(builder.Configuration);
 builder.Services.AddRequiredIdentityServiceCollection(builder.Configuration);
+builder.Services.AddRequiredSwaggerServiceCollection(builder.Configuration);
 
 var app = builder.Build();
 
@@ -16,8 +17,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseRequiredSwaggerServiceCollection();
 }
 
 app.UseStaticFiles();
