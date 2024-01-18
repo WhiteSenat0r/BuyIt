@@ -1,4 +1,5 @@
-﻿using Application.DataTransferObjects.IdentityRelated;
+﻿using System.Security.Claims;
+using Application.DataTransferObjects.IdentityRelated;
 using Application.Responses;
 using Application.Responses.Common.Classes;
 using BuyIt.Infrastructure.Services.Mailing;
@@ -6,6 +7,7 @@ using BuyIt.Infrastructure.Services.Mailing.Common.Classes.Options;
 using BuyIt.Presentation.WebAPI.Controllers.Common.Classes;
 using Domain.Contracts.TokenRelated;
 using Domain.Entities.IdentityRelated;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,8 +28,29 @@ public class UserController : BaseApiController
         _roleManager = roleManager;
         _tokenService = tokenService;
     }
+
+    [Authorize]
+    [HttpGet("CurrentUser")]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<UserDto>> GetCurrentUser()
+    {
+        var userEmail = User.FindFirstValue(ClaimTypes.Email);
+
+        var user = await _userManager.FindByEmailAsync(userEmail);
+        
+        return Ok(new UserDto
+        {
+            DisplayedName = $"{user.FirstName} {user.LastName}",
+            Email = user.Email,
+            Token = _tokenService.CreateToken(user),
+            Roles = await _userManager.GetRolesAsync(user)
+        });
+    }
     
-    [HttpPost("login")]
+    [AllowAnonymous]
+    [HttpPost("Login")]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status401Unauthorized)]
@@ -59,7 +82,8 @@ public class UserController : BaseApiController
         });
     }
     
-    [HttpPost("register")]
+    [AllowAnonymous]
+    [HttpPost("Register")]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<UserDto>> Register([FromBody]RegistrationDto registrationData)
@@ -125,7 +149,8 @@ public class UserController : BaseApiController
         });
     }
 
-    [HttpPut("verifyemail")]
+    [AllowAnonymous]
+    [HttpPut("VerifyEmail")]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<UserDto>> VerifyEmail(
