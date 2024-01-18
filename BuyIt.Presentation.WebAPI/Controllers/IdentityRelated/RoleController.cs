@@ -19,7 +19,7 @@ public class RoleController : BaseApiController
     [HttpPost("create")]
     [ProducesResponseType(typeof(UserRole), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<UserRole>> Login([FromQuery]string roleName)
+    public async Task<ActionResult<UserRole>> Create([FromQuery]string roleName)
     {
         if (roleName.IsNullOrEmpty()) return BadRequest(new ApiResponse(400));
         

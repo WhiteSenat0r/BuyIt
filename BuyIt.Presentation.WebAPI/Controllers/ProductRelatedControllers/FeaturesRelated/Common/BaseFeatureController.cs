@@ -28,7 +28,7 @@ namespace BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.Featur
         public async Task<ActionResult<IProductList<TProductListItem>>> Get(Guid listId) => 
             Ok(await _repository.GetSingleEntityByIdAsync(listId));
 
-        [HttpPost("createorupdate")]
+        [HttpPost("CreateOrUpdate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IProductList<TProductListItem>>> CreateOrUpdate([FromBody]
             ProductListDto<TProductListItemDto> dtoList)
@@ -42,7 +42,7 @@ namespace BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.Featur
             return Ok(updatedList);
         }
         
-        [HttpDelete("delete")]
+        [HttpDelete("Delete")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Delete(Guid listId)
         {

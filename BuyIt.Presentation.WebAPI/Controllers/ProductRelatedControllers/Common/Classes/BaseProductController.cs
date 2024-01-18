@@ -18,7 +18,7 @@ public abstract class BaseProductController<TFilteringModel, TQuerySpecification
     protected BaseProductController(IRepository<Product> products, IMapper mapper)
         : base(products, mapper) { }
 
-    [HttpGet("item/{productCode}")]
+    [HttpGet("Item/{productCode}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IProductDto>> Get(string productCode)

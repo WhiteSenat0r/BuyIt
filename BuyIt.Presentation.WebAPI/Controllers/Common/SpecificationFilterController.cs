@@ -28,28 +28,28 @@ public class SpecificationFilterController : BaseApiController
         _manufacturers = manufacturers;
     }
 
-    [HttpGet("personalcomputer")]
+    [HttpGet("PersonalComputer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<FilterDto>> GetAll(
         [FromQuery] PersonalComputerFilteringModel filteringModel) =>
         Ok(await _filterResolver.ResolveAsync(
             _products, _productSpecifications, _manufacturers, _categories, filteringModel));
     
-    [HttpGet("laptop")]
+    [HttpGet("Laptop")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<FilterDto>> GetAll(
         [FromQuery] LaptopFilteringModel filteringModel) =>
         Ok(await _filterResolver.ResolveAsync(
             _products, _productSpecifications, _manufacturers, _categories, filteringModel));
     
-    [HttpGet("allinonecomputer")]
+    [HttpGet("AllInOneComputer")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<FilterDto>> GetAll(
         [FromQuery] AioComputerFilteringModel filteringModel) =>
         Ok(await _filterResolver.ResolveAsync(
             _products, _productSpecifications, _manufacturers, _categories, filteringModel));
 
-    [HttpGet("productsearch")]
+    [HttpGet("ProductSearch")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<FilterDto>> GetAll(
         [FromQuery] ProductSearchFilteringModel filteringModel) =>
