@@ -2,7 +2,8 @@
 
 namespace Domain.Entities.ProductListRelated;
 
-public class ProductList<TProductItem> : IProductList<TProductItem> where TProductItem : IProductListItem, new()
+public class ProductList<TProductItem> : IProductList<TProductItem> 
+    where TProductItem : IProductListItem, new()
 {
     public ProductList() { }
 
