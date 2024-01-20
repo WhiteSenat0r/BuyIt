@@ -136,7 +136,7 @@ public class UserController : BaseApiController
             " we need to confirm your email address. Please click the button below to verify your account." +
             "<br><br>If you are unable to click the link, you can copy and paste it into your browser's address" +
             " bar.<br><br>Once your email address is verified, you'll gain full access to your account.<br><br>Thank" +
-            " you for joining BuyIt! We look forward to serving you.",
+            " you for joining BuyIt!",
             "Verify email address",
             verificationUrl);
 
@@ -183,6 +183,13 @@ public class UserController : BaseApiController
             Roles = await _userManager.GetRolesAsync(user)
         });
     }
+
+    [AllowAnonymous]
+    [HttpGet("EmailStatus")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    public async Task<ActionResult<bool>> GetEmailStatus(
+        [FromQuery] string email) =>
+        Ok(await IsRegisteredEmail(email));
 
     private async Task<bool> IsRegisteredEmail(string email) => 
         await _userManager.FindByEmailAsync(email) is not null;
