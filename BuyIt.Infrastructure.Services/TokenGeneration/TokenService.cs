@@ -40,7 +40,7 @@ public sealed class TokenService : ITokenService
         new()
         {
             Subject = new ClaimsIdentity(userClaims),
-            Expires = DateTime.Now.AddDays(7),
+            Expires = DateTime.UtcNow.AddMinutes(5),
             SigningCredentials = credentials,
             Issuer = _configuration["Token:Issuer"]
         };
