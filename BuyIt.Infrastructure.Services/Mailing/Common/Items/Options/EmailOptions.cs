@@ -1,4 +1,4 @@
-﻿namespace BuyIt.Infrastructure.Services.Mailing.Common.Classes.Options;
+﻿namespace BuyIt.Infrastructure.Services.Mailing.Common.Items.Options;
 
 public sealed class EmailOptions
 {
