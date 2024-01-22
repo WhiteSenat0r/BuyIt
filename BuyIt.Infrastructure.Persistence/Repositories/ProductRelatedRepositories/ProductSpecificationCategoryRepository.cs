@@ -2,7 +2,7 @@
 using Persistence.Contexts;
 using Persistence.Repositories.Common.Classes;
 
-namespace Persistence.Repositories.Factories.RelationalRepositoryFactories.ProductRelatedRepositories;
+namespace Persistence.Repositories.ProductRelatedRepositories;
 
 public sealed class ProductSpecificationCategoryRepository : GenericRepository<ProductSpecificationCategory>
 {
