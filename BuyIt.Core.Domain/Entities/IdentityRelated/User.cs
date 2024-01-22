@@ -32,6 +32,8 @@ public sealed class User : IdentityUser<Guid>
         get => _lastName;
         set => _lastName = GetCheckedValue(value, "Last name");
     }
+
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     
     private string GetCheckedValue(string value, string valueName)
     {
