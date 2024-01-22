@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using BuyIt.Infrastructure.Services.FileSystem;
-using BuyIt.Infrastructure.Services.Mailing.Common.Classes.Options;
+using BuyIt.Infrastructure.Services.Mailing.Common.Items.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BuyIt.Infrastructure.Services.Mailing;
@@ -55,11 +55,11 @@ public sealed class MailSender
         EmailOptions options, RelativePathConstructor relativePathConstructor) =>
         IsButtonlessMessage(options) 
             ? await File.ReadAllTextAsync(relativePathConstructor.CreateFilePath(
-                "BuyIt.Infrastructure.Services/Mailing/Common/Classes/" +
-                "MessageTemplates/ButtonlessMessageTemplate.html"))
+                "BuyIt.Infrastructure.Services/Mailing/Common/Items/MessageTemplates" +
+                "/HTML-Templates/ButtonlessMessageTemplate.html"))
             : await File.ReadAllTextAsync(relativePathConstructor.CreateFilePath(
-                "BuyIt.Infrastructure.Services/Mailing/Common/Classes/" +
-                "MessageTemplates/ButtonMessageTemplate.html"));
+                "BuyIt.Infrastructure.Services/Mailing/Common/Items/MessageTemplates/" +
+                "HTML-Templates/ButtonMessageTemplate.html"));
 
     private bool IsButtonlessMessage(EmailOptions options) =>
         options.ButtonName.IsNullOrEmpty() 
