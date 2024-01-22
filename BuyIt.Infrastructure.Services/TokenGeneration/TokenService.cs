@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Domain.Contracts.TokenRelated;
 using Domain.Entities.IdentityRelated;
@@ -20,7 +21,7 @@ public sealed class TokenService : ITokenService
             Encoding.UTF8.GetBytes(_configuration["Token:Key"]!));
     }
     
-    public string CreateToken(User user)
+    public string CreateAccessToken(User user)
     {
         var userClaims = GetUserClaims(user);
 
@@ -33,6 +34,20 @@ public sealed class TokenService : ITokenService
         var jwtToken = tokenHandler.CreateToken(tokenDescriptor);
 
         return tokenHandler.WriteToken(jwtToken);
+    }
+    
+    public RefreshToken CreateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+
+        using var randomNumberGenerator = RandomNumberGenerator.Create();
+        
+        randomNumberGenerator.GetBytes(randomNumber);
+
+        return new RefreshToken
+        {
+            Value = Convert.ToBase64String(randomNumber)
+        };
     }
 
     private SecurityTokenDescriptor GetTokenDescriptor(

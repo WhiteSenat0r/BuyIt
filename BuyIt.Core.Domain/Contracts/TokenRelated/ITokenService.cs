@@ -4,5 +4,7 @@ namespace Domain.Contracts.TokenRelated;
 
 public interface ITokenService
 {
-    string CreateToken(User user);
+    string CreateAccessToken(User user);
+    
+    RefreshToken CreateRefreshToken();
 }
