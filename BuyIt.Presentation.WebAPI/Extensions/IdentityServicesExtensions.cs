@@ -36,7 +36,9 @@ public static class IdentityServicesExtensions
                         Encoding.UTF8.GetBytes(configuration["Token:Key"]!)),
                     ValidIssuer = configuration["Token:Issuer"],
                     ValidateIssuer = true,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
                 };
             });
     }

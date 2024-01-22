@@ -11,6 +11,9 @@ builder.Services.AddRequiredSwaggerServiceCollection(builder.Configuration);
 
 var app = builder.Build();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseMiddleware<ExceptionMiddleware>();
@@ -23,9 +26,6 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseCors("ApplicationCorsPolicy");
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllers();
 
