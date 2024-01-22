@@ -11,8 +11,5 @@ public class UserDto
     public string Email { get; set; }
     
     [Required]
-    public string Token { get; set; }
-    
-    [Required]
     public IEnumerable<string> Roles { get; set; }
 }
