@@ -27,6 +27,10 @@ public static class IdentityServicesExtensions
         IServiceCollection serviceCollection, IConfiguration configuration)
     {
         serviceCollection.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.Cookie.Name = "UserAccessToken";
+            })
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -39,6 +43,15 @@ public static class IdentityServicesExtensions
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Token = context.Request.Cookies["UserAccessToken"];
+                        return Task.CompletedTask;
+                    }
                 };
             });
     }
@@ -59,5 +72,10 @@ public static class IdentityServicesExtensions
             .AddEntityFrameworkStores<StoreContext>()
             .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider)
             .AddSignInManager();
+
+        serviceCollection.Configure<SignInOptions>(options =>
+        {
+            options.RequireConfirmedEmail = true;
+        });
     }
 }
