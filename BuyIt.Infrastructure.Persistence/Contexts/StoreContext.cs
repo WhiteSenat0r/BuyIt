@@ -25,6 +25,8 @@ public sealed class StoreContext : IdentityDbContext<User, UserRole, Guid>
     public DbSet<ProductSpecificationAttribute> ProductSpecificationAttributes { get; set; } = null!;
     
     public DbSet<ProductSpecificationValue> ProductSpecificationValues { get; set; } = null!;
+    
+    public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) // Configuration of database's context
     {
@@ -84,5 +86,17 @@ public sealed class StoreContext : IdentityDbContext<User, UserRole, Guid>
 
         modelBuilder.Entity<ProductSpecificationValue>()
             .HasKey(p => p.Id);
+        
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasKey(rt => rt.Id);
+            entity.Property(rt => rt.Value).IsRequired();
+            entity.Property(rt => rt.ExpiryDate).IsRequired();
+            entity.HasOne(rt => rt.User)
+                .WithMany(u => u.RefreshTokens)
+                .HasForeignKey(rt => rt.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }
