@@ -7,6 +7,7 @@ using Domain.Contracts.ProductListRelated;
 using Domain.Contracts.RepositoryRelated.NonRelational;
 using Domain.Contracts.RepositoryRelated.Relational;
 using Domain.Contracts.TokenRelated;
+using Domain.Entities.IdentityRelated;
 using Domain.Entities.ProductListRelated;
 using Domain.Entities.ProductRelated;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ using Persistence.Contexts;
 using Persistence.Repositories.Factories.NonRelationalRepositoryFactories.Common.Classes;
 using Persistence.Repositories.Factories.NonRelationalRepositoryFactories.RepositoryFactories;
 using Persistence.Repositories.Factories.RelationalRepositoryFactories.Common.Classes;
+using Persistence.Repositories.Factories.RelationalRepositoryFactories.IdentityRelated;
 using Persistence.Repositories.Factories.RelationalRepositoryFactories.ProductRelated;
 using StackExchange.Redis;
 
@@ -53,6 +55,14 @@ public static class ApplicationServicesExtensions
 
     private static void AddApiBehaviourConfiguration(IServiceCollection serviceCollection)
     {
+        serviceCollection.AddCors(option =>
+        {
+            option.AddPolicy("ApplicationCorsPolicy", policy =>
+            {
+                policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:4200");
+            });
+        });
+        
         serviceCollection.Configure<ApiBehaviorOptions>(options =>
         {
             options.InvalidModelStateResponseFactory = actionContext =>
@@ -70,14 +80,6 @@ public static class ApplicationServicesExtensions
                 return new BadRequestObjectResult(errorResponse);
             };
         });
-
-        serviceCollection.AddCors(option =>
-        {
-            option.AddPolicy("ApplicationCorsPolicy", policy =>
-            {
-                policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
-            });
-        });
     }
 
     private static void AddRequiredRepositories(IServiceCollection serviceCollection)
@@ -93,6 +95,7 @@ public static class ApplicationServicesExtensions
             ProductSpecificationAttributeRepositoryFactory>(serviceCollection);
         AddRepository<ProductSpecificationValue, 
             ProductSpecificationValueRepositoryFactory>(serviceCollection);
+        AddRepository<RefreshToken, RefreshTokenRepositoryFactory>(serviceCollection);
         
         AddNonRelationalRepository
             <BasketItem, ProductList<BasketItem>, BasketRepositoryFactory>(serviceCollection);
