@@ -12,7 +12,7 @@ public class RefreshToken : IEntity<Guid>
     
     public string Value { get; set; }
     
-    public DateTime ExpiryDate { get; set; } = DateTime.UtcNow.AddMonths(2);
+    public DateTime ExpiryDate { get; set; } = DateTime.UtcNow.AddDays(14);
     
     public DateTime? RevocationDate { get; set; }
 
