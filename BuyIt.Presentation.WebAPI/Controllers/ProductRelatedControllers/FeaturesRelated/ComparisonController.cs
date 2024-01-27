@@ -2,7 +2,9 @@
 using AutoMapper;
 using BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.FeaturesRelated.Common;
 using Domain.Contracts.RepositoryRelated.NonRelational;
+using Domain.Entities.IdentityRelated;
 using Domain.Entities.ProductListRelated;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.FeaturesRelated;
@@ -12,6 +14,8 @@ namespace BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.Featur
 public class ComparisonController : BaseFeatureController<ComparedItem, ComparedItemDto>
 {
     public ComparisonController(
-        INonRelationalRepository<ProductList<ComparedItem>> repository, IMapper mapper)
-        : base(repository, mapper) { }
+        INonRelationalRepository<ProductList<ComparedItem>> repository,
+        UserManager<User> userManager,
+        IMapper mapper)
+        : base(repository, mapper, userManager) { }
 }
