@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts.Common;
 using Domain.Contracts.RepositoryRelated.Relational;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.Specifications.Common;
@@ -27,6 +28,9 @@ public static class QuerySpecificationEvaluator
         if (querySpecification.IsPagingEnabled)
             queryable = queryable.Skip(querySpecification.SkippedItemsQuantity)
                 .Take(querySpecification.TakenItemsQuantity);
+        
+        if (querySpecification.IsNotTracked)
+            queryable = queryable.AsNoTrackingWithIdentityResolution();
         
         return queryable;
     }

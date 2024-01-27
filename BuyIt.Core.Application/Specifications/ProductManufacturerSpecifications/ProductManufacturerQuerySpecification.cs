@@ -2,6 +2,10 @@
 
 public sealed class ProductManufacturerQuerySpecification : BaseProductManufacturerQuerySpecification
 {
-    public ProductManufacturerQuerySpecification() =>
+    public ProductManufacturerQuerySpecification(bool isNotTracked = false)
+    {
+        IsNotTracked = isNotTracked;
+        
         AddOrderByAscending(m => m.Name);
+    }
 }

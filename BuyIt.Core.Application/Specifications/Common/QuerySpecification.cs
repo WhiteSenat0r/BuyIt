@@ -26,6 +26,8 @@ public abstract class QuerySpecification<TEntity> : IQuerySpecification<TEntity>
     
     public bool IsPagingEnabled { get; set; }
     
+    public bool IsNotTracked { get; set; }
+    
     protected void AddPaging(int takenItemsQuantity, int skippedItemsQuantity)
     {
         TakenItemsQuantity = takenItemsQuantity;

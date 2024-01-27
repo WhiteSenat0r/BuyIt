@@ -19,4 +19,6 @@ public interface IQuerySpecification<TEntity>
     int TakenItemsQuantity { get; }
     
     bool IsPagingEnabled { get; set; }
+    
+    public bool IsNotTracked { get; set; }
 }
