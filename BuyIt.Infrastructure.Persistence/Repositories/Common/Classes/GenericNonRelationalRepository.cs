@@ -26,11 +26,14 @@ public abstract class GenericNonRelationalRepository<TItem, TEntity> : INonRelat
     public async Task<TEntity> CreateOrUpdateEntityAsync(
         TEntity updatedEntity, int? daysToStoreData = null)
     {
-        var createdEntityResult = IsValidDataStoreValue(daysToStoreData)
-            ? await _database.StringSetAsync(updatedEntity.Id.ToString(),
-                JsonSerializer.Serialize(updatedEntity), 
-                TimeSpan.FromDays((int)daysToStoreData!))
-            : await _database.StringSetAsync(updatedEntity.Id.ToString(),
+        bool createdEntityResult;
+        
+        if (IsValidDataStoreValue(daysToStoreData))
+            createdEntityResult = await _database.StringSetAsync(updatedEntity.Id.ToString(),
+                JsonSerializer.Serialize(updatedEntity),
+                TimeSpan.FromDays((int)daysToStoreData!));
+        else
+            createdEntityResult = await _database.StringSetAsync(updatedEntity.Id.ToString(),
                 JsonSerializer.Serialize(updatedEntity));
         
         return GetUpdatedEntity(updatedEntity, createdEntityResult);
