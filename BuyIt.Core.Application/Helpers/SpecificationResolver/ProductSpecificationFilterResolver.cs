@@ -21,7 +21,7 @@ public sealed class ProductSpecificationFilterResolver
         IFilteringModel filteringModel)
     {
         var productManufacturers = await manufacturers.GetAllEntitiesAsync(
-            new ProductManufacturerQuerySpecification());
+            new ProductManufacturerQuerySpecification(true));
 
         var specifications = await GetAllSpecifications(productSpecs, filteringModel);
         
@@ -134,6 +134,7 @@ public sealed class ProductSpecificationFilterResolver
         var brandlessSpecification = filteringModel.CreateQuerySpecification();
 
         brandlessSpecification.IsPagingEnabled = false;
+        brandlessSpecification.IsNotTracked = true;
         
         return brandlessSpecification;
     }
@@ -147,7 +148,7 @@ public sealed class ProductSpecificationFilterResolver
             ? new List<Product>() 
             : (await products.GetAllEntitiesAsync(new ProductQuerySpecification(
                 product => product.ProductType.Name.Equals(
-                    filteredProducts.First().ProductType.Name)))).Except(filteredProducts);
+                    filteredProducts.First().ProductType.Name), true))).Except(filteredProducts);
     }
     
     private IQuerySpecification<Product> GetQuerySpecification(IFilteringModel filteringModel)
