@@ -292,7 +292,8 @@ public class UserController : BaseApiController
             LastName = new CultureInfo("en-US").TextInfo.ToTitleCase(registrationData.LastName),
             Email = registrationData.Email,
             PhoneNumber = registrationData.PhoneNumber,
-            UserName = $"@{registrationData.FirstName.ToLower()}{registrationData.LastName.ToLower()}-"
+            UserName = $"@{registrationData.FirstName.ToLower()}{registrationData.LastName.ToLower()}-",
+            WishListId = Guid.NewGuid()
         };
     
     private async Task<UserDto> GetUserDataResponse(User user) =>
@@ -300,7 +301,10 @@ public class UserController : BaseApiController
         {
             DisplayedName = $"{user.FirstName} {user.LastName}",
             Email = user.Email,
-            Roles = await _userManager.GetRolesAsync(user)
+            Roles = await _userManager.GetRolesAsync(user),
+            BasketId = user.BasketId,
+            WishListId = user.WishListId,
+            ComparisonListId = user.ComparisonListId
         };
     
     private async Task SetRefreshTokenAsync(User user)
