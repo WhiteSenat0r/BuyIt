@@ -12,4 +12,13 @@ public class UserDto
     
     [Required]
     public IEnumerable<string> Roles { get; set; }
+    
+    [Required]
+    public Guid? BasketId { get; set; }
+    
+    [Required]
+    public Guid? WishListId { get; set; }
+    
+    [Required]
+    public Guid? ComparisonListId { get; set; }
 }
