@@ -35,6 +35,12 @@ public sealed class User : IdentityUser<Guid>
 
     public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     
+    public Guid? BasketId { get; set; }
+    
+    public Guid? WishListId { get; set; }
+    
+    public Guid? ComparisonListId { get; set; }
+    
     private string GetCheckedValue(string value, string valueName)
     {
         return !value.IsNullOrEmpty() 
