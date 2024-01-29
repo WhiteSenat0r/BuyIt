@@ -21,7 +21,7 @@ public sealed class ProductSpecificationFilterResolver
         IFilteringModel filteringModel)
     {
         var productManufacturers = await manufacturers.GetAllEntitiesAsync(
-            new ProductManufacturerQuerySpecification(true));
+            new ProductManufacturerQuerySpecification());
 
         var specifications = await GetAllSpecifications(productSpecs, filteringModel);
         
@@ -148,7 +148,7 @@ public sealed class ProductSpecificationFilterResolver
             ? new List<Product>() 
             : (await products.GetAllEntitiesAsync(new ProductQuerySpecification(
                 product => product.ProductType.Name.Equals(
-                    filteredProducts.First().ProductType.Name), true))).Except(filteredProducts);
+                    filteredProducts.First().ProductType.Name)))).Except(filteredProducts);
     }
     
     private IQuerySpecification<Product> GetQuerySpecification(IFilteringModel filteringModel)
