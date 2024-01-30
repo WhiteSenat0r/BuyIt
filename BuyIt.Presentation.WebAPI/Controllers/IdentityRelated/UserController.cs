@@ -62,6 +62,29 @@ public class UserController : BaseApiController
         });
 
     [AllowAnonymous]
+    [HttpPost("CheckLoginCredentials")]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApiResponse>> CheckLoginCredentials(
+        [FromBody]LoginDto loginData)
+    {
+        if (!await IsRegisteredEmail(loginData.Email)) 
+            return Ok(new ApiResponse(
+                400, "User with such email does not exist!"));
+
+        var user = await _userManager.FindByEmailAsync(loginData.Email);
+        
+        if (!user.EmailConfirmed) return Ok(
+            new ApiResponse(401, "The email is not verified!"));
+        
+        var passwordIsValid = await _signInManager.CheckPasswordSignInAsync(
+            user, loginData.Password, false);
+
+        return Ok(!passwordIsValid.Succeeded 
+            ? new ApiResponse(401, "Incorrect password!") 
+            : new ApiResponse(200, "Ready to log in!"));
+    }
+    
+    [AllowAnonymous]
     [HttpPost("Login")]
     [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -73,20 +96,7 @@ public class UserController : BaseApiController
                 new [] { "Email or password contains invalid value!" }))
             return badRequest;
         
-        if (!await IsRegisteredEmail(loginData.Email)) 
-            return BadRequest(new ApiResponse(
-                400, "User with such email does not exist!"));
-
         var user = await _userManager.FindByEmailAsync(loginData.Email);
-        
-        if (!user.EmailConfirmed) return Unauthorized(
-            new ApiResponse(401, "The email is not verified!"));
-        
-        var passwordIsValid = await _signInManager.CheckPasswordSignInAsync(
-            user, loginData.Password, false);
-        
-        if (!passwordIsValid.Succeeded) return Unauthorized(
-            new ApiResponse(401, "Incorrect password!"));
 
         await SetRefreshTokenAsync(user);
         await GenerateAccessTokenAsync(user);
