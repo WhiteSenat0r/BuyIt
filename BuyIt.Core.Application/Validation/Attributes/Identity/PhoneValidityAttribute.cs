@@ -16,7 +16,8 @@ public class PhoneValidityAttribute : ValidationAttribute
             return new ValidationResult("The phone number can not be validated!");
 
         return !Regex.IsMatch(phone, PhonePattern) 
-            ? new ValidationResult("The phone number is not in the correct format!") 
+            ? new ValidationResult(
+                "The phone number is not in the correct format! For example: +380971234567") 
             : ValidationResult.Success;
     }
 }
