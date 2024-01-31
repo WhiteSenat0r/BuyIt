@@ -23,7 +23,7 @@ public class PasswordValidityAttribute : ValidationAttribute
                 "contain at least one lowercase letter, " +
                 "contain at least one uppercase letter, " +
                 "contain at least one special character and " +
-                "must not contain any whitespace characters1") 
+                "must not contain any whitespace characters!") 
             : ValidationResult.Success;
     }
 }
