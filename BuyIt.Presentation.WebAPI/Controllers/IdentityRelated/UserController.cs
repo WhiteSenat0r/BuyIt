@@ -130,9 +130,9 @@ public class UserController : BaseApiController
 
     [AllowAnonymous]
     [HttpPost("Register")]
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> Register([FromBody]RegistrationDto registrationData)
+    public async Task<ActionResult<UserDto>> Register([FromBody]RegistrationDto registrationData)
     {
         if (IsInvalidModel(out var badRequest,
                 "Error occured during registration of a new user!",
@@ -175,8 +175,9 @@ public class UserController : BaseApiController
             "Verify email address",
             verificationUrl);
 
-        return Ok($"New user with email {user.Email} was registered successfully!" +
-                  $" Waiting for email verification!");
+        var result = await GetUserDataResponse(user);
+        
+        return Ok(result);
     }
 
     [AllowAnonymous]
