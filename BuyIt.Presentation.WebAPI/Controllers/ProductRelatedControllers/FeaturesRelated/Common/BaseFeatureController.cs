@@ -65,7 +65,7 @@ namespace BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.Featur
             if (user is null) 
                 return BadRequest(new ApiResponse(400, "Invalid user!"));
 
-            switch (listType.ToUpper())
+            switch (listType)
             {
                 case "BASKET":
                     user.BasketId = listId;
