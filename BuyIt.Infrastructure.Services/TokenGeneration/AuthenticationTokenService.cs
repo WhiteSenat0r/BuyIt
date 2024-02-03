@@ -9,19 +9,19 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BuyIt.Infrastructure.Services.TokenGeneration;
 
-public sealed class TokenService : ITokenService
+public sealed class AuthenticationTokenService : IAuthenticationTokenService
 {
     private readonly IConfiguration _configuration;
     private readonly SymmetricSecurityKey _symmetricSecurityKey;
 
-    public TokenService(IConfiguration configuration)
+    public AuthenticationTokenService(IConfiguration configuration)
     {
         _configuration = configuration;
         _symmetricSecurityKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(_configuration["Token:Key"]!));
     }
     
-    public string CreateAccessToken(User user)
+    public string CreateToken(User user)
     {
         var userClaims = GetUserClaims(user);
 
