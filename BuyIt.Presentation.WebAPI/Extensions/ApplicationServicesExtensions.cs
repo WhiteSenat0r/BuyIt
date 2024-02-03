@@ -50,7 +50,8 @@ public static class ApplicationServicesExtensions
     private static void AddRequiredServices(IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<ProductSpecificationFilterResolver>();
-        serviceCollection.AddScoped<ITokenService, TokenService>();
+        serviceCollection.AddScoped<IConfirmationTokenService, ConfirmationTokenService>();
+        serviceCollection.AddScoped<IAuthenticationTokenService, AuthenticationTokenService>();
     }
 
     private static void AddApiBehaviourConfiguration(IServiceCollection serviceCollection)
