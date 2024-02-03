@@ -149,6 +149,13 @@ public class UserController : BaseApiController
                 Errors = new [] { "User with entered email is already registered!" }
             });
         
+        if (await IsRegisteredPhoneNumber(registrationData.PhoneNumber))
+            return BadRequest(new ApiValidationErrorResponse(
+                "Error occured during registration of a new user!")
+            {
+                Errors = new [] { "User with entered phone number is already registered!" }
+            });
+        
         var createdUser = CreateFormattedUser(registrationData);
 
         createdUser.UserName += createdUser.Id.ToString()[..8]; 
@@ -162,18 +169,7 @@ public class UserController : BaseApiController
 
         await _userManager.AddToRoleAsync(user!, (await _roleManager.FindByNameAsync("User"))!.Name!);
 
-        var verificationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-        var verificationUrl = "https://localhost:7001" + Url.Action(
-            nameof(VerifyEmail), "User",new { verificationToken, user.Email } );
-        
-        await SendNotificationLetterAsync(
-            user, 
-            "buyit.verify@gmail.com",
-            "Registration at BuyIt!",
-            EmailMessages.VerificationRequest,
-            "Verify email address",
-            verificationUrl);
+        await SendConfirmationEmailAsync(user);
 
         var result = await GetUserDataResponse(user);
         
@@ -257,9 +253,29 @@ public class UserController : BaseApiController
         Response.Cookies.Delete("UserAccessToken");
         Response.Cookies.Delete("UserRefreshToken");
     }
+    
+    private async Task SendConfirmationEmailAsync(User user)
+    {
+        var verificationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+        var verificationUrl = "https://localhost:7001" + Url.Action(
+            nameof(VerifyEmail), "User",new { verificationToken, user.Email } );
+        
+        await SendNotificationLetterAsync(
+            user, 
+            "buyit.verify@gmail.com",
+            "Registration at BuyIt!",
+            EmailMessages.VerificationRequest,
+            "Verify email address",
+            verificationUrl);
+    }
 
     private async Task<bool> IsRegisteredEmail(string email) => 
         await _userManager.FindByEmailAsync(email) is not null;
+    
+    private async Task<bool> IsRegisteredPhoneNumber(string phoneNumber) => 
+        await _userManager.Users.SingleOrDefaultAsync(
+            u => u.PhoneNumber.Equals(phoneNumber)) is not null;
     
     private bool IsInvalidModel(
         out ActionResult badRequest, string errorMessage, IEnumerable<string> errors)
