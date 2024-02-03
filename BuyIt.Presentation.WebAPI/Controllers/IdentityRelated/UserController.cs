@@ -23,18 +23,20 @@ public class UserController : BaseApiController
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly RoleManager<UserRole> _roleManager;
-    private readonly ITokenService _tokenService;
+    private readonly IConfirmationTokenService _confirmationTokenService;
+    private readonly IAuthenticationTokenService _authenticationTokenService;
     private readonly IRepository<RefreshToken> _refreshTokenRepository;
 
     public UserController(UserManager<User> userManager, SignInManager<User> signInManager,
-        RoleManager<UserRole> roleManager, ITokenService tokenService,
-        IRepository<RefreshToken> refreshTokenRepository)
+        RoleManager<UserRole> roleManager, IAuthenticationTokenService authenticationTokenService,
+        IRepository<RefreshToken> refreshTokenRepository, IConfirmationTokenService confirmationTokenService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
-        _tokenService = tokenService;
+        _authenticationTokenService = authenticationTokenService;
         _refreshTokenRepository = refreshTokenRepository;
+        _confirmationTokenService = confirmationTokenService;
     }
 
     [Authorize]
@@ -170,25 +172,29 @@ public class UserController : BaseApiController
         await _userManager.AddToRoleAsync(user!, (await _roleManager.FindByNameAsync("User"))!.Name!);
 
         await SendConfirmationEmailAsync(user);
-
-        var result = await GetUserDataResponse(user);
         
-        return Ok(result);
+        return Ok(await GetUserDataResponse(user));
     }
 
     [AllowAnonymous]
     [HttpPut("VerifyEmail")]
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> VerifyEmail(
-        [FromQuery]string verificationToken, string email)
+    public async Task<ActionResult<UserDto>> VerifyEmail(
+        [FromQuery]string verificationToken, [FromQuery] string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
         
         if (user is null) return BadRequest(new ApiResponse(
             400, "User does not exist!"));
 
-        var verificationResult = await _userManager.ConfirmEmailAsync(user, verificationToken);
+        if (_confirmationTokenService.IsValidConfirmationToken(user, verificationToken))
+            user.EmailConfirmed = true;
+        else
+            return BadRequest(new ApiResponse(
+                400, "Invalid verification token!"));
+        
+        var verificationResult = await _userManager.UpdateAsync(user);
         
         if (!verificationResult.Succeeded) return BadRequest(new ApiResponse(
             400, "Email verification was not performed!"));
@@ -201,7 +207,7 @@ public class UserController : BaseApiController
             null,
             null);
         
-        return Ok($"Email ({email}) was verified successfully!");
+        return Ok(await GetUserDataResponse(user));
     }
 
     [AllowAnonymous]
@@ -256,10 +262,10 @@ public class UserController : BaseApiController
     
     private async Task SendConfirmationEmailAsync(User user)
     {
-        var verificationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-        var verificationUrl = "https://localhost:7001" + Url.Action(
-            nameof(VerifyEmail), "User",new { verificationToken, user.Email } );
+        var verificationToken = _confirmationTokenService.CreateToken(user);
+        
+        var verificationUrl =  $"https://localhost:4200/account/" +
+                              $"verify-email?address={user.Email}&token={verificationToken}";
         
         await SendNotificationLetterAsync(
             user, 
@@ -319,7 +325,7 @@ public class UserController : BaseApiController
     
     private async Task SetRefreshTokenAsync(User user)
     {
-        var refreshToken = _tokenService.CreateRefreshToken();
+        var refreshToken = _authenticationTokenService.CreateRefreshToken();
         refreshToken.UserId = user.Id;
         await _refreshTokenRepository.AddNewEntityAsync(refreshToken);
         
@@ -341,7 +347,7 @@ public class UserController : BaseApiController
     
     private async Task GenerateAccessTokenAsync(User user)
     {
-        var accessToken = _tokenService.CreateAccessToken(user);
+        var accessToken = _authenticationTokenService.CreateToken(user);
 
         var cookieOptions = new CookieOptions
         {
