@@ -258,13 +258,6 @@ public class UserController : BaseApiController
         Response.Cookies.Delete("UserRefreshToken");
     }
 
-    [AllowAnonymous]
-    [HttpGet("EmailStatus")]
-    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-    public async Task<ActionResult<bool>> GetEmailStatus(
-        [FromQuery] string email) =>
-        Ok(await IsRegisteredEmail(email));
-
     private async Task<bool> IsRegisteredEmail(string email) => 
         await _userManager.FindByEmailAsync(email) is not null;
     
