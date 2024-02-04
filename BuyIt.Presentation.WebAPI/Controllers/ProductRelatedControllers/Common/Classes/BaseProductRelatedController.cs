@@ -16,14 +16,13 @@ public abstract class BaseProductRelatedController<TFilteringModel, TQuerySpecif
     where TQuerySpecification : BasicProductFilteringQuerySpecification
 {
     private protected readonly IRepository<Product> Products;
-    
+    private protected readonly IMapper Mapper;
+
     protected BaseProductRelatedController(IRepository<Product> products, IMapper mapper)
     {
         Products = products;
         Mapper = mapper;
     }
-    
-    private protected IMapper Mapper { get; }
     
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
