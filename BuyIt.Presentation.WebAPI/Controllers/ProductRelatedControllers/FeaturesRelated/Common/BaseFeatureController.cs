@@ -68,24 +68,28 @@ namespace BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.Featur
             switch (listType)
             {
                 case "BASKET":
+                    if (await IsUpdatableListWithExistingId(
+                            user.BasketId, listId) is false)
+                        return GetFailedSynchronizationResult();
                     user.BasketId = listId;
                     break;
                 case "WISHLIST":
+                    if (await IsUpdatableListWithExistingId(
+                            user.WishListId, listId) is false)
+                        return GetFailedSynchronizationResult();
                     user.WishListId = listId;
                     break;
                 case "COMPARISONLIST":
+                    if (await IsUpdatableListWithExistingId(
+                            user.ComparisonListId, listId) is false)
+                        return GetFailedSynchronizationResult();
                     user.ComparisonListId = listId;
                     break;
             }
             
             var result = await _userManager.UpdateAsync(user);
 
-            if (!result.Succeeded)
-                return BadRequest(new ApiResponse(
-                        400, "Synchronization was not performed due to an error!"));
-            
-            return Ok(await _repository.CreateOrUpdateEntityAsync(
-                await _repository.GetSingleEntityByIdAsync(listId)));
+            return !result.Succeeded ? GetFailedSynchronizationResult() : Ok();
         }
 
         [HttpDelete("Delete")]
@@ -98,6 +102,63 @@ namespace BuyIt.Presentation.WebAPI.Controllers.ProductRelatedControllers.Featur
             return removalResult 
                 ? Ok("List was successfully removed!")
                 : BadRequest("List was not removed!");
+        }
+
+        private async Task<bool?> IsUpdatableListWithExistingId(
+            Guid? currentListId, Guid? synchronizedListId)
+        {
+            if (currentListId is null) return null;
+
+            var synchronizedList = await _repository.GetSingleEntityByIdAsync(synchronizedListId!.Value);
+
+            if (!synchronizedList.Items.Any()) return true;
+            
+            var currentList = await _repository.GetSingleEntityByIdAsync(currentListId.Value);
+            
+            await JoinListsAsync(currentList, synchronizedList);
+            
+            var removalResult = await _repository.RemoveExistingEntityAsync(currentListId.Value);
+
+            return removalResult;
+        }
+
+        private async Task JoinListsAsync(ProductList<TProductListItem> currentList,
+            ProductList<TProductListItem> synchronizedList)
+        {
+            foreach (var item in currentList.Items)
+            {
+                if (synchronizedList.Items.SingleOrDefault(
+                            i => i.ProductCode.Equals(item.ProductCode)) 
+                        is not null
+                    && item is BasketItem)
+                {
+                    var updatedItem = synchronizedList.Items.Single(
+                        i => i.ProductCode.Equals(item.ProductCode)) as BasketItem;
+
+                    updatedItem!.Quantity++;
+
+                    var removedIndex = (synchronizedList.Items as List<TProductListItem>)!.IndexOf(
+                        (synchronizedList.Items as List<TProductListItem>)!.First(i =>
+                            i.ProductCode.Equals(updatedItem.ProductCode)));
+                    
+                    (synchronizedList.Items as List<TProductListItem>)!.RemoveAt(removedIndex);
+                    (synchronizedList.Items as List<TProductListItem>)!.Add(updatedItem as TProductListItem);
+                    
+                    continue;
+                }
+                
+                if (synchronizedList.Items.SingleOrDefault(
+                        i => i.ProductCode.Equals(item.ProductCode)) is null)
+                    (synchronizedList.Items as List<TProductListItem>)!.Add(item);
+            }
+            
+            await _repository.CreateOrUpdateEntityAsync(synchronizedList);
+        }
+
+        private ActionResult GetFailedSynchronizationResult()
+        {
+            return BadRequest(new ApiResponse(
+                400, "Synchronization was not performed due to an error!"));
         }
     }
 }
