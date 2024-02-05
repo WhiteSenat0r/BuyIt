@@ -134,7 +134,6 @@ public sealed class ProductSpecificationFilterResolver
         var brandlessSpecification = filteringModel.CreateQuerySpecification();
 
         brandlessSpecification.IsPagingEnabled = false;
-        brandlessSpecification.IsNotTracked = true;
         
         return brandlessSpecification;
     }
