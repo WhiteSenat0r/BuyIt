@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Application.Specifications.Common;
 using Domain.Entities.ProductRelated;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Specifications.ProductTypeSpecifications;
 
@@ -10,8 +9,6 @@ public sealed class ProductTypeQuerySpecification : QuerySpecification<ProductTy
     public ProductTypeQuerySpecification() => AddOrderByAscending(p => p.Name);
 
     public ProductTypeQuerySpecification(Expression<Func<ProductType, bool>> expression)
-        : base(expression)
-    {
-        Includes.Add(p => p.Include(c => c.Products));
-    }
+        : base(expression) =>
+        AddInclude("Products");
 }
