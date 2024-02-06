@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.Contracts.RepositoryRelated.Relational;
 
@@ -8,7 +7,7 @@ public interface IQuerySpecification<TEntity>
 {
     Expression<Func<TEntity, bool>> Criteria { get; }
 
-    List<Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>> Includes { get; }
+    IEnumerable<string> IncludeStrings { get; }
     
     Expression<Func<TEntity, object>> OrderByAscendingExpression { get; }
     
