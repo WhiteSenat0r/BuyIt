@@ -4,8 +4,8 @@ using Persistence.Repositories.Common.Classes;
 
 namespace Persistence.Repositories.Factories.RelationalRepositoryFactories.Common.Classes;
 
-public abstract class RepositoryFactory<TEntity> 
+internal abstract class RepositoryFactory<TEntity> 
     where TEntity : class, IEntity<Guid>
 {
-    public abstract GenericRepository<TEntity> Create(StoreContext dbContext);
+    internal abstract GenericRepository<TEntity> Create(StoreContext dbContext);
 }

@@ -5,7 +5,7 @@ using Persistence.Repositories.ProductRelatedRepositories;
 
 namespace Persistence.Repositories.Factories.RelationalRepositoryFactories.ProductRelated;
 
-public class ProductSpecificationRepositoryFactory : RepositoryFactory<ProductSpecification>
+internal class ProductSpecificationRepositoryFactory : RepositoryFactory<ProductSpecification>
 {
-    public override ProductSpecificationRepository Create(StoreContext dbContext) =>  new(dbContext);
+    internal override ProductSpecificationRepository Create(StoreContext dbContext) =>  new(dbContext);
 }

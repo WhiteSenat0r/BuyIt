@@ -5,7 +5,7 @@ using Persistence.Repositories.IdentityRelatedRepositories;
 
 namespace Persistence.Repositories.Factories.RelationalRepositoryFactories.IdentityRelated;
 
-public sealed class RefreshTokenRepositoryFactory : RepositoryFactory<RefreshToken>
+internal sealed class RefreshTokenRepositoryFactory : RepositoryFactory<RefreshToken>
 {
-    public override RefreshTokenRepository Create(StoreContext dbContext) => new(dbContext);
+    internal override RefreshTokenRepository Create(StoreContext dbContext) => new(dbContext);
 }
