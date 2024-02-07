@@ -1,9 +1,8 @@
 ﻿using Application.Responses.Common.Classes;
-using BuyIt.Infrastructure.Services.Mailing;
-using BuyIt.Infrastructure.Services.Mailing.Common.Items.MessageTemplates.MessageTemplates;
-using BuyIt.Infrastructure.Services.Mailing.Common.Items.Options;
 using BuyIt.Presentation.WebAPI.Controllers.IdentityRelated.Common.Classes;
+using Domain.Constants.MessageTemplates;
 using Domain.Contracts.RepositoryRelated.Relational;
+using Domain.Contracts.ServiceRelated;
 using Domain.Contracts.TokenRelated;
 using Domain.Entities.IdentityRelated;
 using Microsoft.AspNetCore.Authorization;
@@ -15,13 +14,18 @@ namespace BuyIt.Presentation.WebAPI.Controllers.IdentityRelated;
 public class EmailController : BaseIdentityRelatedController
 {
     private readonly IConfirmationTokenService _confirmationTokenService;
+    private readonly IMailService _mailService;
 
     public EmailController(UserManager<User> userManager,
         IAuthenticationTokenService authenticationTokenService,
         IRepository<RefreshToken> refreshTokenRepository,
-        IConfirmationTokenService confirmationTokenService) 
-        : base(userManager, authenticationTokenService, refreshTokenRepository) =>
+        IConfirmationTokenService confirmationTokenService,
+        IMailService mailService) 
+        : base(userManager, authenticationTokenService, refreshTokenRepository)
+    {
         _confirmationTokenService = confirmationTokenService;
+        _mailService = mailService;
+    }
 
     [AllowAnonymous]
     [HttpPost("SendEmailConfirmationLetter")]
@@ -52,12 +56,9 @@ public class EmailController : BaseIdentityRelatedController
 
     private async Task SendSuccessfulEmailConfirmationLetterAsync(User user) =>
         await SendNotificationLetterAsync(
-            user, 
-            "buyit.verify@gmail.com",
+            user,
             "Email address confirmation at BuyIt!",
-            EmailMessages.SuccessfulVerification,
-            null,
-            null);
+            EmailMessages.SuccessfulVerification);
 
     private async Task SendEmailConfirmationLetterAsync(User user)
     {
@@ -67,20 +68,20 @@ public class EmailController : BaseIdentityRelatedController
                               $"verify-email?address={user.Email}&token={verificationToken}";
         
         await SendNotificationLetterAsync(
-            user, 
-            "buyit.verify@gmail.com",
+            user,
             "Registration at BuyIt!",
             EmailMessages.VerificationRequest,
             "Verify email address",
             verificationUrl);
     }
     
-    private async Task SendNotificationLetterAsync(User user, string senderEmail,
-        string subject, string message, string buttonName, string buttonUrl)
-    {
-        var mailSender = new MailSender(senderEmail);
-
-        await mailSender.SendEmailAsync(new EmailOptions(
-            user.Email!, subject, message, buttonName, buttonUrl));
-    }
+    private async Task SendNotificationLetterAsync(
+        User user, string subject, string message,
+        string buttonName = null, string buttonUrl = null) =>
+        await _mailService.SendEmailAsync(
+            new []
+            {
+                "buyit.verify@gmail.com", user.Email, subject,
+                message, buttonName, buttonUrl
+            });
 }
