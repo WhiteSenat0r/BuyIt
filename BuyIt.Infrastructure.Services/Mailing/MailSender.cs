@@ -2,28 +2,33 @@
 using System.Net.Mail;
 using BuyIt.Infrastructure.Services.FileSystem;
 using BuyIt.Infrastructure.Services.Mailing.Common.Items.Options;
+using Domain.Contracts.ServiceRelated;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BuyIt.Infrastructure.Services.Mailing;
 
-public sealed class MailSender
+public sealed class MailSender : IMailService
 {
-    private readonly string _senderEmail;
-    private readonly string _senderAuthCode;
     private readonly string _smtpHost;
     private readonly int _smtpPort;
 
-    public MailSender(string senderEmail)
+    public MailSender()
     {
-        _senderEmail = senderEmail;
-        _senderAuthCode = EmailCredentials()[senderEmail];
         _smtpHost = "smtp.gmail.com";
         _smtpPort = 587;
     }
 
-    public async Task SendEmailAsync(EmailOptions options)
+    public async Task SendEmailAsync(IEnumerable<string> inputOptions)
     {
-        using var smtpClient = InstantiateSmtpClient();
+        var options = new EmailOptions(
+            inputOptions.ElementAt(0),
+            inputOptions.ElementAt(1),
+            inputOptions.ElementAt(2),
+            inputOptions.ElementAt(3),
+            inputOptions.ElementAt(4),
+            inputOptions.ElementAt(5));
+        
+        using var smtpClient = InstantiateSmtpClient(options);
 
         var relativePathConstructor = new RelativePathConstructor();
         
@@ -33,14 +38,14 @@ public sealed class MailSender
         AdjustMessageTemplate(options, ref messageTemplate);
 
         await smtpClient.SendMailAsync(new MailMessage(
-            _senderEmail, options.ReceiverEmail,
+            options.SenderEmail, options.ReceiverEmail,
             options.Subject, messageTemplate)
         {
             IsBodyHtml = true
         });
     }
 
-    private void AdjustMessageTemplate(EmailOptions options, ref string messageTemplate)
+    private void AdjustMessageTemplate(IMailOptions options, ref string messageTemplate)
     {
         if (!IsButtonlessMessage(options))
         {
@@ -52,7 +57,7 @@ public sealed class MailSender
     }
 
     private async Task<string> DeterminateMessageTemplateAsync(
-        EmailOptions options, RelativePathConstructor relativePathConstructor) =>
+        IMailOptions options, RelativePathConstructor relativePathConstructor) =>
         IsButtonlessMessage(options) 
             ? await File.ReadAllTextAsync(relativePathConstructor.CreateFilePath(
                 "BuyIt.Infrastructure.Services/Mailing/Common/Items/MessageTemplates" +
@@ -61,17 +66,17 @@ public sealed class MailSender
                 "BuyIt.Infrastructure.Services/Mailing/Common/Items/MessageTemplates/" +
                 "HTML-Templates/ButtonMessageTemplate.html"));
 
-    private bool IsButtonlessMessage(EmailOptions options) =>
+    private bool IsButtonlessMessage(IMailOptions options) =>
         options.ButtonName.IsNullOrEmpty() 
         && options.ButtonUrl.IsNullOrEmpty();
 
-    private SmtpClient InstantiateSmtpClient() =>
+    private SmtpClient InstantiateSmtpClient(IMailOptions options) =>
         new()
         {
             Host = _smtpHost,
             Port = _smtpPort,
             Credentials = new NetworkCredential(
-                _senderEmail, _senderAuthCode),
+                options.SenderEmail, EmailCredentials()[options.SenderEmail]),
             EnableSsl = true
         };
 
