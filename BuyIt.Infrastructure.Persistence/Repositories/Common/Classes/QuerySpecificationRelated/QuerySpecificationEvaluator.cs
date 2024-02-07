@@ -2,7 +2,7 @@
 using Domain.Contracts.RepositoryRelated.Relational;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Specifications.Common;
+namespace Persistence.Repositories.Common.Classes.QuerySpecificationRelated;
 
 public static class QuerySpecificationEvaluator 
 {
