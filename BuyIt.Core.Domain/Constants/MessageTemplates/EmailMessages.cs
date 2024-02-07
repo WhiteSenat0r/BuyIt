@@ -1,4 +1,4 @@
-﻿namespace BuyIt.Infrastructure.Services.Mailing.Common.Items.MessageTemplates.MessageTemplates;
+﻿namespace Domain.Constants.MessageTemplates;
 
 public abstract class EmailMessages
 {
