@@ -18,13 +18,9 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+      <PackageReference Include="Microsoft.OpenApi" Version="1.4.3" />
       <PackageReference Include="PredicateBuilder" Version="1.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Infrastructure">
-        <HintPath>..\Infrastructure\bin\Debug\net7.0\Infrastructure.dll</HintPath>
-      </Reference>
+      <PackageReference Include="StackExchange.Redis" Version="2.7.10" />
     </ItemGroup>
 
 </Project>
