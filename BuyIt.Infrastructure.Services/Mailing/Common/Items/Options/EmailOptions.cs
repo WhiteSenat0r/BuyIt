@@ -1,10 +1,13 @@
-﻿namespace BuyIt.Infrastructure.Services.Mailing.Common.Items.Options;
+﻿using Domain.Contracts.ServiceRelated;
 
-public sealed class EmailOptions
+namespace BuyIt.Infrastructure.Services.Mailing.Common.Items.Options;
+
+public sealed class EmailOptions : IMailOptions
 {
-    public EmailOptions(string receiverEmail, string subject,
+    public EmailOptions(string senderEmail, string receiverEmail, string subject,
         string messageBody, string? buttonName, string? buttonUrl)
     {
+        SenderEmail = senderEmail;
         ReceiverEmail = receiverEmail;
         Subject = subject;
         MessageBody = messageBody;
@@ -12,6 +15,7 @@ public sealed class EmailOptions
         ButtonUrl = buttonUrl;
     }
     
+    public string SenderEmail { get; set; }
     public string ReceiverEmail { get; set; }
     public string Subject { get; set; }
     public string MessageBody { get; set; }
