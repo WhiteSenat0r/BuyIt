@@ -1,13 +1,17 @@
 using Application.Middlewares.ExceptionHandlerMiddleware;
+using BuyIt.Infrastructure.Services.Extensions;
 using BuyIt.Presentation.WebAPI.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
+using Persistence.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRequiredApplicationServiceCollection(builder.Configuration);
+builder.Services.AddRequiredApplicationServiceCollection();
+builder.Services.AddRequiredExternalServiceCollection();
+builder.Services.AddRequiredPersistenceServiceCollection(builder.Configuration);
 builder.Services.AddRequiredIdentityServiceCollection(builder.Configuration);
-builder.Services.AddRequiredSwaggerServiceCollection(builder.Configuration);
+builder.Services.AddRequiredSwaggerServiceCollection();
 
 var app = builder.Build();
 

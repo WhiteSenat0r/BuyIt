@@ -5,7 +5,7 @@ namespace BuyIt.Presentation.WebAPI.Extensions;
 public static class SwaggerServicesExtensions
 {
     public static IServiceCollection AddRequiredSwaggerServiceCollection
-        (this IServiceCollection serviceCollection, IConfiguration configuration) 
+        (this IServiceCollection serviceCollection) 
         // Method that contains all services that will be used in application building process.
         // Additional services can be added in this method in the future.
         // Altering or removal of services can be performed at your own risk.
