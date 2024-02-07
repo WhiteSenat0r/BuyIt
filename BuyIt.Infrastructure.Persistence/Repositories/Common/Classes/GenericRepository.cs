@@ -1,8 +1,8 @@
-﻿using Application.Specifications.Common;
-using Domain.Contracts.Common;
+﻿using Domain.Contracts.Common;
 using Domain.Contracts.RepositoryRelated.Relational;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
+using Persistence.Repositories.Common.Classes.QuerySpecificationRelated;
 
 namespace Persistence.Repositories.Common.Classes;
 
